@@ -22,6 +22,34 @@ int Token::getLineNumber() const {
     return lineNumber;
 }
 
-std::string Token::getText() {
+std::string Token::getText() const {
     return "";
+}
+
+NumToken::NumToken(int line, int v): Token(line, TokenType::number) {
+    value = v;
+}
+
+std::string NumToken::getText() const {
+    return std::to_string(value);
+}
+
+int NumToken::getNumber() const {
+    return value;
+}
+
+IdToken::IdToken(int line, std::string &id): Token(line, TokenType::identifier) {
+    text = id;
+}
+
+std::string IdToken::getText() const {
+    return text;
+}
+
+StrToken::StrToken(int line, std::string &str): Token(line, TokenType::string) {
+    literal = str;
+}
+
+std::string StrToken::getText() const {
+    return literal;
 }
