@@ -39,7 +39,7 @@ protected:
 
     void addToken(int lineNo, std::smatch &result);
 
-    std::string toStringLiteral(const std::string &s);
+    static std::string toStringLiteral(const std::string &s);
 };
 
 
