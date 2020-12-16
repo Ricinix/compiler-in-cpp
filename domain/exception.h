@@ -16,12 +16,12 @@ public:
 
 class ParseException: public std::logic_error {
 public:
-    explicit ParseException(Token &t);
-    explicit ParseException(std::string &msg);
-    explicit ParseException(std::string &msg, Token &t);
+    explicit ParseException(const Token &t);
+    explicit ParseException(const std::string &msg);
+    explicit ParseException(const std::string &msg, const Token &t);
 private:
-    static std::string location(Token &t);
-    static std::string getErrorMsg(const char* msg, Token &t);
+    static std::string location(const Token &t);
+    static std::string getErrorMsg(const char* msg, const Token &t);
 };
 
 #endif //DESIGN_1_EXCEPTION_H

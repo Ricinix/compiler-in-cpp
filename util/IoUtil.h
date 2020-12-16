@@ -16,6 +16,7 @@ private:
     std::ifstream fileIn;
     std::ofstream fileOut;
     std::string path;
+    int lineNo;
 
     void checkInit();
 
@@ -24,11 +25,13 @@ public:
 
     std::string readLine();
 
+    int getLineNumber() const;
+
     explicit IoUtil(const std::string &val_path);
 
     IoUtil(const IoUtil &old_ioUtil);
 
-    IoUtil(IoUtil &&old_ioUtil) noexcept ;
+    IoUtil(IoUtil &&old_ioUtil) noexcept;
 
     IoUtil &operator=(const IoUtil &old_ioUtil);
 

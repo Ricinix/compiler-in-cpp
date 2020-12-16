@@ -6,6 +6,7 @@
 
 IoUtil::IoUtil(const std::string &val_path) {
     path = val_path;
+    lineNo = 0;
 }
 
 void IoUtil::checkInit() {
@@ -47,5 +48,10 @@ IoUtil::IoUtil(IoUtil &&old_ioUtil) noexcept {
 std::string IoUtil::readLine() {
     std::string line;
     std::getline(fileIn, line);
+    ++lineNo;
     return line;
+}
+
+int IoUtil::getLineNumber() const {
+    return lineNo;
 };

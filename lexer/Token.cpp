@@ -15,7 +15,7 @@ Token::Token(TokenType type) {
     tokenType = type;
 }
 
-const TokenType &Token::getTokenType() {
+const TokenType &Token::getTokenType() const {
     return tokenType;
 }
 
@@ -31,7 +31,7 @@ std::string Token::getText() const {
     return "";
 }
 
-NumToken::NumToken(int line, int v): Token(line, TokenType::number) {
+NumToken::NumToken(int line, int v) : Token(line, TokenType::number) {
     value = v;
 }
 
@@ -43,7 +43,7 @@ int NumToken::getNumber() const {
     return value;
 }
 
-IdToken::IdToken(int line, std::string &id): Token(line, TokenType::identifier) {
+IdToken::IdToken(int line, std::string &id) : Token(line, TokenType::identifier) {
     text = id;
 }
 
@@ -51,7 +51,13 @@ std::string IdToken::getText() const {
     return text;
 }
 
-StrToken::StrToken(int line, std::string &str): Token(line, TokenType::string) {
+IdToken::IdToken(int line, TokenType type) : Token(line, type) {
+    if (type == TokenType::eol) {
+        text = "\\n";
+    }
+}
+
+StrToken::StrToken(int line, std::string &str) : Token(line, TokenType::string) {
     literal = str;
 }
 

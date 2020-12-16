@@ -11,6 +11,7 @@
 class Token {
 public:
     explicit Token(int line, TokenType type);
+
     explicit Token(TokenType type);
 
     int getLineNumber() const;
@@ -19,7 +20,7 @@ public:
 
     virtual std::string getText() const;
 
-    const TokenType &getTokenType();
+    const TokenType &getTokenType() const;
 
 private:
     TokenType tokenType;
@@ -42,6 +43,8 @@ private:
 class IdToken : public Token {
 public:
     IdToken(int line, std::string &id);
+
+    IdToken(int line, TokenType type);
 
     std::string getText() const override;
 
