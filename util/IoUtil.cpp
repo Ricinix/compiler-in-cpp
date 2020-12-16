@@ -42,4 +42,10 @@ IoUtil &IoUtil::operator=(const IoUtil &old_ioUtil) {
 
 IoUtil::IoUtil(IoUtil &&old_ioUtil) noexcept {
 
+}
+
+std::string IoUtil::readLine() {
+    std::string line;
+    std::getline(fileIn, line);
+    return line;
 };

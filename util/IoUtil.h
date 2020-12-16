@@ -22,6 +22,8 @@ private:
 public:
     char getNext();
 
+    std::string readLine();
+
     explicit IoUtil(const std::string &val_path);
 
     IoUtil(const IoUtil &old_ioUtil);
