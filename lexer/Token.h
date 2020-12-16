@@ -11,6 +11,7 @@
 class Token {
 public:
     explicit Token(int line, TokenType type);
+    explicit Token(TokenType type);
 
     int getLineNumber() const;
 

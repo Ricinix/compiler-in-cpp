@@ -10,6 +10,11 @@ Token::Token(int line, TokenType type) {
     tokenType = type;
 }
 
+Token::Token(TokenType type) {
+    lineNumber = -1;
+    tokenType = type;
+}
+
 const TokenType &Token::getTokenType() {
     return tokenType;
 }
