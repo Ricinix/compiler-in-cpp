@@ -1,11 +1,16 @@
-#include "util/Log.h"
-#include "util/IoUtil.h"
+#include "lexer/Lexer.h"
+#include "domain/OrderParser.h"
 
 int main(int argc, char *argv[]) {
-    IoUtil ioUtil("");
-    Log::info(ioUtil);
-    Log::info("hello info");
-    Log::warm("hello warm");
-    Log::error("hello error");
+    Order order = OrderParser::parse(argc, argv);
+    if (order.getOrderType() != OrderType::COMPILE) {
+        IoUtil ioUtil(order.getSrcPath());
+        Lexer lexer(ioUtil);
+        Token* t_ptr = lexer.read();
+        while(t_ptr != nullptr && t_ptr->getTokenType()!= TokenType::eof) {
+            Log::info(*t_ptr);
+            t_ptr = lexer.read();
+        }
+    }
     return 0;
 }

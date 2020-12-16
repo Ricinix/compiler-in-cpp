@@ -2,6 +2,7 @@
 // Created by laugh on 2020/12/15.
 //
 
+#include <iostream>
 #include "Token.h"
 #include "../domain/exception.h"
 
@@ -29,6 +30,14 @@ int Token::getLineNumber() const {
 
 std::string Token::getText() const {
     return "";
+}
+
+std::ostream &operator<<(std::ostream &os, const Token &token) {
+    os << ">>>>>>>>>>Token>>>>>>>>>>" << std::endl;
+    os << "text: " + token.getText() << std::endl;
+    os << "line: " + std::to_string(token.getLineNumber()) << std::endl;
+    os << "<<<<<<<<<<Token<<<<<<<<<<";
+    return os;
 }
 
 NumToken::NumToken(int line, int v) : Token(line, TokenType::number) {

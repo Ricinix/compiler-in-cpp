@@ -22,6 +22,8 @@ public:
 
     const TokenType &getTokenType() const;
 
+    friend std::ostream &operator<<(std::ostream &os, const Token &token);
+
 private:
     TokenType tokenType;
     int lineNumber;

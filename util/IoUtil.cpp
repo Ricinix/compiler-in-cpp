@@ -7,6 +7,7 @@
 IoUtil::IoUtil(const std::string &val_path) {
     path = val_path;
     lineNo = 0;
+    checkInit();
 }
 
 void IoUtil::checkInit() {
