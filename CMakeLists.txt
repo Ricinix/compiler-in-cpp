@@ -3,4 +3,4 @@ project(design_1)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(design_1 main.cpp util/IoUtil.cpp util/IoUtil.h)
+add_executable(design_1 main.cpp util/IoUtil.cpp util/IoUtil.h util/Log.h lexer/Token.cpp lexer/Token.h domain/constant.h domain/exception.h lexer/Lexer.cpp lexer/Lexer.h)
