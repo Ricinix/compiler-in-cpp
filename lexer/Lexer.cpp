@@ -109,8 +109,10 @@ std::string Lexer::toStringLiteral(const std::string &s) {
         if (c == '\\' && i + 1 < len) {
             char c2 = s[i + 1];
             if (c2 == '"' || c2 == '\\') {
+                // 把"和\前面的转移字符去掉
                 c = s[++i];
             } else if (c2 == 'n') {
+                // 将\n两个字符合成一个转义字符
                 ++i;
                 c = '\n';
             }
