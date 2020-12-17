@@ -25,3 +25,6 @@ std::string ParseException::location(const Token &t) {
     return "\"" + t.getText() + "\" at line " + std::to_string(t.getLineNumber());
 }
 
+IoException::IoException(const std::string &msg): std::invalid_argument(msg) {
+
+}

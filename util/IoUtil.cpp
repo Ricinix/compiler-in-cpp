@@ -3,18 +3,24 @@
 //
 
 #include "IoUtil.h"
+#include "../domain/exception.h"
 
 IoUtil::IoUtil(const std::string &val_path) {
-    path = val_path;
+    inPath = val_path;
     lineNo = 0;
     checkInit();
 }
 
 void IoUtil::checkInit() {
-    fileIn.open(path);
-    if (fileIn.is_open()) {
-        fileIn.close();
-        fileIn.clear();
+    fileIn.open(inPath);
+    if (!fileIn.is_open()) {
+        throw IoException("open src file fail");
+    }
+    if (!outPath.empty()) {
+        fileOut.open(outPath);
+        if (!fileOut.is_open()) {
+            throw IoException("open target file fail");
+        }
     }
 }
 
@@ -25,19 +31,20 @@ char IoUtil::getNext() {
 }
 
 IoUtil::IoUtil(const IoUtil &old_ioUtil) {
-    path = old_ioUtil.path;
+    inPath = old_ioUtil.inPath;
+    lineNo = 0;
     checkInit();
 }
 
 std::ostream &operator<<(std::ostream &os, const IoUtil &ioUtil) {
     os << ">>>>>>>>>>IoUtil>>>>>>>>>>" << std::endl;
-    os << "path: " + ioUtil.path << std::endl;
+    os << "inPath: " + ioUtil.inPath << std::endl;
     os << "<<<<<<<<<<IoUtil<<<<<<<<<<";
     return os;
 }
 
 IoUtil &IoUtil::operator=(const IoUtil &old_ioUtil) {
-    path = old_ioUtil.path;
+    inPath = old_ioUtil.inPath;
     checkInit();
     return *this;
 }
@@ -55,4 +62,22 @@ std::string IoUtil::readLine() {
 
 int IoUtil::getLineNumber() const {
     return lineNo;
+}
+
+IoUtil::IoUtil(const std::string &srcPath, const std::string &targetPath) {
+    inPath = srcPath;
+    outPath = targetPath;
+    lineNo = 0;
+    checkInit();
+}
+
+IoUtil::~IoUtil() {
+    if (fileIn.is_open()) {
+        fileIn.close();
+        fileIn.clear();
+    }
+    if (fileOut.is_open()) {
+        fileOut.close();
+        fileOut.clear();
+    }
 };

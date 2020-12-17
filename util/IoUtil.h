@@ -15,7 +15,8 @@ class IoUtil {
 private:
     std::ifstream fileIn;
     std::ofstream fileOut;
-    std::string path;
+    std::string inPath;
+    std::string outPath;
     int lineNo;
 
     void checkInit();
@@ -29,9 +30,13 @@ public:
 
     explicit IoUtil(const std::string &val_path);
 
+    IoUtil(const std::string &srcPath, const std::string &targetPath);
+
     IoUtil(const IoUtil &old_ioUtil);
 
     IoUtil(IoUtil &&old_ioUtil) noexcept;
+
+    ~IoUtil();
 
     IoUtil &operator=(const IoUtil &old_ioUtil);
 

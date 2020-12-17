@@ -24,4 +24,9 @@ private:
     static std::string getErrorMsg(const char* msg, const Token &t);
 };
 
+class IoException: public std::invalid_argument {
+public:
+    explicit IoException(const std::string &msg);
+};
+
 #endif //DESIGN_1_EXCEPTION_H
