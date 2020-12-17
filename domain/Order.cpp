@@ -37,6 +37,7 @@ CompileOrder::CompileOrder(std::string &src, std::string &target, OrderType type
 }
 
 void CompileOrder::exec() {
+    Log::info("compiling" + getSrcPath());
     IoUtil ioUtil(getSrcPath(), getTargetPath());
     Lexer lexer(ioUtil);
     Token *t_ptr = lexer.read();
