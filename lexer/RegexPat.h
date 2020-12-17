@@ -9,10 +9,10 @@
 #include <regex>
 
 namespace RegexPat {
-    const char COMMENT[] = "(//.*)";
-    const char NUMBER[] = "([0-9]+)";
+    const char COMMENT[] = R"((//.*))";
+    const char NUMBER[] = R"(([0-9]+))";
     const char STRING[] = R"("(\\"|\\\\|\\n|[^"])*")";
-    const char IDENTIFIER[] = R"([A-Z_a-z][A-Z_a-z0-9]*|==|<=|>=|&&|\|\|\||\p{Punct})";
+    const char IDENTIFIER[] = R"([A-Z_a-z][A-Z_a-z0-9]*|==|<=|>=|&&|\|\||[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~])";
     std::regex getRexPat();
 }
 
