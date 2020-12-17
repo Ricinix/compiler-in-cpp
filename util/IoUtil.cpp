@@ -57,6 +57,9 @@ std::string IoUtil::readLine() {
     std::string line;
     std::getline(fileIn, line);
     ++lineNo;
+    if (line.empty() && !fileIn.eof()) {
+        return readLine();
+    }
     return line;
 }
 
