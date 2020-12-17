@@ -9,13 +9,15 @@
 std::regex RegexPat::getRexPat() {
     std::string regexStr = "\\s*(";
     regexStr += COMMENT;
-    regexStr += '|';
-    regexStr += NUMBER;
-    regexStr += '|';
-    regexStr += STRING;
-    regexStr += '|';
-    regexStr += IDENTIFIER;
+    _concatRegex(regexStr, NUMBER);
+    _concatRegex(regexStr, STRING);
+    _concatRegex(regexStr, IDENTIFIER);
     regexStr += ")?";
     Log::info("getting regex: " + regexStr);
     return std::regex(regexStr);
+}
+
+void RegexPat::_concatRegex(std::string &regexStr, const std::string &part) {
+    regexStr += '|';
+    regexStr += part;
 }
