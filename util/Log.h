@@ -12,19 +12,19 @@ namespace Log {
     template<typename V>
     void error(const V &value) {
         using namespace std;
-        cerr << "ERROR:" << endl << value << endl;
+        cerr << "[ERROR]" << endl << value << endl;
     }
 
     template<typename V>
     void info(const V &value) {
         using namespace std;
-        cout << "INFO:" << endl << value << endl;
+        cout << "[INFO]" << endl << value << endl;
     }
 
     template<typename V>
     void warm(const V &value) {
         using namespace std;
-        cout << "WARM: " << endl << value << endl;
+        cout << "[WARM]" << endl << value << endl;
     }
 
 }
