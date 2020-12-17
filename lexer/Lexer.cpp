@@ -56,11 +56,12 @@ bool Lexer::fillQueue(int i) {
             return false;
         }
     }
-    return false;
+    return true;
 }
 
 void Lexer::readLine() {
     std::string line = ioUtil_ptr->readLine();
+    Log::info("read: " + line);
     if (line.empty()) {
         hasMore = false;
         return;

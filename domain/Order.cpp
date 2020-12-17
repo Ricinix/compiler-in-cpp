@@ -41,6 +41,7 @@ void CompileOrder::exec() {
     IoUtil ioUtil(getSrcPath(), getTargetPath());
     Lexer lexer(ioUtil);
     Token *t_ptr = lexer.read();
+    Log::info(*t_ptr);
     while (t_ptr != nullptr && t_ptr->getTokenType() != TokenType::eof) {
         Log::info(*t_ptr);
         t_ptr = lexer.read();

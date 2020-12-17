@@ -33,9 +33,23 @@ std::string Token::getText() const {
 }
 
 std::ostream &operator<<(std::ostream &os, const Token &token) {
+    std::string type;
+    if (token.getTokenType() == TokenType::eof) {
+        type = "eof";
+    } else if (token.getTokenType() == TokenType::string) {
+        type = "string";
+    } else if (token.getTokenType() == TokenType::eol) {
+        type = "eol";
+    } else if (token.getTokenType() == TokenType::identifier) {
+        type = "identifier";
+    } else if (token.getTokenType() == TokenType::number) {
+        type = "number";
+    }
+
     os << ">>>>>>>>>>Token>>>>>>>>>>" << std::endl;
     os << "text: " + token.getText() << std::endl;
     os << "line: " + std::to_string(token.getLineNumber()) << std::endl;
+    os << "type: " + type << std::endl;
     os << "<<<<<<<<<<Token<<<<<<<<<<";
     return os;
 }
