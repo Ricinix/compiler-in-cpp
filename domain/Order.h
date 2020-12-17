@@ -16,14 +16,22 @@ class Order {
 public:
     Order(std::string &src, std::string &target, OrderType type);
     Order();
-    std::string getSrcPath();
-    std::string getTargetPath();
     OrderType getOrderType();
-
+    virtual void exec();
 private:
     std::string srcPath;
     std::string targetPath;
     OrderType orderType;
+protected:
+    std::string getSrcPath();
+    std::string getTargetPath();
+};
+
+class CompileOrder: public Order {
+public:
+    CompileOrder(std::string &src, std::string &target, OrderType type);
+
+    void exec() override;
 };
 
 

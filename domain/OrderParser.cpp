@@ -5,17 +5,17 @@
 #include "OrderParser.h"
 #include <algorithm>
 
-Order OrderParser::parse(int argc, char *argv[]) {
+std::unique_ptr<Order> OrderParser::parse(int argc, char *argv[]) {
     if (argc < 4) {
-        return Order();
+        return std::make_unique<Order>();
     }
     std::string instruction = argv[1];
     std::string srcPath = _parsePath(argv[0], argv[2]);
     std::string targetPath = _parsePath(argv[0], argv[3]);
     if (instruction == "-c") {
-        return Order(srcPath, targetPath, OrderType::COMPILE);
+        return std::make_unique<CompileOrder>(srcPath, targetPath, OrderType::COMPILE);
     }
-    return Order();
+    return std::make_unique<Order>();
 }
 
 std::string OrderParser::_parsePath(const char *programPath, const char *filePath) {

@@ -3,6 +3,8 @@
 //
 
 #include "Order.h"
+#include "../util/Log.h"
+#include "../lexer/Lexer.h"
 
 Order::Order(std::string &src, std::string &target, OrderType type) {
     srcPath = src;
@@ -24,4 +26,22 @@ OrderType Order::getOrderType() {
 
 Order::Order() {
     orderType = OrderType::ERROR;
+}
+
+void Order::exec() {
+    Log::warm("do nothing");
+}
+
+CompileOrder::CompileOrder(std::string &src, std::string &target, OrderType type) : Order(src, target, type) {
+
+}
+
+void CompileOrder::exec() {
+    IoUtil ioUtil(getSrcPath());
+    Lexer lexer(ioUtil);
+    Token *t_ptr = lexer.read();
+    while (t_ptr != nullptr && t_ptr->getTokenType() != TokenType::eof) {
+        Log::info(*t_ptr);
+        t_ptr = lexer.read();
+    }
 }

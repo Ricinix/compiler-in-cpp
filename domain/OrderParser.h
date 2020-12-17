@@ -6,9 +6,10 @@
 #define DESIGN_1_ORDERPARSER_H
 
 #include "Order.h"
+#include <memory>
 
 namespace OrderParser {
-    Order parse(int argc, char *argv[]);
+    std::unique_ptr<Order> parse(int argc, char *argv[]);
     std::string _parsePath(const char *programPath, const char* filePath);
 }
 
