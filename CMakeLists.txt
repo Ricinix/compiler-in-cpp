@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.17)
 project(design_1)
 
 set(CMAKE_CXX_STANDARD 20)
+SET(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR}/lib) #设置库文件的输出目录
 
 # util 目录下的文件
 file(GLOB UTIL_CPP_PATH ./util/*.cpp)
@@ -36,5 +37,5 @@ add_executable(
 # 连接动态库
 target_link_libraries(
         design_1
-        ${CMAKE_CURRENT_BINARY_DIR}/liblexer.dll
+        ${LIBRARY_OUTPUT_PATH}/liblexer.dll
 )
