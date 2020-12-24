@@ -29,4 +29,12 @@ public:
     explicit IoException(const std::string &msg);
 };
 
+class IndexOutOfBoundsException: public std::invalid_argument {
+public:
+    explicit IndexOutOfBoundsException(const std::string &msg);
+    explicit IndexOutOfBoundsException(int i);
+private:
+    static std::string generateMsg(int i);
+};
+
 #endif //DESIGN_1_EXCEPTION_H

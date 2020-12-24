@@ -2,6 +2,7 @@
 // Created by laugh on 2020/12/16.
 //
 
+#include <sstream>
 #include "exception.h"
 
 ParseException::ParseException(const Token &t) : std::logic_error(getErrorMsg("", t)) {}
@@ -27,4 +28,19 @@ std::string ParseException::location(const Token &t) {
 
 IoException::IoException(const std::string &msg): std::invalid_argument(msg) {
 
+}
+
+IndexOutOfBoundsException::IndexOutOfBoundsException(const std::string &msg) : invalid_argument(msg) {
+
+}
+
+IndexOutOfBoundsException::IndexOutOfBoundsException(int i): std::invalid_argument(generateMsg(i)) {
+
+}
+
+std::string IndexOutOfBoundsException::generateMsg(int i) {
+    using namespace std;
+    ostringstream fmt;
+    fmt << "index " << i << "is out of bounds";
+    return fmt.str();
 }
