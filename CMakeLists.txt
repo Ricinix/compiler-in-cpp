@@ -2,7 +2,10 @@ cmake_minimum_required(VERSION 3.17)
 project(design_1)
 
 set(CMAKE_CXX_STANDARD 20)
-SET(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR}/lib) #设置库文件的输出目录
+# 设置exe输出目录
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR}/bin)
+# 设置dll输出目录
+set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR}/bin)
 
 # util 目录下的文件
 file(GLOB UTIL_CPP_PATH ./util/*.cpp)
@@ -18,6 +21,9 @@ set(DOMAIN_PATH ${DOMAIN_CPP_PATH} ${DOMAIN_H_PATH})
 file(GLOB LEXER_CPP_PATH ./lexer/*.cpp)
 file(GLOB LEXER_H_PATH ./lexer/*.h)
 set(LEXER_PATH ${LEXER_CPP_PATH} ${LEXER_H_PATH})
+
+# 设置编译时搜索库的路径
+link_directories(${LIBRARY_OUTPUT_PATH})
 
 # 生成动态库
 add_library(
@@ -37,5 +43,5 @@ add_executable(
 # 连接动态库
 target_link_libraries(
         design_1
-        ${LIBRARY_OUTPUT_PATH}/liblexer.dll
+        liblexer.dll
 )
