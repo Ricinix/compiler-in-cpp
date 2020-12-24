@@ -1,5 +1,5 @@
 #include "lexer/Lexer.h"
-#include "domain/OrderParser.h"
+#include "main/OrderParser.h"
 
 int main(int argc, char *argv[]) {
     std::unique_ptr<Order> order_ptr = OrderParser::parse(argc, argv);
