@@ -6,6 +6,7 @@
 #define DESIGN_1_REGEXPAT_H
 
 #include <string>
+#include <sstream>
 #include <regex>
 
 namespace RegexPat {
@@ -18,7 +19,7 @@ namespace RegexPat {
     // 匹配标识符（变量名、运算符、以及其他标点符号）
     const char IDENTIFIER[] = R"([A-Z_a-z][A-Z_a-z0-9]*|==|<=|>=|&&|\|\||[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~])";
     std::regex getRexPat();
-    void _concatRegex(std::string &regexStr, const std::string &part);
+    void _concatRegex(std::ostringstream &regexStream, const std::string &part);
 }
 
 

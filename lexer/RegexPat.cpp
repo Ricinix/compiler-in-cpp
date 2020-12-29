@@ -7,17 +7,18 @@
 #include <regex>
 
 std::regex RegexPat::getRexPat() {
-    std::string regexStr = "\\s*(";
-    regexStr += COMMENT;
-    _concatRegex(regexStr, NUMBER);
-    _concatRegex(regexStr, STRING);
-    _concatRegex(regexStr, IDENTIFIER);
-    regexStr += ")?";
-    Log::info("getting regex: " + regexStr);
-    return std::regex(regexStr);
+    std::ostringstream fmt;
+    fmt << "\\s*(";
+    fmt << COMMENT;
+    _concatRegex(fmt, NUMBER);
+    _concatRegex(fmt, STRING);
+    _concatRegex(fmt, IDENTIFIER);
+    fmt << ")?";
+    Log::info("getting regex: " + fmt.str());
+    return std::regex(fmt.str());
 }
 
-void RegexPat::_concatRegex(std::string &regexStr, const std::string &part) {
-    regexStr += '|';
-    regexStr += part;
+void RegexPat::_concatRegex(std::ostringstream &regexStream, const std::string &part) {
+    regexStream << '|';
+    regexStream << part;
 }

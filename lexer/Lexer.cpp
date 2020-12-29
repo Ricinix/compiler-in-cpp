@@ -2,6 +2,7 @@
 // Created by laugh on 2020/12/16.
 //
 #include <regex>
+#include <sstream>
 #include "Lexer.h"
 #include "../domain/exception.h"
 
@@ -102,7 +103,7 @@ void Lexer::addToken(int lineNo, std::smatch &result) {
 }
 
 std::string Lexer::toStringLiteral(const std::string &s) {
-    std::string stringLiteral;
+    std::ostringstream fmt;
     unsigned int len = s.length() - 1;
     for (unsigned int i = 1; i < len; ++i) {
         char c = s[i];
@@ -117,7 +118,7 @@ std::string Lexer::toStringLiteral(const std::string &s) {
                 c = '\n';
             }
         }
-        stringLiteral += c;
+        fmt << c;
     }
-    return stringLiteral;
+    return fmt.str();
 }
