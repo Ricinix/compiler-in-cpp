@@ -69,7 +69,7 @@ public:
 
     ASTList() = default;
 
-    ~ASTList() override = default;
+    ~ASTList() override;
 
     ASTNode *child(int i) override;
 

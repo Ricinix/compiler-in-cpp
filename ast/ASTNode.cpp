@@ -84,7 +84,7 @@ int ASTList::numChildren() const {
 }
 
 std::string ASTList::location() const {
-    for (auto& t : children) {
+    for (auto &t : children) {
         std::string s = t->location();
         if (!s.empty()) {
             return s;
@@ -103,10 +103,17 @@ std::ostream &operator<<(std::ostream &os, const ASTList &astList) {
 std::string ASTList::toString() const {
     std::ostringstream fmt("(");
     std::string sep;
-    for (auto& t : children) {
+    for (auto &t : children) {
         fmt << sep;
         sep = " ";
         fmt << t->toString();
     }
     return fmt.str();
+}
+
+ASTList::~ASTList() {
+    for (auto &node_ptr : children) {
+        delete node_ptr;
+    }
+    children.clear();
 }
