@@ -42,11 +42,6 @@ add_library(
         ${UTIL_PATH}
         ${DOMAIN_PATH}
         ${LEXER_PATH}
-)
-
-add_library(
-        ast
-        SHARED
         ${AST_PATH}
 )
 
@@ -61,5 +56,4 @@ add_executable(
 target_link_libraries(
         design_1
         liblexer.dll
-        libast.dll
 )
