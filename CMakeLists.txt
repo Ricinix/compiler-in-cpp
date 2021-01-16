@@ -32,6 +32,11 @@ file(GLOB AST_CPP_PATH ./ast/*.cpp)
 file(GLOB AST_H_PATH ./ast/*.h)
 set(AST_PATH ${AST_CPP_PATH} ${AST_H_PATH})
 
+# parser 目录下的文件
+file(GLOB PARSER_CPP_PATH ./parser/*.cpp)
+file(GLOB PARSER_H_PATH ./parser/*.h)
+set(PARSER_PATH ${PARSER_CPP_PATH} ${PARSER_H_PATH})
+
 # 设置编译时搜索库的路径
 link_directories(${LIBRARY_OUTPUT_PATH})
 
@@ -43,6 +48,7 @@ add_library(
         ${DOMAIN_PATH}
         ${LEXER_PATH}
         ${AST_PATH}
+        ${PARSER_PATH}
 )
 
 # 生成可执行文件

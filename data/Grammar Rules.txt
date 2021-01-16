@@ -1,0 +1,19 @@
+// { ... } 至少重复0次
+// [ ... ] 重复出现0次或者1次
+// ... | ... 与其中之一匹配
+// () 括号内视为一个完整的模式
+
+// 基本构成元素
+primary   :   "(" expr ")" | NUMBER | IDENTIFIER | STRING
+// 因子
+factor    :   "-" primary | primary
+// 表达式
+expr      :   factor { OP factor }
+// 代码块
+block     :   "{" [ statement ] { (";" | EOL) [ statement ] } "}"
+// 简单表达式语句
+simple    :   expr
+// 语句
+statement :   "if" expr block [ "else" block ] | "while" expr block
+// 程序
+program   :   [ statement ] (";" | EOL)
