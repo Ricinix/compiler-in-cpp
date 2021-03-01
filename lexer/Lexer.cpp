@@ -95,7 +95,12 @@ void Lexer::addToken(int lineNo, std::smatch &result) {
                 std::string literal = toStringLiteral(m);
                 t_ptr = new StrToken(lineNo, literal);
             } else {
-                t_ptr = new IdToken(lineNo, m);
+                OpType opType = OpToken::getOpType(m);
+                if (opType != OpType::none) {
+                    t_ptr = new OpToken(lineNo, opType);
+                } else {
+                    t_ptr = new IdToken(lineNo, m);
+                }
             }
             queue.push_back(t_ptr);
         }

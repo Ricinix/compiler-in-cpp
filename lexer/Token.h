@@ -64,5 +64,15 @@ private:
     std::string literal;
 };
 
+class OpToken : public Token {
+private:
+    OpType opType;
+public:
+    static OpType getOpType(const std::string &str);
+
+    OpToken(int line, OpType type);
+
+    OpType getOpType() const;
+};
 
 #endif //DESIGN_1_TOKEN_H

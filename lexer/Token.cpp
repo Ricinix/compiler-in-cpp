@@ -87,3 +87,60 @@ StrToken::StrToken(int line, std::string &str) : Token(line, TokenType::string) 
 std::string StrToken::getText() const {
     return literal;
 }
+
+OpType OpToken::getOpType(const std::string &str) {
+    if (str.length() > 3) {
+        return OpType::none;
+    }
+    if (str == "+") {
+        return OpType::plus;
+    }
+    else if (str == "-") {
+        return OpType::minus;
+    }
+    else if (str == "*") {
+        return OpType::times;
+    }
+    else if (str == "/") {
+        return OpType::divide;
+    }
+    else if (str == "%") {
+        return OpType::mod;
+    }
+    else if (str == "==") {
+        return OpType::equal;
+    }
+    else if (str == "<") {
+        return OpType::less;
+    }
+    else if (str == ">") {
+        return OpType::more;
+    }
+    else if (str == "<=") {
+        return OpType::lessEqual;
+    }
+    else if (str == ">=") {
+        return OpType::moreEqual;
+    }
+    else if (str == "&&") {
+        return OpType::logicalAnd;
+    }
+    else if (str == "||") {
+        return OpType::logicalOr;
+    }
+    else if (str == "!") {
+        return OpType::logicalNot;
+    }
+    else if (str == "=") {
+        return OpType::assign;
+    }
+    return OpType::none;
+}
+
+OpToken::OpToken(int line, OpType type) : Token(line, TokenType::op) {
+    opType = type;
+}
+
+OpType OpToken::getOpType() const {
+    return opType;
+}
