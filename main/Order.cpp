@@ -5,6 +5,7 @@
 #include "Order.h"
 #include "../util/Log.h"
 #include "../lexer/Lexer.h"
+#include "../parser/Parser.h"
 
 Order::Order(std::string &src, std::string &target, OrderType type) {
     srcPath = src;
@@ -39,11 +40,16 @@ CompileOrder::CompileOrder(std::string &src, std::string &target, OrderType type
 void CompileOrder::exec() {
     Log::info("compiling" + getSrcPath());
     IoUtil ioUtil(getSrcPath(), getTargetPath());
-    Lexer lexer(ioUtil);
-    Token *t_ptr = lexer.read();
-    Log::info(*t_ptr);
-    while (t_ptr != nullptr && t_ptr->getTokenType() != TokenType::eof) {
-        Log::info(*t_ptr);
-        t_ptr = lexer.read();
-    }
+    auto *lexer_ptr = new Lexer(ioUtil);
+    auto *ruleSet = RuleSet::generate();
+    Parser parser(ruleSet, lexer_ptr);
+    parser.parse();
+//    parser.getParseTree();
+
+//    Token *t_ptr = lexer.read();
+//    Log::info(*t_ptr);
+//    while (t_ptr != nullptr && t_ptr->getTokenType() != TokenType::eof) {
+//        Log::info(*t_ptr);
+//        t_ptr = lexer.read();
+//    }
 }

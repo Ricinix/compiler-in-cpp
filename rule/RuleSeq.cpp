@@ -35,3 +35,11 @@ RuleSeq* RuleSeq::appendEmpty() {
     return this;
 }
 
+RuleItem *RuleSeq::getRuleItemByPos(int pos) {
+    return ruleItemSet[pos];
+}
+
+int RuleSeq::ruleItemNum() {
+    return ruleItemSet.size();
+}
+

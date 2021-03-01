@@ -5,13 +5,14 @@
 #ifndef DESIGN_1_RULESET_H
 #define DESIGN_1_RULESET_H
 
-#include <memory>
+#include <map>
 #include <vector>
 #include "Rule.h"
 
 class RuleSet {
 private:
     std::vector<Rule *> ruleSet;
+    std::map<std::string, Rule *> ruleMap;
 
 public:
     Rule *makeNewRule(const std::string &name);
@@ -23,7 +24,15 @@ public:
      *
      * @return
      */
-    static std::unique_ptr<RuleSet> generate();
+    static RuleSet *generate();
+
+    int ruleNum();
+
+    Rule *getRule(int i);
+
+    Rule *getRule(std::string &startSymbolName);
+
+    Rule *getRule(RuleItem *startSymbol);
 };
 
 

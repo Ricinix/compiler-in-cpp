@@ -16,6 +16,10 @@ public:
     RuleSeq* appendTerminalSymbol(const std::string &name);
     RuleSeq* appendTerminalSymbol(TokenType tokenType);
     RuleSeq* appendEmpty();
+
+    RuleItem* getRuleItemByPos(int pos);
+    int ruleItemNum();
+
     ~RuleSeq();
 };
 

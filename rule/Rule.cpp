@@ -10,21 +10,38 @@ Rule::~Rule() {
         delete ruleSeq;
         ruleSeq = nullptr;
     }
+    delete startSymbol;
+    startSymbol = nullptr;
 }
 
 RuleSeq *Rule::makeNewSeq() {
-    auto ruleSeq_ptr = new RuleSeq();
+    auto *ruleSeq_ptr = new RuleSeq();
     ruleSeqSet.push_back(ruleSeq_ptr);
     return ruleSeq_ptr;
 }
 
 Rule::Rule(const std::string &name) {
     startName = name;
+    startSymbol = new NonTerminalSymbol(name);
 }
 
 void Rule::makeEmptySeq() {
-    auto ruleSeq_ptr = new RuleSeq();
+    auto *ruleSeq_ptr = new RuleSeq();
     ruleSeq_ptr->appendEmpty();
     ruleSeqSet.push_back(ruleSeq_ptr);
 }
+
+RuleItem *Rule::getStartSymbol() {
+    return startSymbol;
+}
+
+int Rule::ruleSeqNum() {
+    return ruleSeqSet.size();
+}
+
+RuleSeq *Rule::getRuleSeq(int i) {
+    return ruleSeqSet[i];
+}
+
+
 

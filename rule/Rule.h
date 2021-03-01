@@ -15,11 +15,15 @@ private:
      */
     std::vector<RuleSeq*> ruleSeqSet;
     std::string startName;
+    RuleItem* startSymbol;
 public:
     explicit Rule(const std::string &name);
+    ~Rule();
     RuleSeq* makeNewSeq();
     void makeEmptySeq();
-    ~Rule();
+    RuleItem* getStartSymbol();
+    int ruleSeqNum();
+    RuleSeq* getRuleSeq(int i);
 };
 
 

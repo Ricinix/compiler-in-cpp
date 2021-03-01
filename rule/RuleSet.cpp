@@ -7,6 +7,7 @@
 Rule *RuleSet::makeNewRule(const std::string &name) {
     Rule *rule_ptr = new Rule(name);
     ruleSet.push_back(rule_ptr);
+    ruleMap[name] = rule_ptr;
     return rule_ptr;
 }
 
@@ -15,65 +16,88 @@ RuleSet::~RuleSet() {
         delete rule_ptr;
         rule_ptr = nullptr;
     }
+    ruleSet.clear();
+    ruleMap.clear();
 }
 
-std::unique_ptr<RuleSet> RuleSet::generate() {
-    auto ruleSet = std::make_unique<RuleSet>();
+RuleSet *RuleSet::generate() {
+    auto *ruleSet = new RuleSet();
 
     // program 语法，包含了3个新产生式
-    auto program = ruleSet->makeNewRule("program");
+    auto *program = ruleSet->makeNewRule("program");
     program->makeNewSeq()->appendNonTerminalSymbol("statementOrNone")->appendNonTerminalSymbol("lineEnd");
-    auto program2 = ruleSet->makeNewRule("statementOrNone");
+    auto *program2 = ruleSet->makeNewRule("statementOrNone");
     program2->makeNewSeq()->appendNonTerminalSymbol("statement");
     program2->makeEmptySeq();
-    auto lineEnd = ruleSet->makeNewRule("lineEnd");
+    auto *lineEnd = ruleSet->makeNewRule("lineEnd");
     lineEnd->makeNewSeq()->appendTerminalSymbol(";");
     lineEnd->makeNewSeq()->appendTerminalSymbol(TokenType::eol);
 
     // statement 语法，包含了2个新产生式
-    auto statement = ruleSet->makeNewRule("statement");
+    auto *statement = ruleSet->makeNewRule("statement");
     statement->makeNewSeq()->appendTerminalSymbol("if")->appendNonTerminalSymbol("expr")
-    ->appendNonTerminalSymbol("block")->appendNonTerminalSymbol("statement2");
+            ->appendNonTerminalSymbol("block")->appendNonTerminalSymbol("statement2");
     statement->makeNewSeq()->appendTerminalSymbol("while")->appendNonTerminalSymbol("expr")
-    ->appendNonTerminalSymbol("block");
+            ->appendNonTerminalSymbol("block");
     statement->makeNewSeq()->appendNonTerminalSymbol("simple");
-    auto statement2 = ruleSet->makeNewRule("statement2");
+    auto *statement2 = ruleSet->makeNewRule("statement2");
     statement2->makeNewSeq()->appendTerminalSymbol("else")->appendNonTerminalSymbol("block");
     statement2->makeEmptySeq();
 
     // simple 语法，包含了1个新产生式
-    auto simple = ruleSet->makeNewRule("simple");
+    auto *simple = ruleSet->makeNewRule("simple");
     simple->makeNewSeq()->appendNonTerminalSymbol("expr");
 
     // block 语法，包含了2个新产生式
-    auto block = ruleSet->makeNewRule("block");
+    auto *block = ruleSet->makeNewRule("block");
     block->makeNewSeq()->appendTerminalSymbol("{")->appendNonTerminalSymbol("statementOrNone")
-    ->appendNonTerminalSymbol("block2")->appendTerminalSymbol("}");
-    auto block2 = ruleSet->makeNewRule("block2");
+            ->appendNonTerminalSymbol("block2")->appendTerminalSymbol("}");
+    auto *block2 = ruleSet->makeNewRule("block2");
     block2->makeNewSeq()->appendNonTerminalSymbol("lineEnd")->appendNonTerminalSymbol("statementOrNone")
-    ->appendNonTerminalSymbol("block2");
+            ->appendNonTerminalSymbol("block2");
     block2->makeEmptySeq();
 
     // expr 语法，包含了2个新产生式
-    auto expr = ruleSet->makeNewRule("expr");
+    auto *expr = ruleSet->makeNewRule("expr");
     expr->makeNewSeq()->appendNonTerminalSymbol("factor")->appendNonTerminalSymbol("expr2");
-    auto expr2 = ruleSet->makeNewRule("expr2");
+    auto *expr2 = ruleSet->makeNewRule("expr2");
     expr2->makeNewSeq()->appendTerminalSymbol(TokenType::op)->appendNonTerminalSymbol("factor")
-    ->appendNonTerminalSymbol("expr2");
+            ->appendNonTerminalSymbol("expr2");
     expr2->makeEmptySeq();
 
     // factor 语法，包含了1个新产生式
-    auto factor = ruleSet->makeNewRule("factor");
+    auto *factor = ruleSet->makeNewRule("factor");
     factor->makeNewSeq()->appendTerminalSymbol("-")->appendNonTerminalSymbol("primary");
     factor->makeNewSeq()->appendNonTerminalSymbol("primary");
 
     // primary 语法，包含了1个新产生式
-    auto primary = ruleSet->makeNewRule("primary");
+    auto *primary = ruleSet->makeNewRule("primary");
     primary->makeNewSeq()->appendTerminalSymbol("(")->appendNonTerminalSymbol("expr")
-    ->appendTerminalSymbol(")");
+            ->appendTerminalSymbol(")");
     primary->makeNewSeq()->appendTerminalSymbol(TokenType::number);
     primary->makeNewSeq()->appendTerminalSymbol(TokenType::identifier);
     primary->makeNewSeq()->appendTerminalSymbol(TokenType::string);
-    
+
     return ruleSet;
+}
+
+int RuleSet::ruleNum() {
+    return ruleSet.size();
+}
+
+Rule *RuleSet::getRule(int i) {
+    return ruleSet[i];
+}
+
+Rule *RuleSet::getRule(std::string &startSymbolName) {
+    auto rulePair = ruleMap.find(startSymbolName);
+    if (rulePair != ruleMap.end()) {
+        return rulePair->second;
+    }
+    return nullptr;
+}
+
+Rule *RuleSet::getRule(RuleItem *startSymbol) {
+    std::string symbolName = startSymbol->getSymbolName();
+    return getRule(symbolName);
 }
