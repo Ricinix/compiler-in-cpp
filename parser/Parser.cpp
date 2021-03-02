@@ -45,7 +45,7 @@ ParseTree *Parser::getParseTree() {
 bool Parser::recurParseFromTop(ParseTreeNode* node) {
     if (node->isLeaf()) {
         // 叶子节点则不需要再构造子树，所以该节点为根节点的子树构造成功
-        Log::info(node->getRuleItem()->getSymbolName() + "已是叶子节点");
+        Log::info(node->getNodeName() + "已是叶子节点");
         return true;
     }
     auto *rule = rules->getRule(node->getRuleItem());
@@ -68,14 +68,14 @@ bool Parser::recurParseFromTop(ParseTreeNode* node) {
                     }
                 } else if (ruleItem->getRuleItemType() == RuleItemType::Empty) {
                     // ε则成功且保留当前token
-                    auto *child = new ParseTreeLeaf(ruleItem);
+                    auto *child = new ParseTreeLeaf(ruleItem, nullptr);
                     Log::info("增加新叶子节点: ε");
                     child->setFather(node);
                     node->appendChild(child);
                 } else if (ruleItem->matchToken(getNowToken())){
                     // 终结符则停止
-                    auto *child = new ParseTreeLeaf(ruleItem);
-                    Log::info("增加新叶子节点: " + child->getRuleItem()->getSymbolName());
+                    auto *child = new ParseTreeLeaf(ruleItem, getNowToken());
+                    Log::info("增加新叶子节点: " + child->getNodeName());
                     child->setFather(node);
                     node->appendChild(child);
                     nextToken();
@@ -86,14 +86,14 @@ bool Parser::recurParseFromTop(ParseTreeNode* node) {
                 }
             }
             if (seqSucceed) {
-                Log::info(node->getRuleItem()->getSymbolName() + "子树构造成功");
+                Log::info(node->getNodeName() + "子树构造成功");
                 return true;
             } else {
                 node->clearChildren();
             }
         }
     } else {
-        Log::info(node->getRuleItem()->getSymbolName() + "找不到该文法");
+        Log::info(node->getNodeName() + "找不到该文法");
     }
     // 构造失败的原因：全部产生式都无法匹配上/无法找到对应的文法规则
 //    Log::info(node->getRuleItem()->getSymbolName() + "构建失败");

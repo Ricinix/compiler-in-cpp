@@ -6,6 +6,7 @@
 
 ParseTreeNode::ParseTreeNode(RuleItem *ruleItem) {
     symbol = ruleItem;
+    token = nullptr;
 }
 
 void ParseTreeNode::setFather(ParseTreeNode *node) {
@@ -27,22 +28,15 @@ ParseTreeNode::~ParseTreeNode() {
     }
 }
 
-void ParseTreeNode::appendChildren(RuleSeq *ruleSeq) {
-    for (int i = 0; i < ruleSeq->ruleItemNum(); ++i) {
-        auto *ruleItem = ruleSeq->getRuleItemByPos(i);
-        if (ruleItem->getRuleItemType() == RuleItemType::NonTerminal) {
-            children.push_back(new ParseTreeNonLeaf(ruleItem));
-        } else {
-            children.push_back(new ParseTreeLeaf(ruleItem));
-        }
-    }
-}
-
 void ParseTreeNode::appendChild(ParseTreeNode *node) {
     children.push_back(node);
 }
 
 void ParseTreeNode::setChild(int pos, ParseTreeNode *node) {
+    if (childNum() >= pos) {
+        appendChild(node);
+        return;
+    }
     if (children[pos] != nullptr) {
         delete children[pos];
     }
@@ -65,13 +59,34 @@ bool ParseTreeNode::isLeaf() {
     return false;
 }
 
+ParseTreeNode::ParseTreeNode(RuleItem *ruleItem, Token *token_p) {
+    symbol = ruleItem;
+    token = token_p;
+}
 
-ParseTreeLeaf::ParseTreeLeaf(RuleItem *ruleItem) : ParseTreeNode(ruleItem) {
+Token *ParseTreeNode::getToken() {
+    return token;
+}
+
+std::string ParseTreeNode::getNodeName() const {
+    return "";
+}
+
+
+ParseTreeLeaf::ParseTreeLeaf(RuleItem *ruleItem, Token* token_p) : ParseTreeNode(ruleItem, token_p) {
 
 }
 
 bool ParseTreeLeaf::isLeaf() {
     return true;
+}
+
+ParseTreeLeaf::ParseTreeLeaf(RuleItem *ruleItem) : ParseTreeNode(ruleItem) {
+
+}
+
+std::string ParseTreeLeaf::getNodeName() const {
+    return token->getText();
 }
 
 ParseTreeNonLeaf::ParseTreeNonLeaf(RuleItem *ruleItem) : ParseTreeNode(ruleItem) {
@@ -80,4 +95,8 @@ ParseTreeNonLeaf::ParseTreeNonLeaf(RuleItem *ruleItem) : ParseTreeNode(ruleItem)
 
 bool ParseTreeNonLeaf::isLeaf() {
     return false;
+}
+
+std::string ParseTreeNonLeaf::getNodeName() const {
+    return "NonLeaf: " + symbol->getSymbolName();
 }

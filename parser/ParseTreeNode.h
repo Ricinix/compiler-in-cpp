@@ -16,42 +16,56 @@ protected:
     ParseTreeNode *father = nullptr;
     std::vector<ParseTreeNode *> children;
     RuleItem *symbol;
+    Token *token;
 public:
     explicit ParseTreeNode(RuleItem *ruleItem);
 
+    ParseTreeNode(RuleItem *ruleItem, Token *token_p);
+
     ~ParseTreeNode();
 
-    void setFather(ParseTreeNode* node);
+    void setFather(ParseTreeNode *node);
 
-    ParseTreeNode* getFather();
+    ParseTreeNode *getFather();
 
-    void appendChildren(RuleSeq* ruleSeq);
+    void appendChild(ParseTreeNode *node);
 
-    void appendChild(ParseTreeNode* node);
+    void setChild(int pos, ParseTreeNode *node);
 
-    void setChild(int pos, ParseTreeNode* node);
-
-    ParseTreeNode* getChild(int pos);
+    ParseTreeNode *getChild(int pos);
 
     int childNum();
 
     void clearChildren();
 
-    RuleItem* getRuleItem();
+    RuleItem *getRuleItem();
 
     virtual bool isLeaf();
+
+    Token *getToken();
+
+    virtual std::string getNodeName() const;
+
 };
 
 class ParseTreeLeaf : public ParseTreeNode {
 public:
     explicit ParseTreeLeaf(RuleItem *ruleItem);
+
+    ParseTreeLeaf(RuleItem *ruleItem, Token *token_p);
+
     bool isLeaf() override;
+
+    std::string getNodeName() const override;
 };
 
 class ParseTreeNonLeaf : public ParseTreeNode {
 public:
     explicit ParseTreeNonLeaf(RuleItem *ruleItem);
+
     bool isLeaf() override;
+
+    std::string getNodeName() const override;
 };
 
 #endif //DESIGN_1_PARSETREENODE_H
