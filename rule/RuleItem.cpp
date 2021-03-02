@@ -34,7 +34,7 @@ RuleItemType NonTerminalSymbol::getRuleItemType() {
 }
 
 TerminalSymbol::TerminalSymbol(const std::string &name) : RuleItem(name) {
-    tokenType = TokenType::none;
+    tokenType = TokenType::reserve;
 }
 
 TerminalSymbol::TerminalSymbol(TokenType type) : RuleItem("") {
@@ -42,12 +42,12 @@ TerminalSymbol::TerminalSymbol(TokenType type) : RuleItem("") {
 }
 
 bool TerminalSymbol::matchToken(Token *token) {
-    if (tokenType == TokenType::none) {
+    if (tokenType == TokenType::reserve) {
         // 如果当前的终结符没有指定TokenType，那就是在Rule中定义的关键字，按id处理，且内容得一致
         return token->getTokenType() == TokenType::identifier && token->getText() == symbolName;
     } else if (token->getTokenType() == TokenType::identifier && SymbolTable::isReservedWord(token->getText())) {
         // 假如不是终结符是关键字，而是token是关键字，则也要完全比对
-        return tokenType == TokenType::none && token->getText() == symbolName;
+        return tokenType == TokenType::reserve && token->getText() == symbolName;
     }
     return token->getTokenType() == tokenType;
 }

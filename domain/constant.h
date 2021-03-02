@@ -13,6 +13,7 @@ enum class TokenType{
     string,
     op,
     none, // 默认赋值，代表没有类型
+    reserve, // 保留字，给文法Rule用的
 };
 
 enum class OpType {
