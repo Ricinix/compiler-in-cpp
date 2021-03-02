@@ -45,3 +45,8 @@ void ParseTree::printTree(ParseTreeNode *node, std::ostream &fmt, std::string &i
     fmt << indent << ")";
 }
 
+ParseTree::~ParseTree() {
+    delete root;
+    root = nullptr;
+}
+

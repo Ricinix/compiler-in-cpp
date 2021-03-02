@@ -13,6 +13,7 @@ private:
     ParseTreeNode* root = nullptr;
     void printTree(ParseTreeNode *node, std::ostream &fmt, std::string &indent) const;
 public:
+    ~ParseTree();
     ParseTreeNode* getRoot();
     void setRoot(ParseTreeNode* node);
     friend std::ostream &operator<<(std::ostream &os, const ParseTree &tree);
