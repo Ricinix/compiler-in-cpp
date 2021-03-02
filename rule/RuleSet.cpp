@@ -25,13 +25,18 @@ RuleSet *RuleSet::generate() {
 
     // program 语法，包含了3个新产生式
     auto *program = ruleSet->makeNewRule("program");
-    program->makeNewSeq()->appendNonTerminalSymbol("statementOrNone")->appendNonTerminalSymbol("lineEnd");
+    program->makeNewSeq()->appendNonTerminalSymbol("statementOrNone")->appendNonTerminalSymbol("lineEnd")
+    ->appendNonTerminalSymbol("program4");
     auto *program2 = ruleSet->makeNewRule("statementOrNone");
     program2->makeNewSeq()->appendNonTerminalSymbol("statement");
     program2->makeEmptySeq();
     auto *lineEnd = ruleSet->makeNewRule("lineEnd");
     lineEnd->makeNewSeq()->appendTerminalSymbol(";");
     lineEnd->makeNewSeq()->appendTerminalSymbol(TokenType::eol);
+    // 增加program对多条statement的识别
+    auto *program4 = ruleSet->makeNewRule("program4");
+    program4->makeNewSeq()->appendNonTerminalSymbol("program");
+    program4->makeEmptySeq();
 
     // statement 语法，包含了2个新产生式
     auto *statement = ruleSet->makeNewRule("statement");
