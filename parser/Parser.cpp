@@ -57,6 +57,7 @@ bool Parser::recurParseFromTop(ParseTreeNode* node) {
                 if (!ruleItem->isTerminal()) {
                     // 不是终结符则继续构造
                     auto *child = new ParseTreeNonLeaf(ruleItem);
+                    child->setFather(node);
                     node->setChild(j, child);
                     if (!recurParseFromTop(child)) {
                         seqSucceed = false;
@@ -65,6 +66,7 @@ bool Parser::recurParseFromTop(ParseTreeNode* node) {
                 } else if (ruleItem->matchToken(getNowToken())){
                     // 终结符则停止
                     auto *child = new ParseTreeLeaf(ruleItem);
+                    child->setFather(node);
                     node->setChild(j, child);
                     nextToken();
                 } else {

@@ -6,13 +6,16 @@
 #define DESIGN_1_PARSETREE_H
 
 #include "ParseTreeNode.h"
+#include <sstream>
 
 class ParseTree {
 private:
     ParseTreeNode* root = nullptr;
+    void printTree(ParseTreeNode *node, std::ostringstream &fmt) const;
 public:
     ParseTreeNode* getRoot();
     void setRoot(ParseTreeNode* node);
+    friend std::ostream &operator<<(std::ostream &os, const ParseTree &tree);
 };
 
 

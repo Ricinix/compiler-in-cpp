@@ -44,6 +44,8 @@ std::ostream &operator<<(std::ostream &os, const Token &token) {
         type = "identifier";
     } else if (token.getTokenType() == TokenType::number) {
         type = "number";
+    } else if (token.getTokenType() == TokenType::op) {
+        type = "op";
     }
 
     os << ">>>>>>>>>>Token>>>>>>>>>>" << std::endl;

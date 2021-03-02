@@ -44,7 +44,7 @@ void CompileOrder::exec() {
     auto *ruleSet = RuleSet::generate();
     Parser parser(ruleSet, lexer_ptr);
     parser.parse();
-//    parser.getParseTree();
+    Log::info(*parser.getParseTree());
 
 //    Token *t_ptr = lexer.read();
 //    Log::info(*t_ptr);
