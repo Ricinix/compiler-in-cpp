@@ -146,3 +146,12 @@ OpToken::OpToken(int line, OpType type) : Token(line, TokenType::op) {
 OpType OpToken::getOpType() const {
     return opType;
 }
+
+OpToken::OpToken(int line, OpType type, const std::string &str) : Token(line, TokenType::op) {
+    rawStr = str;
+    opType = type;
+}
+
+std::string OpToken::getText() const {
+    return rawStr;
+}

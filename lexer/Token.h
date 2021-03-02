@@ -67,12 +67,17 @@ private:
 class OpToken : public Token {
 private:
     OpType opType;
+    std::string rawStr;
 public:
     static OpType getOpType(const std::string &str);
 
     OpToken(int line, OpType type);
 
+    OpToken(int line, OpType type, const std::string &str);
+
     OpType getOpType() const;
+
+    std::string getText() const override;
 };
 
 #endif //DESIGN_1_TOKEN_H

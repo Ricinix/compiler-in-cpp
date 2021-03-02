@@ -97,7 +97,7 @@ void Lexer::addToken(int lineNo, std::smatch &result) {
             } else {
                 OpType opType = OpToken::getOpType(m);
                 if (opType != OpType::none) {
-                    t_ptr = new OpToken(lineNo, opType);
+                    t_ptr = new OpToken(lineNo, opType, m);
                 } else {
                     t_ptr = new IdToken(lineNo, m);
                 }
