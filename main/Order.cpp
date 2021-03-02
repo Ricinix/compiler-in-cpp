@@ -46,10 +46,9 @@ void CompileOrder::exec() {
     parser.parse();
     Log::info(*parser.getParseTree());
 
-//    Token *t_ptr = lexer.read();
-//    Log::info(*t_ptr);
+//    Token *t_ptr = lexer_ptr->read();
 //    while (t_ptr != nullptr && t_ptr->getTokenType() != TokenType::eof) {
 //        Log::info(*t_ptr);
-//        t_ptr = lexer.read();
+//        t_ptr = lexer_ptr->read();
 //    }
 }

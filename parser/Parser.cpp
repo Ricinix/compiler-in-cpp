@@ -34,7 +34,10 @@ void Parser::parseFromTop() {
             break;
         }
     }
-
+//    Rule *rule = rules->getRule(0);
+//    auto *root = new ParseTreeNonLeaf(rule->getStartSymbol());
+//    parseTree->setRoot(root);
+//    recurParseFromTop(root);
 }
 
 ParseTree *Parser::getParseTree() {
@@ -60,8 +63,7 @@ bool Parser::recurParseFromTop(ParseTreeNode* node) {
                     // 不是终结符则继续构造
                     auto *child = new ParseTreeNonLeaf(ruleItem);
                     child->setFather(node);
-//                    node->setChild(j, child);
-                    node->appendChild(child);
+                    node->setChild(j, child);
                     if (!recurParseFromTop(child)) {
                         seqSucceed = false;
                         break;
@@ -71,7 +73,7 @@ bool Parser::recurParseFromTop(ParseTreeNode* node) {
                     auto *child = new ParseTreeLeaf(ruleItem, nullptr);
                     Log::info("增加新叶子节点: ε");
                     child->setFather(node);
-                    node->appendChild(child);
+                    node->setChild(j, child);
                 } else if (ruleItem->matchToken(getNowToken())){
                     // 终结符则停止
                     auto *child = new ParseTreeLeaf(ruleItem, getNowToken());
@@ -96,13 +98,12 @@ bool Parser::recurParseFromTop(ParseTreeNode* node) {
         Log::info(node->getNodeName() + "找不到该文法");
     }
     // 构造失败的原因：全部产生式都无法匹配上/无法找到对应的文法规则
-//    Log::info(node->getRuleItem()->getSymbolName() + "构建失败");
     return false;
 }
 
 void Parser::nextToken() {
     nowToken = mLexer->read();
-    Log::info("读取Token: " + nowToken->getText());
+    Log::info(*nowToken);
 }
 
 Token *Parser::getNowToken() {
