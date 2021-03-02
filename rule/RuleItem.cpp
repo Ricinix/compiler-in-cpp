@@ -12,24 +12,24 @@ std::string RuleItem::getSymbolName() {
     return symbolName;
 }
 
-bool RuleItem::isTerminal() {
-    return true;
-}
-
 bool RuleItem::matchToken(Token *token) {
     return false;
+}
+
+RuleItemType RuleItem::getRuleItemType() {
+    return RuleItemType::Empty;
 }
 
 NonTerminalSymbol::NonTerminalSymbol(const std::string &name) : RuleItem(name) {
 
 }
 
-bool NonTerminalSymbol::isTerminal() {
+bool NonTerminalSymbol::matchToken(Token *token) {
     return false;
 }
 
-bool NonTerminalSymbol::matchToken(Token *token) {
-    return false;
+RuleItemType NonTerminalSymbol::getRuleItemType() {
+    return RuleItemType::NonTerminal;
 }
 
 TerminalSymbol::TerminalSymbol(const std::string &name) : RuleItem(name) {
@@ -40,10 +40,6 @@ TerminalSymbol::TerminalSymbol(TokenType type) : RuleItem("") {
     tokenType = type;
 }
 
-bool TerminalSymbol::isTerminal() {
-    return true;
-}
-
 bool TerminalSymbol::matchToken(Token *token) {
     if (tokenType == TokenType::none) {
         return token->getTokenType() == TokenType::identifier && token->getText() == symbolName;
@@ -51,14 +47,18 @@ bool TerminalSymbol::matchToken(Token *token) {
     return token->getTokenType() == tokenType;
 }
 
+RuleItemType TerminalSymbol::getRuleItemType() {
+    return RuleItemType::Terminal;
+}
+
 EmptySymbol::EmptySymbol() : RuleItem("") {
 
 }
 
-bool EmptySymbol::isTerminal() {
-    return true;
-}
-
 bool EmptySymbol::matchToken(Token *token) {
     return false;
+}
+
+RuleItemType EmptySymbol::getRuleItemType() {
+    return RuleItemType::Empty;
 }

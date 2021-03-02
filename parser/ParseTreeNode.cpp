@@ -30,7 +30,7 @@ ParseTreeNode::~ParseTreeNode() {
 void ParseTreeNode::appendChildren(RuleSeq *ruleSeq) {
     for (int i = 0; i < ruleSeq->ruleItemNum(); ++i) {
         auto *ruleItem = ruleSeq->getRuleItemByPos(i);
-        if (!ruleItem->isTerminal()) {
+        if (ruleItem->getRuleItemType() == RuleItemType::NonTerminal) {
             children.push_back(new ParseTreeNonLeaf(ruleItem));
         } else {
             children.push_back(new ParseTreeLeaf(ruleItem));
@@ -79,5 +79,5 @@ ParseTreeNonLeaf::ParseTreeNonLeaf(RuleItem *ruleItem) : ParseTreeNode(ruleItem)
 }
 
 bool ParseTreeNonLeaf::isLeaf() {
-    return true;
+    return false;
 }

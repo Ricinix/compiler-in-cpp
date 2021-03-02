@@ -9,6 +9,12 @@
 #include "../domain/constant.h"
 #include "../lexer/Token.h"
 
+enum class RuleItemType {
+    NonTerminal,
+    Terminal,
+    Empty,
+};
+
 /**
  * 文法项的抽象类
  */
@@ -18,7 +24,7 @@ protected:
 public:
     explicit RuleItem(const std::string &name);
     std::string getSymbolName();
-    virtual bool isTerminal();
+    virtual RuleItemType getRuleItemType();
     virtual bool matchToken(Token* token);
 };
 
@@ -31,7 +37,7 @@ private:
 public:
     explicit TerminalSymbol(const std::string &name);
     explicit TerminalSymbol(TokenType type);
-    bool isTerminal() override;
+    RuleItemType getRuleItemType() override;
     bool matchToken(Token *token) override;
 };
 
@@ -41,7 +47,7 @@ public:
 class NonTerminalSymbol : public RuleItem {
 public:
     explicit NonTerminalSymbol(const std::string &name);
-    bool isTerminal() override;
+    RuleItemType getRuleItemType() override;
     bool matchToken(Token *token) override;
 };
 
@@ -52,7 +58,7 @@ class EmptySymbol : public RuleItem {
 
 public:
     explicit EmptySymbol();
-    bool isTerminal() override;
+    RuleItemType getRuleItemType() override;
     bool matchToken(Token *token) override;
 };
 
