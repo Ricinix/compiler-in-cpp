@@ -11,7 +11,7 @@
 class ParseTree {
 private:
     ParseTreeNode* root = nullptr;
-    void printTree(ParseTreeNode *node, std::ostringstream &fmt, std::string &indent) const;
+    void printTree(ParseTreeNode *node, std::ostream &fmt, std::string &indent) const;
 public:
     ParseTreeNode* getRoot();
     void setRoot(ParseTreeNode* node);

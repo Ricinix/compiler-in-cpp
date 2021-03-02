@@ -17,14 +17,13 @@ void ParseTree::setRoot(ParseTreeNode *node) {
 std::ostream &operator<<(std::ostream &os, const ParseTree &tree) {
     std::ostringstream fmt;
     std::string intent;
-    tree.printTree(tree.root, fmt, intent);
     os << ">>>>>>>>>>ParseTree>>>>>>>>>>" << std::endl;
-    os << fmt.str() << std::endl;
-    os << "<<<<<<<<<<ParseTree<<<<<<<<<<";
+    tree.printTree(tree.root, os, intent);
+    os << std::endl << "<<<<<<<<<<ParseTree<<<<<<<<<<";
     return os;
 }
 
-void ParseTree::printTree(ParseTreeNode *node, std::ostringstream &fmt, std::string &indent) const {
+void ParseTree::printTree(ParseTreeNode *node, std::ostream &fmt, std::string &indent) const {
     if (node == nullptr) {
         fmt << indent << "null";
         return;
