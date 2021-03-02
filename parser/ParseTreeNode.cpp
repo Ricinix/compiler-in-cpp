@@ -29,6 +29,7 @@ ParseTreeNode::~ParseTreeNode() {
 }
 
 void ParseTreeNode::appendChild(ParseTreeNode *node) {
+    node->setFather(this);
     children.push_back(node);
 }
 
@@ -41,6 +42,7 @@ void ParseTreeNode::setChild(int pos, ParseTreeNode *node) {
         delete children[pos];
     }
     children[pos] = node;
+    node->setFather(this);
 }
 
 ParseTreeNode *ParseTreeNode::getChild(int pos) {
@@ -86,6 +88,9 @@ ParseTreeLeaf::ParseTreeLeaf(RuleItem *ruleItem) : ParseTreeNode(ruleItem) {
 }
 
 std::string ParseTreeLeaf::getNodeName() const {
+    if (token == nullptr) {
+        return symbol->getSymbolName();
+    }
     return token->getText();
 }
 

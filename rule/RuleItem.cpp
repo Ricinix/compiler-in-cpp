@@ -56,7 +56,7 @@ RuleItemType TerminalSymbol::getRuleItemType() {
     return RuleItemType::Terminal;
 }
 
-EmptySymbol::EmptySymbol() : RuleItem("") {
+EmptySymbol::EmptySymbol() : RuleItem("ε") {
 
 }
 

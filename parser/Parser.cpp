@@ -62,8 +62,8 @@ bool Parser::recurParseFromTop(ParseTreeNode* node) {
                 if (ruleItem->getRuleItemType() == RuleItemType::NonTerminal) {
                     // 不是终结符则继续构造
                     auto *child = new ParseTreeNonLeaf(ruleItem);
-                    child->setFather(node);
                     node->setChild(j, child);
+//                    node->appendChild(child);
                     if (!recurParseFromTop(child)) {
                         seqSucceed = false;
                         break;
@@ -72,14 +72,14 @@ bool Parser::recurParseFromTop(ParseTreeNode* node) {
                     // ε则成功且保留当前token
                     auto *child = new ParseTreeLeaf(ruleItem, nullptr);
                     Log::info("增加新叶子节点: ε");
-                    child->setFather(node);
                     node->setChild(j, child);
+//                    node->appendChild(child);
                 } else if (ruleItem->matchToken(getNowToken())){
                     // 终结符则停止
                     auto *child = new ParseTreeLeaf(ruleItem, getNowToken());
                     Log::info("增加新叶子节点: " + child->getNodeName());
-                    child->setFather(node);
-                    node->appendChild(child);
+                    node->setChild(j, child);
+//                    node->appendChild(child);
                     nextToken();
                 } else {
                     // 当前产生式识别错误，需要换个产生式
