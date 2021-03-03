@@ -18,16 +18,9 @@ std::string ASTNode::location() const {
     return "";
 }
 
-const ASTNode *ASTNode::cbegin() const {
-    return nullptr;
-}
-
-const ASTNode *ASTNode::cend() const {
-    return nullptr;
-}
 
 std::string ASTNode::toString() const {
-    return std::__cxx11::string();
+    return "";
 }
 
 ASTLeaf::ASTLeaf(Token *token_p) {
@@ -40,14 +33,6 @@ ASTNode *ASTLeaf::child(int i) {
 
 int ASTLeaf::numChildren() const {
     return ASTNode::numChildren();
-}
-
-const ASTNode *ASTLeaf::cbegin() const {
-    return ASTNode::cbegin();
-}
-
-const ASTNode *ASTLeaf::cend() const {
-    return ASTNode::cend();
 }
 
 std::string ASTLeaf::location() const {

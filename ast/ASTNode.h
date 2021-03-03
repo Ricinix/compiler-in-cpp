@@ -10,6 +10,7 @@
 #include "../lexer/Token.h"
 
 class ASTNode {
+
 public:
     virtual ASTNode *child(int i);
 
@@ -17,22 +18,17 @@ public:
 
     virtual std::string location() const;
 
-    virtual const ASTNode *cbegin() const;
-
-    virtual const ASTNode *cend() const;
-
     virtual std::string toString() const;
 
     virtual ~ASTNode() = default;
 
+    virtual ASTNode* work()
 };
 
 /**
  * 叶子节点
  */
 class ASTLeaf : public ASTNode {
-private:
-    static std::vector<ASTNode *> empty;
 protected:
     Token *token_ptr;
 public:
@@ -44,16 +40,11 @@ public:
 
     int numChildren() const override;
 
-    const ASTNode *cbegin() const override;
-
-    const ASTNode *cend() const override;
-
     std::string location() const override;
 
     std::string toString() const override;
 
     Token *token();
-
 
     friend std::ostream &operator<<(std::ostream &os, const ASTLeaf &astLeaf);
 };
