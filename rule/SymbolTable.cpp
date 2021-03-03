@@ -4,7 +4,7 @@
 
 #include "SymbolTable.h"
 
-std::map<std::string, ReservedWord*> SymbolTable::reservedWordMap;
+std::map<std::string, Operator*> SymbolTable::reservedWordMap;
 
 /**
  * 不包含Op
@@ -20,9 +20,9 @@ bool SymbolTable::isReservedWord(const std::string &word) {
 }
 
 void SymbolTable::initReservedWordMap() {
-    reservedWordMap["{"] = new ReservedWord();
-    reservedWordMap["}"] = new ReservedWord();
-    reservedWordMap["while"] = new ReservedWord();
-    reservedWordMap["if"] = new ReservedWord();
-    reservedWordMap[";"] = new ReservedWord();
+    reservedWordMap["{"] = new Operator();
+    reservedWordMap["}"] = new Operator();
+    reservedWordMap["while"] = new Operator();
+    reservedWordMap["if"] = new Operator();
+    reservedWordMap[";"] = new Operator();
 }
