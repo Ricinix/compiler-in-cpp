@@ -5,7 +5,7 @@
 #ifndef DESIGN_1_CONSTANT_H
 #define DESIGN_1_CONSTANT_H
 
-enum class TokenType{
+enum class TokenType {
     eof, // end of file
     eol, // end of line
     identifier,
@@ -33,5 +33,11 @@ enum class OpType {
     logicalNot, // !
     assign, // =
 };
+
+// 定义保留字
+
+#define RW_WHILE "while"
+#define RW_IF "if"
+#define RW_ELSE "else"
 
 #endif //DESIGN_1_CONSTANT_H

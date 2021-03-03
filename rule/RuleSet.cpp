@@ -40,13 +40,14 @@ RuleSet *RuleSet::generate() {
 
     // statement 语法，包含了2个新产生式
     auto *statement = ruleSet->makeNewRule("statement");
-    statement->makeNewSeq()->appendTerminalSymbol("if")->appendNonTerminalSymbol("expr")
+    statement->makeNewSeq()->appendTerminalSymbol(RW_IF)->appendNonTerminalSymbol("expr")
             ->appendNonTerminalSymbol("block")->appendNonTerminalSymbol("statement2");
-    statement->makeNewSeq()->appendTerminalSymbol("while")->appendNonTerminalSymbol("expr")
+
+    statement->makeNewSeq()->appendTerminalSymbol(RW_WHILE)->appendNonTerminalSymbol("expr")
             ->appendNonTerminalSymbol("block");
     statement->makeNewSeq()->appendNonTerminalSymbol("simple");
     auto *statement2 = ruleSet->makeNewRule("statement2");
-    statement2->makeNewSeq()->appendTerminalSymbol("else")->appendNonTerminalSymbol("block");
+    statement2->makeNewSeq()->appendTerminalSymbol(RW_ELSE)->appendNonTerminalSymbol("block");
     statement2->makeEmptySeq();
 
     // simple 语法，包含了1个新产生式

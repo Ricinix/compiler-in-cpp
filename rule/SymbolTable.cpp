@@ -3,6 +3,7 @@
 //
 
 #include "SymbolTable.h"
+#include "../domain/constant.h"
 
 std::map<std::string, Operator*> SymbolTable::reservedWordMap;
 
@@ -22,7 +23,8 @@ bool SymbolTable::isReservedWord(const std::string &word) {
 void SymbolTable::initReservedWordMap() {
     reservedWordMap["{"] = new Operator();
     reservedWordMap["}"] = new Operator();
-    reservedWordMap["while"] = new Operator();
-    reservedWordMap["if"] = new Operator();
+    reservedWordMap[RW_WHILE] = new Operator();
+    reservedWordMap[RW_IF] = new Operator();
+    reservedWordMap[RW_ELSE] = new Operator();
     reservedWordMap[";"] = new Operator();
 }
