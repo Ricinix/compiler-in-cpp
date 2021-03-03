@@ -11,3 +11,7 @@ AbstractSyntaxTree::AbstractSyntaxTree(ParseTree *parseTree) {
 void AbstractSyntaxTree::translateToAst(ParseTreeNode *ptNode, ASTNode *astNode) {
 
 }
+
+void AbstractSyntaxTree::eval() {
+    root->work(nullptr, nullptr);
+}

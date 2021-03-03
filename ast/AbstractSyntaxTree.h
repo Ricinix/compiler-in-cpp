@@ -17,6 +17,8 @@ private:
 public:
     explicit AbstractSyntaxTree(ParseTree *parseTree);
 
+    void eval();
+
 };
 
 

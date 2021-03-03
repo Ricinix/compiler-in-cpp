@@ -7,7 +7,9 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 #include "../lexer/Token.h"
+#include "../rule/Operator.h"
 
 class ASTNode {
 
@@ -22,7 +24,13 @@ public:
 
     virtual ~ASTNode() = default;
 
-    virtual ASTNode* work()
+    /**
+     * 若未进行任何操作，或不需要返回值，则返回空指针
+     * @param op
+     * @param node
+     * @return
+     */
+    virtual std::unique_ptr<ASTNode> work(Operator *op, ASTNode *node);
 };
 
 /**

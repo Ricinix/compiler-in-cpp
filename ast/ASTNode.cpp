@@ -23,6 +23,10 @@ std::string ASTNode::toString() const {
     return "";
 }
 
+std::unique_ptr<ASTNode> ASTNode::work(Operator *op, ASTNode *node) {
+    return nullptr;
+}
+
 ASTLeaf::ASTLeaf(Token *token_p) {
     token_ptr = token_p;
 }
