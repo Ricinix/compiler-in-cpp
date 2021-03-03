@@ -23,7 +23,7 @@ std::string ASTNode::toString() const {
     return "";
 }
 
-std::unique_ptr<ASTNode> ASTNode::work(Operator *op, ASTNode *node) {
+std::unique_ptr<ASTNode> ASTNode::work() {
     return nullptr;
 }
 
@@ -58,6 +58,10 @@ std::ostream &operator<<(std::ostream &os, const ASTLeaf &astLeaf) {
 
 std::string ASTLeaf::toString() const {
     return token_ptr->getText();
+}
+
+std::unique_ptr<ASTNode> ASTLeaf::work() {
+    return ASTNode::work();
 }
 
 ASTList::ASTList(const std::vector<ASTNode *> &v) {
@@ -105,4 +109,8 @@ ASTList::~ASTList() {
         delete node_ptr;
     }
     children.clear();
+}
+
+std::unique_ptr<ASTNode> ASTList::work() {
+    return ASTNode::work();
 }

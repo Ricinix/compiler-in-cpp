@@ -13,5 +13,5 @@ void AbstractSyntaxTree::translateToAst(ParseTreeNode *ptNode, ASTNode *astNode)
 }
 
 void AbstractSyntaxTree::eval() {
-    root->work(nullptr, nullptr);
+    root->work();
 }

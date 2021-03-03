@@ -74,6 +74,10 @@ std::string ParseTreeNode::getNodeName() const {
     return "";
 }
 
+ASTNode *ParseTreeNode::toASTNode() {
+    return nullptr;
+}
+
 
 ParseTreeLeaf::ParseTreeLeaf(RuleItem *ruleItem, Token* token_p) : ParseTreeNode(ruleItem, token_p) {
 
@@ -94,6 +98,10 @@ std::string ParseTreeLeaf::getNodeName() const {
     return token->getText();
 }
 
+ASTNode *ParseTreeLeaf::toASTNode() {
+    return ParseTreeNode::toASTNode();
+}
+
 ParseTreeNonLeaf::ParseTreeNonLeaf(RuleItem *ruleItem) : ParseTreeNode(ruleItem) {
 
 }
@@ -104,4 +112,8 @@ bool ParseTreeNonLeaf::isLeaf() {
 
 std::string ParseTreeNonLeaf::getNodeName() const {
     return "NonLeaf: " + symbol->getSymbolName();
+}
+
+ASTNode *ParseTreeNonLeaf::toASTNode() {
+    return ParseTreeNode::toASTNode();
 }

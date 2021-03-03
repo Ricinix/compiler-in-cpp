@@ -7,6 +7,7 @@
 
 #include <vector>
 #include "../rule/RuleSeq.h"
+#include "../ast/ASTNode.h"
 
 /**
  * 语法分析树的基类
@@ -46,6 +47,8 @@ public:
 
     virtual std::string getNodeName() const;
 
+    virtual ASTNode* toASTNode();
+
 };
 
 class ParseTreeLeaf : public ParseTreeNode {
@@ -57,6 +60,8 @@ public:
     bool isLeaf() override;
 
     std::string getNodeName() const override;
+
+    ASTNode * toASTNode() override;
 };
 
 class ParseTreeNonLeaf : public ParseTreeNode {
@@ -66,6 +71,8 @@ public:
     bool isLeaf() override;
 
     std::string getNodeName() const override;
+
+    ASTNode * toASTNode() override;
 };
 
 #endif //DESIGN_1_PARSETREENODE_H

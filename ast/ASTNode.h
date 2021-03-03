@@ -30,7 +30,7 @@ public:
      * @param node
      * @return
      */
-    virtual std::unique_ptr<ASTNode> work(Operator *op, ASTNode *node);
+    virtual std::unique_ptr<ASTNode> work();
 };
 
 /**
@@ -55,6 +55,8 @@ public:
     Token *token();
 
     friend std::ostream &operator<<(std::ostream &os, const ASTLeaf &astLeaf);
+
+    std::unique_ptr<ASTNode> work() override;
 };
 
 /**
@@ -79,6 +81,8 @@ public:
     std::string toString() const override;
 
     friend std::ostream &operator<<(std::ostream &os, const ASTList &astList);
+
+    std::unique_ptr<ASTNode> work() override;
 };
 
 
