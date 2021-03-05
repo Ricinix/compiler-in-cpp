@@ -42,6 +42,11 @@ file(GLOB RULE_CPP_PATH ./rule/*.cpp)
 file(GLOB RULE_H_PATH ./rule/*.h)
 set(RULE_PATH ${RULE_CPP_PATH} ${RULE_H_PATH})
 
+# generator 目录下的文件
+file(GLOB GENERATOR_CPP_PATH ./generator/*.cpp)
+file(GLOB GENERATOR_H_PATH ./generator/*.h)
+set(GENERATOR_PATH ${GENERATOR_CPP_PATH} ${GENERATOR_H_PATH})
+
 # 设置编译时搜索库的路径
 link_directories(${LIBRARY_OUTPUT_PATH})
 
@@ -55,6 +60,7 @@ add_library(
         ${AST_PATH}
         ${PARSER_PATH}
         ${RULE_PATH}
+        ${GENERATOR_PATH}
 )
 
 # 生成可执行文件
