@@ -24,61 +24,61 @@ RuleSet *RuleSet::generate() {
     auto *ruleSet = new RuleSet();
 
     // program 语法，包含了3个新产生式
-    auto *program = ruleSet->makeNewRule("program");
-    program->makeNewSeq()->appendNonTerminalSymbol("statementOrNone")->appendNonTerminalSymbol("lineEnd")
-    ->appendNonTerminalSymbol("program4");
-    auto *program2 = ruleSet->makeNewRule("statementOrNone");
-    program2->makeNewSeq()->appendNonTerminalSymbol("statement");
+    auto *program = ruleSet->makeNewRule(NS_PROGRAM);
+    program->makeNewSeq()->appendNonTerminalSymbol(NS_STATEMENT_OR_NONE)->appendNonTerminalSymbol(NS_LINE_END)
+    ->appendNonTerminalSymbol(NS_PROGRAM_STAR);
+    auto *program2 = ruleSet->makeNewRule(NS_STATEMENT_OR_NONE);
+    program2->makeNewSeq()->appendNonTerminalSymbol(NS_STATEMENT);
     program2->makeEmptySeq();
-    auto *lineEnd = ruleSet->makeNewRule("lineEnd");
+    auto *lineEnd = ruleSet->makeNewRule(NS_LINE_END);
     lineEnd->makeNewSeq()->appendTerminalSymbol(";");
     lineEnd->makeNewSeq()->appendTerminalSymbol(TokenType::eol);
     // 增加program对多条statement的识别
-    auto *program4 = ruleSet->makeNewRule("program4");
-    program4->makeNewSeq()->appendNonTerminalSymbol("program");
+    auto *program4 = ruleSet->makeNewRule(NS_PROGRAM_STAR);
+    program4->makeNewSeq()->appendNonTerminalSymbol(NS_PROGRAM);
     program4->makeEmptySeq();
 
     // statement 语法，包含了2个新产生式
-    auto *statement = ruleSet->makeNewRule("statement");
-    statement->makeNewSeq()->appendTerminalSymbol(RW_IF)->appendNonTerminalSymbol("expr")
-            ->appendNonTerminalSymbol("block")->appendNonTerminalSymbol("statement2");
+    auto *statement = ruleSet->makeNewRule(NS_STATEMENT);
+    statement->makeNewSeq()->appendTerminalSymbol(RW_IF)->appendNonTerminalSymbol(NS_EXPR)
+            ->appendNonTerminalSymbol(NS_BLOCK)->appendNonTerminalSymbol(NS_STATEMENT_STAR);
 
-    statement->makeNewSeq()->appendTerminalSymbol(RW_WHILE)->appendNonTerminalSymbol("expr")
-            ->appendNonTerminalSymbol("block");
-    statement->makeNewSeq()->appendNonTerminalSymbol("simple");
-    auto *statement2 = ruleSet->makeNewRule("statement2");
-    statement2->makeNewSeq()->appendTerminalSymbol(RW_ELSE)->appendNonTerminalSymbol("block");
+    statement->makeNewSeq()->appendTerminalSymbol(RW_WHILE)->appendNonTerminalSymbol(NS_EXPR)
+            ->appendNonTerminalSymbol(NS_BLOCK);
+    statement->makeNewSeq()->appendNonTerminalSymbol(NS_SIMPLE);
+    auto *statement2 = ruleSet->makeNewRule(NS_STATEMENT_STAR);
+    statement2->makeNewSeq()->appendTerminalSymbol(RW_ELSE)->appendNonTerminalSymbol(NS_BLOCK);
     statement2->makeEmptySeq();
 
     // simple 语法，包含了1个新产生式
-    auto *simple = ruleSet->makeNewRule("simple");
-    simple->makeNewSeq()->appendNonTerminalSymbol("expr");
+    auto *simple = ruleSet->makeNewRule(NS_SIMPLE);
+    simple->makeNewSeq()->appendNonTerminalSymbol(NS_EXPR);
 
     // block 语法，包含了2个新产生式
-    auto *block = ruleSet->makeNewRule("block");
-    block->makeNewSeq()->appendTerminalSymbol("{")->appendNonTerminalSymbol("statementOrNone")
-            ->appendNonTerminalSymbol("block2")->appendTerminalSymbol("}");
-    auto *block2 = ruleSet->makeNewRule("block2");
-    block2->makeNewSeq()->appendNonTerminalSymbol("lineEnd")->appendNonTerminalSymbol("statementOrNone")
-            ->appendNonTerminalSymbol("block2");
+    auto *block = ruleSet->makeNewRule(NS_BLOCK);
+    block->makeNewSeq()->appendTerminalSymbol("{")->appendNonTerminalSymbol(NS_STATEMENT_OR_NONE)
+            ->appendNonTerminalSymbol(NS_BLOCK_STAR)->appendTerminalSymbol("}");
+    auto *block2 = ruleSet->makeNewRule(NS_BLOCK_STAR);
+    block2->makeNewSeq()->appendNonTerminalSymbol(NS_LINE_END)->appendNonTerminalSymbol(NS_STATEMENT_OR_NONE)
+            ->appendNonTerminalSymbol(NS_BLOCK_STAR);
     block2->makeEmptySeq();
 
     // expr 语法，包含了2个新产生式
-    auto *expr = ruleSet->makeNewRule("expr");
-    expr->makeNewSeq()->appendNonTerminalSymbol("factor")->appendNonTerminalSymbol("expr2");
-    auto *expr2 = ruleSet->makeNewRule("expr2");
-    expr2->makeNewSeq()->appendTerminalSymbol(TokenType::op)->appendNonTerminalSymbol("factor")
-            ->appendNonTerminalSymbol("expr2");
+    auto *expr = ruleSet->makeNewRule(NS_EXPR);
+    expr->makeNewSeq()->appendNonTerminalSymbol(NS_FACTOR)->appendNonTerminalSymbol(NS_EXPR_STAR);
+    auto *expr2 = ruleSet->makeNewRule(NS_EXPR_STAR);
+    expr2->makeNewSeq()->appendTerminalSymbol(TokenType::op)->appendNonTerminalSymbol(NS_FACTOR)
+            ->appendNonTerminalSymbol(NS_EXPR_STAR);
     expr2->makeEmptySeq();
 
     // factor 语法，包含了1个新产生式
-    auto *factor = ruleSet->makeNewRule("factor");
-    factor->makeNewSeq()->appendTerminalSymbol("-")->appendNonTerminalSymbol("primary");
-    factor->makeNewSeq()->appendNonTerminalSymbol("primary");
+    auto *factor = ruleSet->makeNewRule(NS_FACTOR);
+    factor->makeNewSeq()->appendTerminalSymbol("-")->appendNonTerminalSymbol(NS_PRIMARY);
+    factor->makeNewSeq()->appendNonTerminalSymbol(NS_PRIMARY);
 
     // primary 语法，包含了1个新产生式
-    auto *primary = ruleSet->makeNewRule("primary");
-    primary->makeNewSeq()->appendTerminalSymbol("(")->appendNonTerminalSymbol("expr")
+    auto *primary = ruleSet->makeNewRule(NS_PRIMARY);
+    primary->makeNewSeq()->appendTerminalSymbol("(")->appendNonTerminalSymbol(NS_EXPR)
             ->appendTerminalSymbol(")");
     primary->makeNewSeq()->appendTerminalSymbol(TokenType::number);
     primary->makeNewSeq()->appendTerminalSymbol(TokenType::identifier);

@@ -40,4 +40,21 @@ enum class OpType {
 #define RW_IF "if"
 #define RW_ELSE "else"
 
+// 定义非终结符
+
+#define NS_PROGRAM "program"
+#define NS_STATEMENT_OR_NONE "statementOrNone"
+#define NS_LINE_END "lineEnd"
+#define NS_PROGRAM_STAR "programStar"
+#define NS_STATEMENT "statement"
+#define NS_EXPR "expr"
+#define NS_EXPR_STAR "exprStar"
+#define NS_BLOCK "block"
+#define NS_BLOCK_STAR "blockStar"
+#define NS_STATEMENT_STAR "statementStar"
+#define NS_SIMPLE "simple"
+#define NS_FACTOR "factor"
+#define NS_PRIMARY "primary"
+
+
 #endif //DESIGN_1_CONSTANT_H
