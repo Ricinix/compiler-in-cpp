@@ -11,6 +11,8 @@ std::unique_ptr<ASTNode> OpNodeIf::work() {
 OpNodeIf::OpNodeIf(ASTNode *conditionNode, ASTNode *runBodyNode) {
     condition = conditionNode;
     runBody = runBodyNode;
+    children.push_back(conditionNode);
+    children.push_back(runBodyNode);
 }
 
 void OpNodeIf::genCode(IoUtil &ioUtil) {
