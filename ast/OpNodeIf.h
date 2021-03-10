@@ -16,7 +16,7 @@ public:
     std::unique_ptr<ASTNode> work() override;
     void genCode(IoUtil &ioUtil) override;
 
-    class OpNodeIfBuilder {
+    class Builder {
     private:
         ASTNode *condition;
         ASTNode *runBody;

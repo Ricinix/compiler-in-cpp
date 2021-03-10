@@ -11,8 +11,18 @@
  * 连续执行多个独立语句
  */
 class OpNodeProgram : public ASTList {
+private:
+    explicit OpNodeProgram(const std::vector<ASTNode *> &v);
 public:
-    std::unique_ptr<ASTNode> work() override;
+    void genCode(IoUtil &ioUtil) override;
+
+    class Builder {
+    private:
+        std::vector<ASTNode *> programSet;
+    public:
+        void appendChild(ASTNode* node);
+        OpNodeProgram* build();
+    };
 };
 
 

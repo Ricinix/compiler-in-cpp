@@ -19,14 +19,14 @@ void OpNodeIf::genCode(IoUtil &ioUtil) {
     ASTList::genCode(ioUtil);
 }
 
-void OpNodeIf::OpNodeIfBuilder::setCondition(ASTNode *node) {
+void OpNodeIf::Builder::setCondition(ASTNode *node) {
     condition = node;
 }
 
-void OpNodeIf::OpNodeIfBuilder::setRunBody(ASTNode *node) {
+void OpNodeIf::Builder::setRunBody(ASTNode *node) {
     runBody = node;
 }
 
-OpNodeIf *OpNodeIf::OpNodeIfBuilder::build() {
+OpNodeIf *OpNodeIf::Builder::build() {
     return new OpNodeIf(condition, runBody);
 }
