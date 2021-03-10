@@ -13,8 +13,12 @@
 #include "../util/IoUtil.h"
 
 class ASTNode {
-
+private:
+    ASTNode *father = nullptr;
 public:
+    void setFather(ASTNode *node);
+    ASTNode *getFather();
+
     virtual ASTNode *child(int i);
 
     virtual int numChildren() const;
@@ -70,6 +74,9 @@ public:
 class ASTList : public ASTNode {
 protected:
     std::vector<ASTNode *> children;
+
+    void addChild(ASTNode *node);
+
 public:
     explicit ASTList(const std::vector<ASTNode *> &v);
 

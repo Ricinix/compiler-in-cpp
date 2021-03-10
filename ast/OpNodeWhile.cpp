@@ -23,6 +23,6 @@ void OpNodeWhile::genCode(IoUtil &ioUtil) {
 OpNodeWhile::OpNodeWhile(ASTNode *conditionNode, ASTNode *runBodyNode) {
     condition = conditionNode;
     runBody = runBodyNode;
-    children.push_back(condition);
-    children.push_back(runBody);
+    addChild(condition);
+    addChild(runBody);
 }

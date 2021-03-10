@@ -31,6 +31,14 @@ void ASTNode::genCode(IoUtil &ioUtil) {
 
 }
 
+void ASTNode::setFather(ASTNode* node) {
+    father = node;
+}
+
+ASTNode *ASTNode::getFather() {
+    return father;
+}
+
 ASTLeaf::ASTLeaf(Token *token_p) {
     token_ptr = token_p;
 }
@@ -74,6 +82,9 @@ void ASTLeaf::genCode(IoUtil &ioUtil) {
 
 ASTList::ASTList(const std::vector<ASTNode *> &v) {
     children = v;
+    for (auto &child : children) {
+        child->setFather(this);
+    }
 }
 
 ASTNode *ASTList::child(int i) {
@@ -125,4 +136,9 @@ std::unique_ptr<ASTNode> ASTList::work() {
 
 void ASTList::genCode(IoUtil &ioUtil) {
     ASTNode::genCode(ioUtil);
+}
+
+void ASTList::addChild(ASTNode *node) {
+    children.push_back(node);
+    node->setFather(this);
 }
