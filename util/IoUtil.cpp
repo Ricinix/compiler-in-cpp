@@ -83,4 +83,15 @@ IoUtil::~IoUtil() {
         fileOut.close();
         fileOut.clear();
     }
+}
+
+void IoUtil::appendLine(const std::string &content) {
+    if (!fileOut.is_open()) {
+        throw IoException("open output file fail");
+    }
+    fileOut << content << std::endl;
+}
+
+void IoUtil::appendEmptyLine() {
+    appendLine("");
 };

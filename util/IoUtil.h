@@ -28,6 +28,10 @@ public:
 
     int getLineNumber() const;
 
+    void appendLine(const std::string &content);
+
+    void appendEmptyLine();
+
     explicit IoUtil(const std::string &val_path);
 
     IoUtil(const std::string &srcPath, const std::string &targetPath);

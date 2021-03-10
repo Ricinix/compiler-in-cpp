@@ -27,6 +27,10 @@ std::unique_ptr<ASTNode> ASTNode::work() {
     return nullptr;
 }
 
+void ASTNode::genCode(IoUtil &ioUtil) {
+
+}
+
 ASTLeaf::ASTLeaf(Token *token_p) {
     token_ptr = token_p;
 }
@@ -62,6 +66,10 @@ std::string ASTLeaf::toString() const {
 
 std::unique_ptr<ASTNode> ASTLeaf::work() {
     return ASTNode::work();
+}
+
+void ASTLeaf::genCode(IoUtil &ioUtil) {
+    ASTNode::genCode(ioUtil);
 }
 
 ASTList::ASTList(const std::vector<ASTNode *> &v) {
@@ -113,4 +121,8 @@ ASTList::~ASTList() {
 
 std::unique_ptr<ASTNode> ASTList::work() {
     return ASTNode::work();
+}
+
+void ASTList::genCode(IoUtil &ioUtil) {
+    ASTNode::genCode(ioUtil);
 }

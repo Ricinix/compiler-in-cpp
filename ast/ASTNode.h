@@ -10,6 +10,7 @@
 #include <memory>
 #include "../lexer/Token.h"
 #include "../rule/Operator.h"
+#include "../util/IoUtil.h"
 
 class ASTNode {
 
@@ -31,6 +32,8 @@ public:
      * @return
      */
     virtual std::unique_ptr<ASTNode> work();
+
+    virtual void genCode(IoUtil &ioUtil);
 };
 
 /**
@@ -57,6 +60,8 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const ASTLeaf &astLeaf);
 
     std::unique_ptr<ASTNode> work() override;
+
+    void genCode(IoUtil &ioUtil) override;
 };
 
 /**
@@ -83,6 +88,8 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const ASTList &astList);
 
     std::unique_ptr<ASTNode> work() override;
+
+    void genCode(IoUtil &ioUtil) override;
 };
 
 
