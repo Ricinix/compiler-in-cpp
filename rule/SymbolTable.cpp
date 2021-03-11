@@ -23,6 +23,8 @@ bool SymbolTable::isReservedWord(const std::string &word) {
 void SymbolTable::initReservedWordMap() {
     reservedWordMap["{"] = new Operator();
     reservedWordMap["}"] = new Operator();
+    reservedWordMap["["] = new Operator();
+    reservedWordMap["]"] = new Operator();
     reservedWordMap[RW_WHILE] = new Operator();
     reservedWordMap[RW_IF] = new Operator();
     reservedWordMap[RW_ELSE] = new Operator();

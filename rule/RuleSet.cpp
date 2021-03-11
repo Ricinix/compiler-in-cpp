@@ -83,8 +83,10 @@ RuleSet *RuleSet::generate() {
     factor->makeNewSeq()->appendTerminalSymbol("-")->appendNonTerminalSymbol(NS_PRIMARY);
     factor->makeNewSeq()->appendNonTerminalSymbol(NS_PRIMARY);
 
-    // primary 语法，包含了3个新产生式
+    // primary 语法，包含了4个新产生式
     auto *primary = ruleSet->makeNewRule(NS_PRIMARY);
+    primary->makeNewSeq()->appendTerminalSymbol("[")->appendNonTerminalSymbol(NS_ELEMENTS_OR_NONE)
+    ->appendTerminalSymbol("]")->appendNonTerminalSymbol(NS_PRIMARY_STAR);
     primary->makeNewSeq()->appendTerminalSymbol("(")->appendNonTerminalSymbol(NS_EXPR)
             ->appendTerminalSymbol(")")->appendNonTerminalSymbol(NS_PRIMARY_STAR);
     primary->makeNewSeq()->appendTerminalSymbol(TokenType::number)->appendNonTerminalSymbol(NS_DECIMALS);
@@ -96,6 +98,9 @@ RuleSet *RuleSet::generate() {
     auto *decimals = ruleSet->makeNewRule(NS_DECIMALS);
     decimals->makeNewSeq()->appendTerminalSymbol(".")->appendTerminalSymbol(TokenType::number);
     decimals->makeEmptySeq();
+    auto *elementsOrNone = ruleSet->makeNewRule(NS_ELEMENTS_OR_NONE);
+    elementsOrNone->makeNewSeq()->appendNonTerminalSymbol(NS_ELEMENTS);
+    elementsOrNone->makeEmptySeq();
 
     // param 语法，包含了1个新产生式
     auto *param = ruleSet->makeNewRule(NS_PARAM);
@@ -133,6 +138,8 @@ RuleSet *RuleSet::generate() {
     postfix->makeNewSeq()->appendTerminalSymbol(".")->appendTerminalSymbol(TokenType::identifier);
     postfix->makeNewSeq()->appendTerminalSymbol("(")->appendNonTerminalSymbol(NS_POSTFIX_OR_NONE)
     ->appendTerminalSymbol(")");
+    postfix->makeNewSeq()->appendTerminalSymbol("[")->appendNonTerminalSymbol(NS_EXPR)
+    ->appendTerminalSymbol("]");
     auto *postfixOrNone = ruleSet->makeNewRule(NS_POSTFIX_OR_NONE);
     postfixOrNone->makeNewSeq()->appendNonTerminalSymbol(NS_ARGS);
     postfixOrNone->makeEmptySeq();
@@ -166,6 +173,13 @@ RuleSet *RuleSet::generate() {
     auto *memberStar = ruleSet->makeNewRule(NS_MEMBER_STAR);
     memberStar->makeNewSeq()->appendNonTerminalSymbol(NS_FUNC);
     memberStar->makeNewSeq()->appendNonTerminalSymbol(NS_SIMPLE);
+
+    // elements 语法，包含了2个新产生式
+    auto *elements = ruleSet->makeNewRule(NS_ELEMENTS);
+    elements->makeNewSeq()->appendNonTerminalSymbol(NS_EXPR)->appendNonTerminalSymbol(NS_ELEMENTS_STAR);
+    auto *elementsStar = ruleSet->makeNewRule(NS_ELEMENTS_STAR);
+    elementsStar->makeNewSeq()->appendTerminalSymbol(",")->appendNonTerminalSymbol(NS_EXPR);
+    elementsStar->makeEmptySeq();
 
     return ruleSet;
 }

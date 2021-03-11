@@ -87,6 +87,9 @@ enum class VisibleType {
 #define NS_MEMBER "member"
 #define NS_MEMBER_STAR "member_star"
 #define NS_STATIC_OR_NONE "static_or_none"
+#define NS_ELEMENTS "elements"
+#define NS_ELEMENTS_OR_NONE "elements_or_none"
+#define NS_ELEMENTS_STAR "elements_star"
 
 
 #endif //DESIGN_1_CONSTANT_H
