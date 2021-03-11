@@ -17,9 +17,10 @@ private:
     OpNodeIf(ASTNode *conditionNode, ASTNode *runBodyNode, ASTNode *elseNode);
 
 public:
-    std::unique_ptr<ASTNode> work() override;
 
     void genCode(IoUtil &ioUtil) override;
+
+    std::string toString() const override;
 
     class Builder {
     private:

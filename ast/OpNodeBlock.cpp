@@ -12,6 +12,10 @@ void OpNodeBlock::genCode(IoUtil &ioUtil) {
     ASTList::genCode(ioUtil);
 }
 
+std::string OpNodeBlock::toString() const {
+    return "{}";
+}
+
 void OpNodeBlock::Builder::appendChild(ASTNode *node) {
     stmtSet.push_back(node);
 }

@@ -14,6 +14,7 @@ class CodePrinter : public ASTLeaf{
 public:
     explicit CodePrinter();
     void genCode(IoUtil &ioUtil) override;
+    std::string toString() const override;
 };
 
 

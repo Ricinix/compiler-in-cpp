@@ -19,3 +19,7 @@ void OpNodeProgram::genCode(IoUtil &ioUtil) {
 OpNodeProgram::OpNodeProgram(const std::vector<ASTNode *> &v) : ASTList(v) {
 
 }
+
+std::string OpNodeProgram::toString() const {
+    return "program";
+}

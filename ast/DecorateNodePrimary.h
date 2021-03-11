@@ -10,10 +10,14 @@
 class DecorateNodePrimary : public ASTList {
 private:
     ASTNode *expr;
-public:
+
     explicit DecorateNodePrimary(ASTNode *exprNode);
 
+public:
+
     void genCode(IoUtil &ioUtil) override;
+
+    std::string toString() const override;
 
     class Builder {
     private:

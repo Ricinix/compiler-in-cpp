@@ -31,3 +31,7 @@ OpNodeBinaryExpr::OpNodeBinaryExpr(ASTNode *leftNode, ASTNode *rightNode, Token 
 void OpNodeBinaryExpr::genCode(IoUtil &ioUtil) {
     ASTList::genCode(ioUtil);
 }
+
+std::string OpNodeBinaryExpr::toString() const {
+    return token->getText();
+}

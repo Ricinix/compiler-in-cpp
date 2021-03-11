@@ -16,6 +16,8 @@ private:
 public:
     void genCode(IoUtil &ioUtil) override;
 
+    std::string toString() const override;
+
     class Builder {
     private:
         std::vector<ASTNode *> programSet;

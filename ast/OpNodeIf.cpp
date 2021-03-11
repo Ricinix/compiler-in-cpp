@@ -4,10 +4,6 @@
 
 #include "OpNodeIf.h"
 
-std::unique_ptr<ASTNode> OpNodeIf::work() {
-    return nullptr;
-}
-
 OpNodeIf::OpNodeIf(ASTNode *conditionNode, ASTNode *runBodyNode, ASTNode *elseNode) {
     condition = conditionNode;
     runBody = runBodyNode;
@@ -19,6 +15,10 @@ OpNodeIf::OpNodeIf(ASTNode *conditionNode, ASTNode *runBodyNode, ASTNode *elseNo
 
 void OpNodeIf::genCode(IoUtil &ioUtil) {
     ASTList::genCode(ioUtil);
+}
+
+std::string OpNodeIf::toString() const {
+    return "if";
 }
 
 void OpNodeIf::Builder::setCondition(ASTNode *node) {

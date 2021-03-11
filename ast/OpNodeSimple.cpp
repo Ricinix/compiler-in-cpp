@@ -20,3 +20,7 @@ OpNodeSimple::OpNodeSimple(ASTNode *simpleStmtNode) {
 void OpNodeSimple::genCode(IoUtil &ioUtil) {
     ASTList::genCode(ioUtil);
 }
+
+std::string OpNodeSimple::toString() const {
+    return ";";
+}

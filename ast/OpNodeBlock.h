@@ -8,10 +8,15 @@
 #include "ASTNode.h"
 
 class OpNodeBlock : public ASTList {
-public:
+private:
+
     explicit OpNodeBlock(const std::vector<ASTNode *> &v);
 
+public:
+
     void genCode(IoUtil &ioUtil) override;
+
+    std::string toString() const override;
 
     class Builder {
     private:

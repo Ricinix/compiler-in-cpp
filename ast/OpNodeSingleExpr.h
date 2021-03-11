@@ -11,10 +11,14 @@ class OpNodeSingleExpr : public ASTList {
 private:
     Token *token;
     ASTNode *factor;
-public:
+
     OpNodeSingleExpr(ASTNode *factorNode, Token *opToken);
 
+public:
+
     void genCode(IoUtil &ioUtil) override;
+
+    std::string toString() const override;
 
     class Builder {
     private:

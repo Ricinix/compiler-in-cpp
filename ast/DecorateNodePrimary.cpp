@@ -12,6 +12,10 @@ void DecorateNodePrimary::genCode(IoUtil &ioUtil) {
     ASTList::genCode(ioUtil);
 }
 
+std::string DecorateNodePrimary::toString() const {
+    return "(expr)";
+}
+
 void DecorateNodePrimary::Builder::setExprNode(ASTNode *exprNode) {
     expr = exprNode;
 }

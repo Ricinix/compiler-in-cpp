@@ -11,6 +11,8 @@ class StringLiteral : public ASTLeaf {
 public:
     explicit StringLiteral(Token* t);
     void genCode(IoUtil &ioUtil) override;
+
+    std::string toString() const override;
 };
 
 

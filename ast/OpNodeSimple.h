@@ -10,10 +10,14 @@
 class OpNodeSimple : public ASTList {
 private:
     ASTNode *simpleStmt;
-public:
+
     explicit OpNodeSimple(ASTNode *simpleStmtNode);
 
+public:
+
     void genCode(IoUtil &ioUtil) override;
+
+    std::string toString() const override;
 
     class Builder {
     private:

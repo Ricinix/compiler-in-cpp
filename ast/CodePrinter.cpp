@@ -11,3 +11,7 @@ CodePrinter::CodePrinter() : ASTLeaf(nullptr) {
 void CodePrinter::genCode(IoUtil &ioUtil) {
     ASTLeaf::genCode(ioUtil);
 }
+
+std::string CodePrinter::toString() const {
+    return "CodePrinter";
+}

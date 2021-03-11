@@ -13,17 +13,22 @@ private:
     ASTNode *runBody;
 
     OpNodeWhile(ASTNode *conditionNode, ASTNode *runBodyNode);
+
 public:
     void genCode(IoUtil &ioUtil) override;
 
+    std::string toString() const override;
+
     class Builder {
     private:
-        ASTNode* condition;
-        ASTNode* runBody;
+        ASTNode *condition;
+        ASTNode *runBody;
     public:
-        void setCondition(ASTNode* node);
-        void setRunBody(ASTNode* node);
-        OpNodeWhile* build();
+        void setCondition(ASTNode *node);
+
+        void setRunBody(ASTNode *node);
+
+        OpNodeWhile *build();
     };
 };
 

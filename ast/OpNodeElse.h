@@ -10,10 +10,14 @@
 class OpNodeElse : public ASTList {
 private:
     ASTNode *runBody;
-public:
+
     explicit OpNodeElse(ASTNode *runBodyNode);
 
+public:
+
     void genCode(IoUtil &ioUtil) override;
+
+    std::string toString() const override;
 
     class Builder {
     private:

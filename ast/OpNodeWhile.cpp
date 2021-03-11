@@ -26,3 +26,7 @@ OpNodeWhile::OpNodeWhile(ASTNode *conditionNode, ASTNode *runBodyNode) {
     addChild(condition);
     addChild(runBody);
 }
+
+std::string OpNodeWhile::toString() const {
+    return "while";
+}

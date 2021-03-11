@@ -14,6 +14,10 @@ void OpNodeSingleExpr::genCode(IoUtil &ioUtil) {
     ASTList::genCode(ioUtil);
 }
 
+std::string OpNodeSingleExpr::toString() const {
+    return token->getText();
+}
+
 void OpNodeSingleExpr::Builder::setOpToken(Token *t) {
     opToken = t;
 }
