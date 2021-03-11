@@ -3,6 +3,9 @@
 //
 
 #include "ParseTreeNode.h"
+#include "../ast/NumberLiteral.h"
+#include "../ast/StringLiteral.h"
+#include "../ast/Identifier.h"
 
 ParseTreeNode::ParseTreeNode(RuleItem *ruleItem) {
     symbol = ruleItem;
@@ -99,7 +102,14 @@ std::string ParseTreeLeaf::getNodeName() const {
 }
 
 ASTNode *ParseTreeLeaf::toASTNode() {
-    return ParseTreeNode::toASTNode();
+    if (getToken()->getTokenType() == TokenType::number) {
+        return new NumberLiteral(getToken());
+    } else if (getToken()->getTokenType() == TokenType::string) {
+        return new StringLiteral(getToken());
+    } else if (getToken()->getTokenType() == TokenType::identifier) {
+        return new Identifier(getToken());
+    }
+    return nullptr;
 }
 
 ParseTreeNonLeaf::ParseTreeNonLeaf(RuleItem *ruleItem) : ParseTreeNode(ruleItem) {
