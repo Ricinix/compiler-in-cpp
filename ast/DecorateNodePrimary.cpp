@@ -6,6 +6,7 @@
 
 DecorateNodePrimary::DecorateNodePrimary(ASTNode *exprNode) {
     expr = exprNode;
+    addChild(exprNode);
 }
 
 void DecorateNodePrimary::genCode(IoUtil &ioUtil) {

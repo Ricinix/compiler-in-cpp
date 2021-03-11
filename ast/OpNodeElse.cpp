@@ -10,6 +10,7 @@ void OpNodeElse::genCode(IoUtil &ioUtil) {
 
 OpNodeElse::OpNodeElse(ASTNode *runBodyNode) {
     runBody = runBodyNode;
+    addChild(runBodyNode);
 }
 
 std::string OpNodeElse::toString() const {
