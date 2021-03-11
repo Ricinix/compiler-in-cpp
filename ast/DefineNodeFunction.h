@@ -5,9 +5,40 @@
 #ifndef DESIGN_1_DEFINENODEFUNCTION_H
 #define DESIGN_1_DEFINENODEFUNCTION_H
 
+#include "ASTNode.h"
 
-class DefineNodeFunction {
+class DefineNodeFunction : public ASTList {
+private:
+    VisibleType visibleType;
+    std::string functionName;
+    std::vector<ASTNode *> params;
+    ASTNode *runBody;
 
+    DefineNodeFunction(VisibleType type, const std::string &name, std::vector<ASTNode *> &paramSet, ASTNode *runPart);
+
+public:
+
+    void genCode(IoUtil &ioUtil) override;
+
+    std::string toString() const override;
+
+    class Builder {
+    private:
+        VisibleType visibleType;
+        std::string functionName;
+        std::vector<ASTNode *> params;
+        ASTNode *runBody;
+    public:
+        void setVisibleType(VisibleType type);
+
+        void setFunctionName(const std::string &name);
+
+        void addParam(ASTNode *param);
+
+        void setRunBody(ASTNode *runPart);
+
+        DefineNodeFunction* build();
+    };
 };
 
 

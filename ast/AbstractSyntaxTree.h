@@ -13,12 +13,13 @@ private:
     ASTNode *root;
 
     void printTree(ASTNode *node, std::ostream &fmt, std::string &indent) const;
+
 public:
     explicit AbstractSyntaxTree(ASTNode *rootNode);
 
     ~AbstractSyntaxTree();
 
-    ASTNode* getRoot();
+    ASTNode *getRoot();
 
     void translateToCppTree();
 

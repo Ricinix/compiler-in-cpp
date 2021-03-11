@@ -34,6 +34,11 @@ enum class OpType {
     assign, // =
 };
 
+enum class VisibleType {
+    privateType, // 可见性私有
+    publicType, // 可见性公开
+};
+
 // 定义保留字
 
 #define RW_WHILE "while"
