@@ -140,7 +140,7 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
     if (getRuleItem()->getSymbolName() == NS_PROGRAM) {
         // program结点
         if (childNum() != 3) {
-            throw ParseException("program结点解析失败");
+            throw ParseException("program node parse fail");
         }
         auto builder = OpNodeProgram::Builder();
         auto stmt = getChild(0)->toASTNode();
@@ -175,7 +175,7 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
         if (getChild(0)->getRuleItem()->getSymbolName() == RW_IF) {
             // if语句
             if (childNum() != 4) {
-                throw ParseException("statement的if解释必须要有4个孩子结点");
+                throw ParseException("if wrong children num");
             }
             auto builder = OpNodeIf::Builder();
             builder.setCondition(getChild(1)->toASTNode());
@@ -185,7 +185,7 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
         } else if (getChild(0)->getRuleItem()->getSymbolName() == RW_WHILE) {
             // while语句
             if (childNum() != 3) {
-                throw ParseException("statement的while解释必须要有3个孩子结点");
+                throw ParseException("while wrong children num");
             }
             auto builder = OpNodeWhile::Builder();
             builder.setCondition(getChild(1)->toASTNode());
@@ -197,7 +197,7 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
     } else if (getRuleItem()->getSymbolName() == NS_EXPR) {
         // expr结点
         if (childNum() != 2) {
-            throw ParseException("expr的子节点必须得有2个");
+            throw ParseException("expr wrong children num");
         }
         return getChild(1)->toASTNode();
     } else if (getRuleItem()->getSymbolName() == NS_EXPR_STAR) {
@@ -213,7 +213,7 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
     } else if (getRuleItem()->getSymbolName() == NS_BLOCK) {
         // block 结点
         if (childNum() != 4) {
-            throw ParseException("block结点孩子个数必须为4个");
+            throw ParseException("block wrong children num");
         }
         auto builder = OpNodeBlock::Builder();
         auto stmt = getChild(1)->toASTNode();
@@ -231,12 +231,12 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
         return builder.build();
     } else if (getRuleItem()->getSymbolName() == NS_BLOCK_STAR) {
         // blockStar结点，其孩子可能是block也可能是空
-        throw ParseException("blockStar结点应由Block结点解析");
+        throw ParseException("blockStar should be parsed by Block");
     } else if (getRuleItem()->getSymbolName() == NS_STATEMENT_STAR) {
         // statementStar结点，此结点命名不太好，其意思是孩子可能是else也可能是空
         if (childNum() == 2) {
             if (getChild(0)->getRuleItem()->getSymbolName() != RW_ELSE) {
-                throw ParseException("statementStar(else)结点解析错误，找不到关键词else");
+                throw ParseException("statementStar(else) parse fail，can't find else");
             }
             auto builder = OpNodeElse::Builder();
             builder.setRunBody(getChild(1)->toASTNode());
@@ -246,7 +246,7 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
     } else if (getRuleItem()->getSymbolName() == NS_SIMPLE) {
         // simple结点
         if (childNum() != 1) {
-            throw ParseException("simple结点孩子个数必须为1");
+            throw ParseException("simple wrong children num");
         }
         auto simpleStmt = getChild(0)->toASTNode();
         if (simpleStmt != nullptr) {
@@ -265,7 +265,7 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
                 builder.setFactor(getChild(1)->toASTNode());
                 return builder.build();
             } else {
-                throw ParseException("factor结点中无该文法");
+                throw ParseException("factor has no such grammar");
             }
         }
         return parseChildDirectly();
@@ -276,7 +276,7 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
             builder.setExprNode(getChild(1)->toASTNode());
             return builder.build();
         } else if (childNum() != 1) {
-            throw ParseException("primary结点孩子个数错误: " + std::to_string(childNum()));
+            throw ParseException("primary wrong children num: " + std::to_string(childNum()));
         }
         return parseChildDirectly();
     }
