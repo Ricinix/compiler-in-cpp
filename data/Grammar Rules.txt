@@ -5,8 +5,8 @@
 // ... | ... 与其中之一匹配
 // () 括号内视为一个完整的模式
 
-// 基本构成元素
-primary   :   "(" expr ")" | NUMBER | IDENTIFIER | STRING
+// 基本构成元素, 这里添加的postfix是对函数调用形式的支持
+primary   :  ( "(" expr ")" { postfix } ) | NUMBER | ( IDENTIFIER { postfix } ) | STRING )
 // 因子
 factor    :   "-" primary | primary
 // 表达式
@@ -18,4 +18,16 @@ simple    :   expr
 // 语句
 statement :   "if" expr block [ "else" block ] | "while" expr block | simple
 // 程序
-program   :   [ statement ] (";" | EOL)
+program   :   [ func | statement ] (";" | EOL)
+// 函数参数
+param : IDENTIFIER
+// 参数列表
+params : param { "," param }
+// 参数部分
+param_list: "(" [ params ] ")"
+// 函数定义
+func : "function" IDENTIFIER param_list block
+// 函数调用参数列表
+args : expr { "," expr }
+// 函数调用参数部分
+postfix : "(" [ args ] ")"

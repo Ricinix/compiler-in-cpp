@@ -26,5 +26,7 @@ void SymbolTable::initReservedWordMap() {
     reservedWordMap[RW_WHILE] = new Operator();
     reservedWordMap[RW_IF] = new Operator();
     reservedWordMap[RW_ELSE] = new Operator();
+    reservedWordMap[RW_FUNC] = new Operator();
     reservedWordMap[";"] = new Operator();
+    reservedWordMap[","] = new Operator();
 }

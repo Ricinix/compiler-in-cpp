@@ -44,10 +44,12 @@ enum class VisibleType {
 #define RW_WHILE "while"
 #define RW_IF "if"
 #define RW_ELSE "else"
+#define RW_FUNC "function"
 
 // 定义非终结符
 
 #define NS_PROGRAM "program"
+#define NS_PROGRAM_BODY "programBody"
 #define NS_STATEMENT_OR_NONE "statementOrNone"
 #define NS_LINE_END "lineEnd"
 #define NS_PROGRAM_STAR "programStar"
@@ -60,6 +62,17 @@ enum class VisibleType {
 #define NS_SIMPLE "simple"
 #define NS_FACTOR "factor"
 #define NS_PRIMARY "primary"
+#define NS_PRIMARY_STAR "primaryStar"
+#define NS_FUNC "func"
+#define NS_POSTFIX "postfix"
+#define NS_POSTFIX_OR_NONE "postfixOrNone"
+#define NS_PARAM "param"
+#define NS_PARAMS "params"
+#define NS_PARAMS_STAR "params_star"
+#define NS_PARAM_LIST "param_list"
+#define NS_PARAM_LIST_OR_NONE "param_list_or_none"
+#define NS_ARGS "args"
+#define NS_ARGS_STAR "args_star"
 
 
 #endif //DESIGN_1_CONSTANT_H

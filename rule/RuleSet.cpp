@@ -23,16 +23,21 @@ RuleSet::~RuleSet() {
 RuleSet *RuleSet::generate() {
     auto *ruleSet = new RuleSet();
 
-    // program 语法，包含了3个新产生式
+    // program 语法，包含了4个新产生式
     auto *program = ruleSet->makeNewRule(NS_PROGRAM);
-    program->makeNewSeq()->appendNonTerminalSymbol(NS_STATEMENT_OR_NONE)->appendNonTerminalSymbol(NS_LINE_END)
-    ->appendNonTerminalSymbol(NS_PROGRAM_STAR);
+    program->makeNewSeq()->appendNonTerminalSymbol(NS_PROGRAM_BODY)->appendNonTerminalSymbol(NS_LINE_END)
+            ->appendNonTerminalSymbol(NS_PROGRAM_STAR);
     auto *program2 = ruleSet->makeNewRule(NS_STATEMENT_OR_NONE);
     program2->makeNewSeq()->appendNonTerminalSymbol(NS_STATEMENT);
     program2->makeEmptySeq();
+    auto *program3 = ruleSet->makeNewRule(NS_PROGRAM_BODY);
+    program3->makeNewSeq()->appendNonTerminalSymbol(NS_FUNC);
+    program3->makeNewSeq()->appendNonTerminalSymbol(NS_STATEMENT);
+    program3->makeEmptySeq();
     auto *lineEnd = ruleSet->makeNewRule(NS_LINE_END);
     lineEnd->makeNewSeq()->appendTerminalSymbol(";");
     lineEnd->makeNewSeq()->appendTerminalSymbol(TokenType::eol);
+
     // 增加program对多条statement的识别
     auto *program4 = ruleSet->makeNewRule(NS_PROGRAM_STAR);
     program4->makeNewSeq()->appendNonTerminalSymbol(NS_PROGRAM);
@@ -42,7 +47,6 @@ RuleSet *RuleSet::generate() {
     auto *statement = ruleSet->makeNewRule(NS_STATEMENT);
     statement->makeNewSeq()->appendTerminalSymbol(RW_IF)->appendNonTerminalSymbol(NS_EXPR)
             ->appendNonTerminalSymbol(NS_BLOCK)->appendNonTerminalSymbol(NS_STATEMENT_STAR);
-
     statement->makeNewSeq()->appendTerminalSymbol(RW_WHILE)->appendNonTerminalSymbol(NS_EXPR)
             ->appendNonTerminalSymbol(NS_BLOCK);
     statement->makeNewSeq()->appendNonTerminalSymbol(NS_SIMPLE);
@@ -75,13 +79,55 @@ RuleSet *RuleSet::generate() {
     factor->makeNewSeq()->appendTerminalSymbol("-")->appendNonTerminalSymbol(NS_PRIMARY);
     factor->makeNewSeq()->appendNonTerminalSymbol(NS_PRIMARY);
 
-    // primary 语法，包含了1个新产生式
+    // primary 语法，包含了2个新产生式
     auto *primary = ruleSet->makeNewRule(NS_PRIMARY);
     primary->makeNewSeq()->appendTerminalSymbol("(")->appendNonTerminalSymbol(NS_EXPR)
-            ->appendTerminalSymbol(")");
+            ->appendTerminalSymbol(")")->appendNonTerminalSymbol(NS_PRIMARY_STAR);
     primary->makeNewSeq()->appendTerminalSymbol(TokenType::number);
-    primary->makeNewSeq()->appendTerminalSymbol(TokenType::identifier);
+    primary->makeNewSeq()->appendTerminalSymbol(TokenType::identifier)->appendNonTerminalSymbol(NS_PRIMARY_STAR);
     primary->makeNewSeq()->appendTerminalSymbol(TokenType::string);
+    auto *primary2 = ruleSet->makeNewRule(NS_PRIMARY_STAR);
+    primary2->makeNewSeq()->appendNonTerminalSymbol(NS_POSTFIX)->appendNonTerminalSymbol(NS_PRIMARY_STAR);
+    primary2->makeEmptySeq();
+
+    // param 语法，包含了1个新产生式
+    auto *param = ruleSet->makeNewRule(NS_PARAM);
+    param->makeNewSeq()->appendTerminalSymbol(TokenType::identifier);
+
+    // params 语法，包含了2个新产生式
+    auto *params = ruleSet->makeNewRule(NS_PARAMS);
+    params->makeNewSeq()->appendNonTerminalSymbol(NS_PARAM)->appendNonTerminalSymbol(NS_PARAMS_STAR);
+    auto *params2 = ruleSet->makeNewRule(NS_PARAMS_STAR);
+    params2->makeNewSeq()->appendTerminalSymbol(",")->appendNonTerminalSymbol(NS_PARAMS);
+    params2->makeEmptySeq();
+
+    // param_list 语法，包含了2个新产生式
+    auto *paramList = ruleSet->makeNewRule(NS_PARAM_LIST);
+    paramList->makeNewSeq()->appendTerminalSymbol("(")->appendNonTerminalSymbol(NS_PARAM_LIST_OR_NONE)
+    ->appendTerminalSymbol(")");
+    auto *paramList2 = ruleSet->makeNewRule(NS_PARAM_LIST_OR_NONE);
+    paramList2->makeNewSeq()->appendNonTerminalSymbol(NS_PARAMS);
+    paramList2->makeEmptySeq();
+
+    // func 语法，包含了1个新产生式
+    auto *func = ruleSet->makeNewRule(NS_FUNC);
+    func->makeNewSeq()->appendTerminalSymbol("function")->appendTerminalSymbol(TokenType::identifier)
+    ->appendNonTerminalSymbol(NS_PARAM_LIST)->appendNonTerminalSymbol(NS_BLOCK);
+
+    // args 语法，包含了2个新产生式
+    auto *args = ruleSet->makeNewRule(NS_ARGS);
+    args->makeNewSeq()->appendNonTerminalSymbol(NS_EXPR)->appendNonTerminalSymbol(NS_ARGS_STAR);
+    auto *args2 = ruleSet->makeNewRule(NS_ARGS_STAR);
+    args2->makeNewSeq()->appendTerminalSymbol(",")->appendNonTerminalSymbol(NS_ARGS);
+    args2->makeEmptySeq();
+
+    // postfix 语法，包含了2个新产生式
+    auto *postfix = ruleSet->makeNewRule(NS_POSTFIX);
+    postfix->makeNewSeq()->appendTerminalSymbol("(")->appendNonTerminalSymbol(NS_POSTFIX_OR_NONE)
+    ->appendTerminalSymbol(")");
+    auto *postfixOrNone = ruleSet->makeNewRule(NS_POSTFIX_OR_NONE);
+    postfixOrNone->makeNewSeq()->appendNonTerminalSymbol(NS_ARGS);
+    postfixOrNone->makeEmptySeq();
 
     return ruleSet;
 }
