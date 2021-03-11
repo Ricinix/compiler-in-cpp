@@ -5,9 +5,24 @@
 #ifndef DESIGN_1_OPNODEELSE_H
 #define DESIGN_1_OPNODEELSE_H
 
+#include "ASTNode.h"
 
-class OpNodeElse {
+class OpNodeElse : public ASTList {
+private:
+    ASTNode *runBody;
+public:
+    explicit OpNodeElse(ASTNode *runBodyNode);
 
+    void genCode(IoUtil &ioUtil) override;
+
+    class Builder {
+    private:
+        ASTNode *runBody;
+    public:
+        void setRunBody(ASTNode *runBodyNode);
+
+        OpNodeElse *build();
+    };
 };
 
 

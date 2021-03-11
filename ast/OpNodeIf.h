@@ -6,24 +6,34 @@
 #define DESIGN_1_OPNODEIF_H
 
 #include "ASTNode.h"
+#include "OpNodeElse.h"
 
 class OpNodeIf : public ASTList {
 private:
     ASTNode *condition;
     ASTNode *runBody;
-    OpNodeIf(ASTNode* conditionNode, ASTNode* runBodyNode);
+    ASTNode *elsePart;
+
+    OpNodeIf(ASTNode *conditionNode, ASTNode *runBodyNode, ASTNode *elseNode);
+
 public:
     std::unique_ptr<ASTNode> work() override;
+
     void genCode(IoUtil &ioUtil) override;
 
     class Builder {
     private:
         ASTNode *condition;
         ASTNode *runBody;
+        ASTNode *elsePart;
     public:
-        void setCondition(ASTNode* node);
-        void setRunBody(ASTNode* node);
-        OpNodeIf* build();
+        void setCondition(ASTNode *node);
+
+        void setRunBody(ASTNode *node);
+
+        void setElsePart(ASTNode *node);
+
+        OpNodeIf *build();
     };
 };
 

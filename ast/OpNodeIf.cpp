@@ -8,11 +8,13 @@ std::unique_ptr<ASTNode> OpNodeIf::work() {
     return nullptr;
 }
 
-OpNodeIf::OpNodeIf(ASTNode *conditionNode, ASTNode *runBodyNode) {
+OpNodeIf::OpNodeIf(ASTNode *conditionNode, ASTNode *runBodyNode, ASTNode *elseNode) {
     condition = conditionNode;
     runBody = runBodyNode;
+    elsePart = elseNode;
     addChild(conditionNode);
     addChild(runBodyNode);
+    addChild(elseNode);
 }
 
 void OpNodeIf::genCode(IoUtil &ioUtil) {
@@ -28,5 +30,9 @@ void OpNodeIf::Builder::setRunBody(ASTNode *node) {
 }
 
 OpNodeIf *OpNodeIf::Builder::build() {
-    return new OpNodeIf(condition, runBody);
+    return new OpNodeIf(condition, runBody, elsePart);
+}
+
+void OpNodeIf::Builder::setElsePart(ASTNode *node) {
+    elsePart = node;
 }
