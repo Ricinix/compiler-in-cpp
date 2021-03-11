@@ -5,19 +5,15 @@
 #ifndef DESIGN_1_ABSTRACTSYNTAXTREE_H
 #define DESIGN_1_ABSTRACTSYNTAXTREE_H
 
-#include "../parser/ParseTree.h"
 #include "ASTNode.h"
 
 class AbstractSyntaxTree {
 private:
     ASTNode *root;
-
-    void translateToAst(ParseTreeNode *ptNode, ASTNode *astNode);
-
 public:
-    explicit AbstractSyntaxTree(ParseTree *parseTree);
+    explicit AbstractSyntaxTree(ASTNode *rootNode);
 
-    void eval();
+    ASTNode* getRoot();
 
 };
 

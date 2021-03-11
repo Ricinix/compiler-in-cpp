@@ -50,3 +50,7 @@ ParseTree::~ParseTree() {
     root = nullptr;
 }
 
+AbstractSyntaxTree *ParseTree::toAST() {
+    return new AbstractSyntaxTree(root->toASTNode());
+}
+

@@ -4,14 +4,10 @@
 
 #include "AbstractSyntaxTree.h"
 
-AbstractSyntaxTree::AbstractSyntaxTree(ParseTree *parseTree) {
-
+AbstractSyntaxTree::AbstractSyntaxTree(ASTNode *rootNode) {
+    root = rootNode;
 }
 
-void AbstractSyntaxTree::translateToAst(ParseTreeNode *ptNode, ASTNode *astNode) {
-
-}
-
-void AbstractSyntaxTree::eval() {
-    root->work();
+ASTNode *AbstractSyntaxTree::getRoot() {
+    return root;
 }
