@@ -11,7 +11,7 @@
 class NumberLiteral: public ASTLeaf {
 public:
     explicit NumberLiteral(Token* token_ptr);
-    int value() const;
+    void genCode(IoUtil &ioUtil) override;
 };
 
 

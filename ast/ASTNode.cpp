@@ -129,14 +129,7 @@ std::ostream &operator<<(std::ostream &os, const ASTList &astList) {
 }
 
 std::string ASTList::toString() const {
-    std::ostringstream fmt("(");
-    std::string sep;
-    for (auto &t : children) {
-        fmt << sep;
-        sep = " ";
-        fmt << t->toString();
-    }
-    return fmt.str();
+    return "AST List";
 }
 
 ASTList::~ASTList() {

@@ -8,6 +8,6 @@ NumberLiteral::NumberLiteral(Token *token_ptr) : ASTLeaf(token_ptr) {
 
 }
 
-int NumberLiteral::value() const {
-    return token_ptr->getNumber();
+void NumberLiteral::genCode(IoUtil &ioUtil) {
+    ioUtil.appendContent(token_ptr->getText() + " ");
 }
