@@ -45,6 +45,7 @@ enum class VisibleType {
 #define RW_IF "if"
 #define RW_ELSE "else"
 #define RW_FUNC "function"
+#define RW_RETURN "return"
 
 // 定义非终结符
 
@@ -73,6 +74,8 @@ enum class VisibleType {
 #define NS_PARAM_LIST_OR_NONE "param_list_or_none"
 #define NS_ARGS "args"
 #define NS_ARGS_STAR "args_star"
+#define NS_DECIMALS "decimals"
+#define NS_RETURN "return"
 
 
 #endif //DESIGN_1_CONSTANT_H

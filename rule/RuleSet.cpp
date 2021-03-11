@@ -54,9 +54,12 @@ RuleSet *RuleSet::generate() {
     statement2->makeNewSeq()->appendTerminalSymbol(RW_ELSE)->appendNonTerminalSymbol(NS_BLOCK);
     statement2->makeEmptySeq();
 
-    // simple 语法，包含了1个新产生式
+    // simple 语法，包含了2个新产生式
     auto *simple = ruleSet->makeNewRule(NS_SIMPLE);
-    simple->makeNewSeq()->appendNonTerminalSymbol(NS_EXPR);
+    simple->makeNewSeq()->appendNonTerminalSymbol(NS_RETURN)->appendNonTerminalSymbol(NS_EXPR);
+    auto *returnRule = ruleSet->makeNewRule(NS_RETURN);
+    returnRule->makeNewSeq()->appendTerminalSymbol("return");
+    returnRule->makeEmptySeq();
 
     // block 语法，包含了2个新产生式
     auto *block = ruleSet->makeNewRule(NS_BLOCK);
@@ -79,16 +82,19 @@ RuleSet *RuleSet::generate() {
     factor->makeNewSeq()->appendTerminalSymbol("-")->appendNonTerminalSymbol(NS_PRIMARY);
     factor->makeNewSeq()->appendNonTerminalSymbol(NS_PRIMARY);
 
-    // primary 语法，包含了2个新产生式
+    // primary 语法，包含了3个新产生式
     auto *primary = ruleSet->makeNewRule(NS_PRIMARY);
     primary->makeNewSeq()->appendTerminalSymbol("(")->appendNonTerminalSymbol(NS_EXPR)
             ->appendTerminalSymbol(")")->appendNonTerminalSymbol(NS_PRIMARY_STAR);
-    primary->makeNewSeq()->appendTerminalSymbol(TokenType::number);
+    primary->makeNewSeq()->appendTerminalSymbol(TokenType::number)->appendNonTerminalSymbol(NS_DECIMALS);
     primary->makeNewSeq()->appendTerminalSymbol(TokenType::identifier)->appendNonTerminalSymbol(NS_PRIMARY_STAR);
     primary->makeNewSeq()->appendTerminalSymbol(TokenType::string);
     auto *primary2 = ruleSet->makeNewRule(NS_PRIMARY_STAR);
     primary2->makeNewSeq()->appendNonTerminalSymbol(NS_POSTFIX)->appendNonTerminalSymbol(NS_PRIMARY_STAR);
     primary2->makeEmptySeq();
+    auto *decimals = ruleSet->makeNewRule(NS_DECIMALS);
+    decimals->makeNewSeq()->appendTerminalSymbol(".")->appendTerminalSymbol(TokenType::number);
+    decimals->makeEmptySeq();
 
     // param 语法，包含了1个新产生式
     auto *param = ruleSet->makeNewRule(NS_PARAM);
