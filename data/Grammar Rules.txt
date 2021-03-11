@@ -6,7 +6,7 @@
 // () 括号内视为一个完整的模式
 
 // 基本构成元素, 这里添加的postfix是对函数调用形式的支持
-primary   :  ( "(" expr ")" { postfix } ) | NUMBER [ . NUMBER ] | ( IDENTIFIER { postfix } ) | STRING )
+primary   :  ( "(" expr ")" { postfix } ) | NUMBER [ "." NUMBER ] | ( IDENTIFIER { postfix } ) | STRING )
 // 因子
 factor    :   "-" primary | primary
 // 表达式
@@ -18,7 +18,7 @@ simple    :  [ "return" ] expr
 // 语句
 statement :   "if" expr block [ "else" block ] | "while" expr block | simple
 // 程序
-program   :   [ func | statement ] (";" | EOL)
+program   :   [ class | func | statement ] (";" | EOL)
 // 函数参数
 param : IDENTIFIER
 // 参数列表
@@ -30,4 +30,10 @@ func : "function" IDENTIFIER param_list block
 // 函数调用参数列表
 args : expr { "," expr }
 // 函数调用参数部分
-postfix : "(" [ args ] ")"
+postfix : "." IDENTIFIER | "(" [ args ] ")"
+// 类的声明
+class : "class" IDENTIFIER [ "extends" IDENTIFIER ] class_body
+// 类体
+class_body : "{" [ member ] { (";" | EOL) [ member ] } "}"
+// 成员
+member : [ "static" ] ( def | simple )

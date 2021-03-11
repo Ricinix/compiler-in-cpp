@@ -46,6 +46,9 @@ enum class VisibleType {
 #define RW_ELSE "else"
 #define RW_FUNC "function"
 #define RW_RETURN "return"
+#define RW_CLASS "class"
+#define RW_EXTENDS "extends"
+#define RW_STATIC "static"
 
 // 定义非终结符
 
@@ -76,6 +79,14 @@ enum class VisibleType {
 #define NS_ARGS_STAR "args_star"
 #define NS_DECIMALS "decimals"
 #define NS_RETURN "return"
+#define NS_CLASS "class"
+#define NS_EXTENDS "extends"
+#define NS_CLASS_BODY "class_body"
+#define NS_CLASS_BODY_STAR "class_body_star"
+#define NS_MEMBER_OR_NONE "member_or_none"
+#define NS_MEMBER "member"
+#define NS_MEMBER_STAR "member_star"
+#define NS_STATIC_OR_NONE "static_or_none"
 
 
 #endif //DESIGN_1_CONSTANT_H
