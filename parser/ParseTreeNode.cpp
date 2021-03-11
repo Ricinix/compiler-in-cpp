@@ -136,12 +136,23 @@ std::string ParseTreeNonLeaf::getNodeName() const {
 ASTNode *ParseTreeNonLeaf::toASTNode() {
     if (getRuleItem()->getSymbolName() == NS_PROGRAM) {
         // program结点
+        if (childNum() != 3) {
+            throw ParseException("program结点解析失败");
+        }
         auto builder = OpNodeProgram::Builder();
-        for (auto &child : children) {
-            auto childNode = child->toASTNode();
-            if (childNode != nullptr) {
-                builder.appendChild(childNode);
+        auto stmt = getChild(0)->toASTNode();
+        if (stmt != nullptr) {
+            builder.appendChild(stmt);
+        }
+        auto programStar = getChild(2);
+        while (programStar->childNum() > 0 && !programStar->getChild(0)->isLeaf()) {
+            // 将多个连续的program合成一个
+            auto program = programStar->getChild(0);
+            stmt = program->getChild(0)->toASTNode();
+            if (stmt != nullptr) {
+                builder.appendChild(stmt);
             }
+            programStar = program->getChild(2);
         }
         return builder.build();
     } else if (getRuleItem()->getSymbolName() == NS_STATEMENT_OR_NONE) {
