@@ -67,8 +67,7 @@ RuleSet *RuleSet::generate() {
     auto *expr = ruleSet->makeNewRule(NS_EXPR);
     expr->makeNewSeq()->appendNonTerminalSymbol(NS_FACTOR)->appendNonTerminalSymbol(NS_EXPR_STAR);
     auto *expr2 = ruleSet->makeNewRule(NS_EXPR_STAR);
-    expr2->makeNewSeq()->appendTerminalSymbol(TokenType::op)->appendNonTerminalSymbol(NS_FACTOR)
-            ->appendNonTerminalSymbol(NS_EXPR_STAR);
+    expr2->makeNewSeq()->appendTerminalSymbol(TokenType::op)->appendNonTerminalSymbol(NS_EXPR);
     expr2->makeEmptySeq();
 
     // factor 语法，包含了1个新产生式
