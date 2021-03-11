@@ -17,7 +17,16 @@ private:
     ASTNode *father = nullptr;
 public:
     void setFather(ASTNode *node);
+
     ASTNode *getFather();
+
+    virtual void insert(int i, ASTNode *node);
+
+    virtual void append(ASTNode *node);
+
+    virtual void remove(int i);
+
+    virtual void remove(ASTNode *node);
 
     virtual ASTNode *child(int i);
 
@@ -85,6 +94,14 @@ public:
     ~ASTList() override;
 
     ASTNode *child(int i) override;
+
+    void insert(int i, ASTNode *node) override;
+
+    void append(ASTNode *node) override;
+
+    void remove(int i) override;
+
+    void remove(ASTNode *node) override;
 
     int numChildren() const override;
 

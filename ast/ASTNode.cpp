@@ -39,6 +39,22 @@ ASTNode *ASTNode::getFather() {
     return father;
 }
 
+void ASTNode::insert(int i, ASTNode *node) {
+    throw IndexOutOfBoundsException(i);
+}
+
+void ASTNode::remove(int i) {
+    throw IndexOutOfBoundsException(i);
+}
+
+void ASTNode::remove(ASTNode* node) {
+    throw IndexOutOfBoundsException(0);
+}
+
+void ASTNode::append(ASTNode *node) {
+    throw IndexOutOfBoundsException(0);
+}
+
 ASTLeaf::ASTLeaf(Token *token_p) {
     token_ptr = token_p;
 }
@@ -139,6 +155,31 @@ void ASTList::genCode(IoUtil &ioUtil) {
 }
 
 void ASTList::addChild(ASTNode *node) {
+    children.push_back(node);
+    node->setFather(this);
+}
+
+void ASTList::insert(int i, ASTNode *node) {
+    children.insert(children.cbegin() + i, node);
+    node->setFather(this);
+}
+
+void ASTList::remove(int i) {
+    auto *node = children[i];
+    children.erase(children.cbegin() + i, children.cbegin() + i + 1);
+    delete node;
+}
+
+void ASTList::remove(ASTNode *node) {
+    for (int i = 0; i < children.size(); ++i) {
+        if (children[i] == node) {
+            remove(i);
+            break;
+        }
+    }
+}
+
+void ASTList::append(ASTNode *node) {
     children.push_back(node);
     node->setFather(this);
 }
