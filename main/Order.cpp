@@ -47,7 +47,7 @@ void CompileOrder::exec() {
     auto parseTree = parser.getParseTree();
     Log::info(*parseTree);
     auto *ast = parseTree->toAST();
-    Log::info(ast);
+    Log::info(*ast);
 
     delete lexer_ptr;
     delete ruleSet;
