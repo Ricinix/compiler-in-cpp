@@ -111,6 +111,9 @@ std::string ParseTreeLeaf::getNodeName() const {
 }
 
 ASTNode *ParseTreeLeaf::toASTNode() {
+    if (getToken() == nullptr) {
+        return nullptr;
+    }
     if (getToken()->getTokenType() == TokenType::number) {
         return new NumberLiteral(getToken());
     } else if (getToken()->getTokenType() == TokenType::string) {
@@ -206,7 +209,7 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
             builder.setRightNode(getChild(1)->toASTNode());
             return builder.build();
         }
-        return parseChildDirectly();
+        return getFather()->getChild(0)->toASTNode();
     } else if (getRuleItem()->getSymbolName() == NS_BLOCK) {
         // block 结点
         if (childNum() != 4) {
@@ -260,6 +263,7 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
                 auto builder = OpNodeSingleExpr::Builder();
                 builder.setOpToken(opChild->getToken());
                 builder.setFactor(getChild(1)->toASTNode());
+                return builder.build();
             } else {
                 throw ParseException("factor结点中无该文法");
             }
