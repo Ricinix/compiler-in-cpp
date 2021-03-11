@@ -47,7 +47,7 @@ public:
 
     virtual std::string getNodeName() const;
 
-    virtual ASTNode* toASTNode();
+    virtual ASTNode *toASTNode();
 
 };
 
@@ -61,10 +61,12 @@ public:
 
     std::string getNodeName() const override;
 
-    ASTNode * toASTNode() override;
+    ASTNode *toASTNode() override;
 };
 
 class ParseTreeNonLeaf : public ParseTreeNode {
+private:
+    ASTNode* parseChildDirectly();
 public:
     explicit ParseTreeNonLeaf(RuleItem *ruleItem);
 
@@ -72,7 +74,7 @@ public:
 
     std::string getNodeName() const override;
 
-    ASTNode * toASTNode() override;
+    ASTNode *toASTNode() override;
 };
 
 #endif //DESIGN_1_PARSETREENODE_H
