@@ -48,3 +48,7 @@ void AbstractSyntaxTree::printTree(ASTNode *node, std::ostream &fmt, std::string
     indent.pop_back();
     fmt << indent << ")";
 }
+
+void AbstractSyntaxTree::translateToCppTree() {
+
+}

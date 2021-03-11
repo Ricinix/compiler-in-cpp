@@ -15,3 +15,14 @@ void CodePrinter::genCode(IoUtil &ioUtil) {
 std::string CodePrinter::toString() const {
     return "CodePrinter";
 }
+
+std::string CodePrinter::location() const {
+    return "";
+}
+
+std::ostream &operator<<(std::ostream &os, const CodePrinter &astLeaf) {
+    os << ">>>>>>>>>>ASTLeaf>>>>>>>>>>" << std::endl;
+    os << astLeaf.toString() << std::endl;
+    os << "<<<<<<<<<<ASTLeaf<<<<<<<<<<";
+    return os;
+}

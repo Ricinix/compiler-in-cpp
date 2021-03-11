@@ -14,7 +14,9 @@ class CodePrinter : public ASTLeaf{
 public:
     explicit CodePrinter();
     void genCode(IoUtil &ioUtil) override;
+    std::string location() const override;
     std::string toString() const override;
+    friend std::ostream &operator<<(std::ostream &os, const CodePrinter &astLeaf);
 };
 
 

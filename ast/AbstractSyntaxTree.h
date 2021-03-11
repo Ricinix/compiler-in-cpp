@@ -20,6 +20,8 @@ public:
 
     ASTNode* getRoot();
 
+    void translateToCppTree();
+
     friend std::ostream &operator<<(std::ostream &os, const AbstractSyntaxTree &tree);
 
 };
