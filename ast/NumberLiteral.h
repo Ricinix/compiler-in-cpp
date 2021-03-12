@@ -8,9 +8,14 @@
 #include "ASTNode.h"
 #include "../lexer/Token.h"
 
-class NumberLiteral: public ASTLeaf {
+class NumberLiteral : public ASTLeaf {
+private:
+    Token *decimalsToken;
 public:
-    explicit NumberLiteral(Token* token_ptr);
+    explicit NumberLiteral(Token *token_ptr);
+
+    NumberLiteral(Token *integer, Token *decimals);
+
     void genCode(IoUtil &ioUtil) override;
 };
 
