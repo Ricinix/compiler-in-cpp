@@ -18,6 +18,8 @@ protected:
     std::vector<ParseTreeNode *> children;
     RuleItem *symbol;
     Token *token;
+
+    void checkChildNum(int correctNum);
 public:
     explicit ParseTreeNode(RuleItem *ruleItem);
 
