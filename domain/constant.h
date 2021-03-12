@@ -49,6 +49,7 @@ enum class VisibleType {
 #define RW_CLASS "class"
 #define RW_EXTENDS "extends"
 #define RW_STATIC "static"
+#define RW_NEW "new"
 
 // 定义非终结符
 
@@ -90,6 +91,7 @@ enum class VisibleType {
 #define NS_ELEMENTS "elements"
 #define NS_ELEMENTS_OR_NONE "elements_or_none"
 #define NS_ELEMENTS_STAR "elements_star"
+#define NS_NEW "new"
 
 
 #endif //DESIGN_1_CONSTANT_H

@@ -6,7 +6,7 @@
 // () 括号内视为一个完整的模式
 
 // 基本构成元素, 这里添加的postfix是对函数调用形式的支持
-primary   :  ( "(" expr ")" { postfix } ) | NUMBER [ "." NUMBER ] | ( IDENTIFIER { postfix } ) | STRING | ( "[" [ elements ] "]" { postfix } )
+primary   :  ( "(" expr ")" { postfix } ) | NUMBER [ "." NUMBER ] | ( [ new ] IDENTIFIER { postfix } ) | STRING | ( "[" [ elements ] "]" { postfix } )
 // 因子
 factor    :   "-" primary | primary
 // 表达式

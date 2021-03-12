@@ -30,6 +30,7 @@ void SymbolTable::initReservedWordMap() {
     reservedWordMap[RW_ELSE] = new Operator();
     reservedWordMap[RW_FUNC] = new Operator();
     reservedWordMap[RW_RETURN] = new Operator();
+    reservedWordMap[RW_NEW] = new Operator();
     reservedWordMap[";"] = new Operator();
     reservedWordMap[","] = new Operator();
     reservedWordMap["."] = new Operator();
