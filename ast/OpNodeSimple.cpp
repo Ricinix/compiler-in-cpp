@@ -9,11 +9,16 @@ void OpNodeSimple::Builder::setSimpleStmt(ASTNode *node) {
 }
 
 OpNodeSimple *OpNodeSimple::Builder::build() {
-    return new OpNodeSimple(simpleStmt);
+    return new OpNodeSimple(simpleStmt, isReturnStmt);
 }
 
-OpNodeSimple::OpNodeSimple(ASTNode *simpleStmtNode) {
+void OpNodeSimple::Builder::setReturnStmt(bool isReturn) {
+    isReturnStmt = isReturn;
+}
+
+OpNodeSimple::OpNodeSimple(ASTNode *simpleStmtNode, bool isReturn) {
     simpleStmt = simpleStmtNode;
+    isReturnStmt = isReturn;
     addChild(simpleStmtNode);
 }
 

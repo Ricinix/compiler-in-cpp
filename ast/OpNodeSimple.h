@@ -11,7 +11,9 @@ class OpNodeSimple : public ASTList {
 private:
     ASTNode *simpleStmt;
 
-    explicit OpNodeSimple(ASTNode *simpleStmtNode);
+    bool isReturnStmt;
+
+    explicit OpNodeSimple(ASTNode *simpleStmtNode, bool isReturn);
 
 public:
 
@@ -21,9 +23,12 @@ public:
 
     class Builder {
     private:
-        ASTNode *simpleStmt;
+        ASTNode *simpleStmt = nullptr;
+        bool isReturnStmt = false;
     public:
         void setSimpleStmt(ASTNode *node);
+
+        void setReturnStmt(bool isReturn);
 
         OpNodeSimple *build();
     };
