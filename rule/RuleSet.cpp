@@ -181,7 +181,7 @@ RuleSet *RuleSet::generate() {
     auto *elements = ruleSet->makeNewRule(NS_ELEMENTS);
     elements->makeNewSeq()->appendNonTerminalSymbol(NS_EXPR)->appendNonTerminalSymbol(NS_ELEMENTS_STAR);
     auto *elementsStar = ruleSet->makeNewRule(NS_ELEMENTS_STAR);
-    elementsStar->makeNewSeq()->appendTerminalSymbol(",")->appendNonTerminalSymbol(NS_EXPR);
+    elementsStar->makeNewSeq()->appendTerminalSymbol(",")->appendNonTerminalSymbol(NS_ELEMENTS);
     elementsStar->makeEmptySeq();
 
     return ruleSet;
