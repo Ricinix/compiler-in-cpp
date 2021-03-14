@@ -9,12 +9,11 @@
 
 class DefineNodeFunction : public ASTList {
 private:
-    VisibleType visibleType;
-    std::string functionName;
+    ASTNode *functionName;
     std::vector<ASTNode *> params;
     ASTNode *runBody;
 
-    DefineNodeFunction(VisibleType type, const std::string &name, std::vector<ASTNode *> &paramSet, ASTNode *runPart);
+    DefineNodeFunction(ASTNode *funcName, std::vector<ASTNode *> &paramSet, ASTNode *runPart);
 
 public:
 
@@ -24,20 +23,18 @@ public:
 
     class Builder {
     private:
-        VisibleType visibleType;
-        std::string functionName;
+        ASTNode *functionName;
         std::vector<ASTNode *> params;
         ASTNode *runBody;
     public:
-        void setVisibleType(VisibleType type);
 
-        void setFunctionName(const std::string &name);
+        void setFunctionName(ASTNode *funcName);
 
         void addParam(ASTNode *param);
 
         void setRunBody(ASTNode *runPart);
 
-        DefineNodeFunction* build();
+        DefineNodeFunction *build();
     };
 };
 
