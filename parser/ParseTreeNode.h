@@ -20,6 +20,7 @@ protected:
     Token *token;
 
     void checkChildNum(int correctNum);
+
 public:
     explicit ParseTreeNode(RuleItem *ruleItem);
 
@@ -68,7 +69,10 @@ public:
 
 class ParseTreeNonLeaf : public ParseTreeNode {
 private:
-    ASTNode* parseChildDirectly();
+    ASTNode *parseChildDirectly();
+
+    static ASTNode *parsePostfixNode(ASTNode *prefixNode, ParseTreeNode *targetNode);
+
 public:
     explicit ParseTreeNonLeaf(RuleItem *ruleItem);
 

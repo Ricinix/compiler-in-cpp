@@ -16,6 +16,10 @@
 #include "../ast/OpNodeSingleExpr.h"
 #include "../ast/DecorateNodePrimary.h"
 #include "../ast/NewNodeArray.h"
+#include "../ast/NewNodeObject.h"
+#include "../ast/OpNodeFetchDomain.h"
+#include "../ast/OpNodeCallFunction.h"
+#include "../ast/OpNodeFetchArr.h"
 
 ParseTreeNode::ParseTreeNode(RuleItem *ruleItem) {
     symbol = ruleItem;
@@ -289,11 +293,12 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
             }
             return builder.build();
         } else if (childNum() == 4 && getChild(0)->getRuleItem()->getSymbolName() == "(") {
-            // 表达式，需要判别是否是函数调用
-            // TODO 函数支持
+            // 表达式
             auto builder = DecorateNodePrimary::Builder();
             builder.setExprNode(getChild(1)->toASTNode());
-            auto *expr = builder.build();
+
+            // 判别是否是函数调用
+            return parsePostfixNode(builder.build(), getChild(3));
         } else if (childNum() == 2 && getChild(0)->getToken() != nullptr
                    && getChild(0)->getToken()->getTokenType() == TokenType::number) {
             // 数字，需判别有没有小数
@@ -305,10 +310,18 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
                    && getChild(1)->getToken()->getTokenType() == TokenType::identifier) {
             // 标识符的情况，需要判别有函数调用以及对象实例化
             auto *newNode = getChild(0)->toASTNode();
+            ASTNode *prefix = nullptr;
             if (newNode != nullptr && newNode->toString() == RW_NEW) {
-                // TODO 新建对象
+                // 新建对象，本质上是将 new Object转换为 Object.new，所以此处不需要关系对象实例化所传入的参数，参数会在后面的postfix中处理
+                auto builder = NewNodeObject::Builder();
+                builder.setObjName(getChild(1)->toASTNode());
+                prefix = builder.build();
+            } else {
+                // 只是单纯的标识符
+                prefix = getChild(1)->toASTNode();
             }
-            // TODO 判读是否有函数调用
+            // 判读是否有函数调用
+            return parsePostfixNode(prefix, getChild(2));
         } else {
             // STRING
             checkChildNum(1);
@@ -383,4 +396,47 @@ ASTNode *ParseTreeNonLeaf::parseChildDirectly() {
         return getChild(0)->toASTNode();
     }
     return nullptr;
+}
+
+/**
+ * 用于解析 { postfix } BNF范式
+ * @param prefixNode postfix修饰的前缀结点
+ * @param targetNode NS_PRIMARY_STAR结点
+ * @return
+ */
+ASTNode *ParseTreeNonLeaf::parsePostfixNode(ASTNode *prefixNode, ParseTreeNode *targetNode) {
+    if (targetNode->childNum() == 1 && targetNode->getChild(0)->isLeaf()) {
+        return prefixNode;
+    }
+    auto *postfix = targetNode->getChild(0);
+    if (postfix->childNum() == 2 && postfix->getChild(0)->getRuleItem()->getSymbolName() == ".") {
+        // 取对象的域
+        auto builder = OpNodeFetchDomain::Builder();
+        builder.setPrefixNode(prefixNode);
+        builder.setDomainNode(postfix->getChild(1)->toASTNode());
+        return parsePostfixNode(builder.build(), targetNode->getChild(1));
+    } else if (postfix->childNum() == 3 && postfix->getChild(0)->getRuleItem()->getSymbolName() == "(") {
+        // 函数调用
+        auto builder = OpNodeCallFunction::Builder();
+        builder.setFunctionName(prefixNode);
+        // 取参数
+        auto *postfixOrNone = postfix->getChild(1);
+        if (postfixOrNone->childNum() == 1 && postfixOrNone->getChild(0)->isLeaf()) {
+            return parsePostfixNode(builder.build(), targetNode->getChild(1));
+        }
+        auto *args = postfixOrNone->getChild(0);
+        builder.addArg(args->getChild(0)->toASTNode());
+        for (auto *argsStar = args->getChild(1);argsStar->childNum() == 2; argsStar = args->getChild(1)) {
+            args = argsStar->getChild(1);
+            builder.addArg(args->getChild(0)->toASTNode());
+        }
+        return parsePostfixNode(builder.build(), targetNode->getChild(1));
+    } else if (postfix->childNum() == 3 && postfix->getChild(0)->getRuleItem()->getSymbolName() == "[") {
+        // 取数组
+        auto builder = OpNodeFetchArr::Builder();
+        builder.setArrName(prefixNode);
+        builder.setIndexNode(postfix->getChild(1)->toASTNode());
+        return parsePostfixNode(builder.build(), targetNode->getChild(1));
+    }
+    throw ParseException("postfix parse can't find such grammar");
 }
