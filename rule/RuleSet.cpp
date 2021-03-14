@@ -86,11 +86,12 @@ RuleSet *RuleSet::generate() {
     // primary 语法，包含了5个新产生式
     auto *primary = ruleSet->makeNewRule(NS_PRIMARY);
     primary->makeNewSeq()->appendTerminalSymbol("[")->appendNonTerminalSymbol(NS_ELEMENTS_OR_NONE)
-    ->appendTerminalSymbol("]")->appendNonTerminalSymbol(NS_PRIMARY_STAR);
+    ->appendTerminalSymbol("]");
     primary->makeNewSeq()->appendTerminalSymbol("(")->appendNonTerminalSymbol(NS_EXPR)
             ->appendTerminalSymbol(")")->appendNonTerminalSymbol(NS_PRIMARY_STAR);
     primary->makeNewSeq()->appendTerminalSymbol(TokenType::number)->appendNonTerminalSymbol(NS_DECIMALS);
-    primary->makeNewSeq()->appendNonTerminalSymbol(NS_NEW)->appendTerminalSymbol(TokenType::identifier)->appendNonTerminalSymbol(NS_PRIMARY_STAR);
+    primary->makeNewSeq()->appendNonTerminalSymbol(NS_NEW)->appendTerminalSymbol(TokenType::identifier)
+    ->appendNonTerminalSymbol(NS_PRIMARY_STAR);
     primary->makeNewSeq()->appendTerminalSymbol(TokenType::string);
     auto *primary2 = ruleSet->makeNewRule(NS_PRIMARY_STAR);
     primary2->makeNewSeq()->appendNonTerminalSymbol(NS_POSTFIX)->appendNonTerminalSymbol(NS_PRIMARY_STAR);
