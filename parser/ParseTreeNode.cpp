@@ -171,8 +171,8 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
         // 行尾标识符，孩子可能是eol也可能是;，目前暂不解析
         return nullptr;
     } else if (getRuleItem()->getSymbolName() == NS_PROGRAM_STAR) {
-        // programStar结点，孩子可能是program也可能是空
-        return parseChildDirectly();
+        // program的右递归结点，应在program结点中处理
+        throw ParseException("programStar should be parsed in program node");
     } else if (getRuleItem()->getSymbolName() == NS_STATEMENT) {
         // statement结点
         if (childNum() == 0) {
