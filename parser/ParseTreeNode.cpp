@@ -15,6 +15,7 @@
 #include "../ast/OpNodeSimple.h"
 #include "../ast/OpNodeSingleExpr.h"
 #include "../ast/DecorateNodePrimary.h"
+#include "../ast/NewNodeArray.h"
 
 ParseTreeNode::ParseTreeNode(RuleItem *ruleItem) {
     symbol = ruleItem;
@@ -272,19 +273,36 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
         // primary结点
         if (childNum() == 4 && getChild(0)->getRuleItem()->getSymbolName() == "[") {
             // 数组
+            auto builder = NewNodeArray::Builder();
+            auto *elementsOrNone = getChild(1);
+            if (elementsOrNone->getChild(0)->isLeaf()) {
+                // 无元素
+                return builder.build();
+            }
+            auto *elements = elementsOrNone->getChild(0);
+            builder.addElement(elements->getChild(0)->toASTNode());
+            for (auto *elementsStar = elements->getChild(1);
+                 elementsStar->childNum() == 2;
+                 elementsStar = elements->getChild(1)) {
+                elements = elementsStar->getChild(1);
+                builder.addElement(elements->getChild(0)->toASTNode());
+            }
+            return builder.build();
         } else if (childNum() == 4 && getChild(0)->getRuleItem()->getSymbolName() == "(") {
             // 表达式，需要判别是否是函数调用
             // TODO 函数支持
             auto builder = DecorateNodePrimary::Builder();
             builder.setExprNode(getChild(1)->toASTNode());
             auto *expr = builder.build();
-        } else if (childNum() == 2 && getChild(0)->getToken() != nullptr && getChild(0)->getToken()->getTokenType() == TokenType::number) {
+        } else if (childNum() == 2 && getChild(0)->getToken() != nullptr
+                   && getChild(0)->getToken()->getTokenType() == TokenType::number) {
             // 数字，需判别有没有小数
             if (getChild(1)->childNum() == 2) {
                 return new NumberLiteral(getChild(0)->getToken(), getChild(1)->getChild(1)->getToken());
             }
             return getChild(0)->toASTNode();
-        } else if (childNum() == 3 && getChild(0)->getToken() != nullptr && getChild(1)->getToken()->getTokenType() == TokenType::identifier) {
+        } else if (childNum() == 3 && getChild(0)->getToken() != nullptr
+                   && getChild(1)->getToken()->getTokenType() == TokenType::identifier) {
             // 标识符的情况，需要判别有函数调用以及对象实例化
             auto *newNode = getChild(0)->toASTNode();
             if (newNode != nullptr && newNode->toString() == RW_NEW) {
