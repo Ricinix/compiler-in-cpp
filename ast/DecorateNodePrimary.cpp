@@ -10,7 +10,9 @@ DecorateNodePrimary::DecorateNodePrimary(ASTNode *exprNode) {
 }
 
 void DecorateNodePrimary::genCode(IoUtil &ioUtil) {
-    ASTList::genCode(ioUtil);
+    ioUtil.appendContent("(");
+    expr->genCode(ioUtil);
+    ioUtil.appendContent(")");
 }
 
 std::string DecorateNodePrimary::toString() const {

@@ -6,7 +6,9 @@
 #define DESIGN_1_DECORATENODEPRIMARY_H
 
 #include "ASTNode.h"
-
+/**
+ * 用来装饰(expr)，打印括号用的
+ */
 class DecorateNodePrimary : public ASTList {
 private:
     ASTNode *expr;
