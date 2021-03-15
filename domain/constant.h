@@ -34,9 +34,9 @@ enum class OpType {
     assign, // =
 };
 
-enum class VisibleType {
-    privateType, // 可见性私有
-    publicType, // 可见性公开
+enum class ASTNodeType {
+    empty,
+    importNode,
 };
 
 // 定义保留字

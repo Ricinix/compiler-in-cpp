@@ -46,6 +46,8 @@ public:
     virtual std::unique_ptr<ASTNode> work();
 
     virtual void genCode(IoUtil &ioUtil);
+
+    virtual ASTNodeType getType();
 };
 
 /**

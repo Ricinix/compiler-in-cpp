@@ -55,6 +55,10 @@ void ASTNode::append(ASTNode *node) {
     throw IndexOutOfBoundsException(0);
 }
 
+ASTNodeType ASTNode::getType() {
+    return ASTNodeType::empty;
+}
+
 ASTLeaf::ASTLeaf(Token *token_p) {
     token_ptr = token_p;
 }
