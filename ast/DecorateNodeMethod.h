@@ -13,11 +13,14 @@ private:
     bool isStatic;
     DefineNodeFunction *func;
 
+protected:
     DecorateNodeMethod(DefineNodeFunction *funcNode, bool isStaticMethod);
 
 public:
     void genCode(IoUtil &ioUtil) override;
     std::string toString() const override;
+
+    virtual std::string getHashMsg() const;
 
     class Builder {
     private:

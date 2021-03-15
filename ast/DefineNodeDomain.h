@@ -12,6 +12,7 @@ private:
     bool isStatic;
     ASTNode *initStmt;
 
+protected:
     DefineNodeDomain(ASTNode *initStmtNode, bool isStaticDomain);
 
 public:

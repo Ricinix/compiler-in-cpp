@@ -33,5 +33,9 @@ void DefineNodeFunction::genCode(IoUtil &ioUtil) {
 }
 
 std::string DefineNodeFunction::toString() const {
-    return functionName->toString() + " define";
+    return functionName->toString();
+}
+
+int DefineNodeFunction::paramNum() const {
+    return params.size();
 }

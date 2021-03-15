@@ -19,6 +19,7 @@ private:
 
     std::vector<DecorateNodeMethod *> methodSet;
 
+protected:
     DefineNodeObject(ASTNode *name, ASTNode *extendNode, std::vector<DefineNodeDomain *> &domains,
                      std::vector<DecorateNodeMethod *> &methods);
 
@@ -27,6 +28,10 @@ public:
     std::string toString() const override;
 
     void genCode(IoUtil &ioUtil) override;
+
+    virtual void addDomain(DefineNodeDomain *domain);
+
+    virtual void addMethod(DecorateNodeMethod *method);
 
     class Builder {
     private:

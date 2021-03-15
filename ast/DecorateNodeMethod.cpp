@@ -18,6 +18,10 @@ std::string DecorateNodeMethod::toString() const {
     return "Method";
 }
 
+std::string DecorateNodeMethod::getHashMsg() const {
+    return func->toString() + "_" + std::to_string(func->paramNum());
+}
+
 void DecorateNodeMethod::Builder::setStatic(bool isStaticMethod) {
     isStatic = isStaticMethod;
 }

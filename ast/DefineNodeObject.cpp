@@ -30,6 +30,26 @@ void DefineNodeObject::genCode(IoUtil &ioUtil) {
     ASTList::genCode(ioUtil);
 }
 
+void DefineNodeObject::addDomain(DefineNodeDomain *domain) {
+    for (auto &node : domainSet) {
+        if (domain->toString() == node->toString()) {
+            return;
+        }
+    }
+    domainSet.push_back(domain);
+    addChild(domain);
+}
+
+void DefineNodeObject::addMethod(DecorateNodeMethod *method) {
+    for (auto &node : methodSet) {
+        if (method->getHashMsg() == node->getHashMsg()) {
+            return;
+        }
+    }
+    methodSet.push_back(method);
+    addChild(method);
+}
+
 void DefineNodeObject::Builder::setClassName(ASTNode *name) {
     className = name;
 }

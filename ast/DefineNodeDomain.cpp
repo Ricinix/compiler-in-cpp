@@ -12,7 +12,7 @@ DefineNodeDomain::DefineNodeDomain(ASTNode *initStmtNode, bool isStaticDomain) {
 
 std::string DefineNodeDomain::toString() const {
     if (initStmt->child(0) != nullptr && initStmt->child(0)->child(0) != nullptr) {
-        return "ObjDomain: " + initStmt->child(0)->child(0)->toString();
+        return initStmt->child(0)->child(0)->toString();
     }
     return "ObjDomain";
 }

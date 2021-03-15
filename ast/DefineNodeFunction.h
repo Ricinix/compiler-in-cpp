@@ -21,6 +21,8 @@ public:
 
     std::string toString() const override;
 
+    int paramNum() const;
+
     class Builder {
     private:
         ASTNode *functionName;
