@@ -50,6 +50,15 @@ enum class VisibleType {
 #define RW_EXTENDS "extends"
 #define RW_STATIC "static"
 #define RW_NEW "new"
+#define RW_LEFT_BRACE "{"
+#define RW_RIGHT_BRACE "}"
+#define RW_LEFT_SQUARE_BRACKET "["
+#define RW_RIGHT_SQUARE_BRACKET "]"
+#define RW_LEFT_BRACKET "("
+#define RW_RIGHT_BRACKET ")"
+#define RW_SEMICOLON ";"
+#define RW_COMMA ","
+#define RW_DOT "."
 
 // 定义非终结符
 

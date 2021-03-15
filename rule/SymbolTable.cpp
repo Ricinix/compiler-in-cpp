@@ -21,17 +21,19 @@ bool SymbolTable::isReservedWord(const std::string &word) {
 }
 
 void SymbolTable::initReservedWordMap() {
-    reservedWordMap["{"] = new Operator();
-    reservedWordMap["}"] = new Operator();
-    reservedWordMap["["] = new Operator();
-    reservedWordMap["]"] = new Operator();
+    reservedWordMap[RW_LEFT_BRACE] = new Operator();
+    reservedWordMap[RW_RIGHT_BRACE] = new Operator();
+    reservedWordMap[RW_LEFT_SQUARE_BRACKET] = new Operator();
+    reservedWordMap[RW_RIGHT_SQUARE_BRACKET] = new Operator();
+    reservedWordMap[RW_LEFT_BRACKET] = new Operator();
+    reservedWordMap[RW_RIGHT_BRACKET] = new Operator();
     reservedWordMap[RW_WHILE] = new Operator();
     reservedWordMap[RW_IF] = new Operator();
     reservedWordMap[RW_ELSE] = new Operator();
     reservedWordMap[RW_FUNC] = new Operator();
     reservedWordMap[RW_RETURN] = new Operator();
     reservedWordMap[RW_NEW] = new Operator();
-    reservedWordMap[";"] = new Operator();
-    reservedWordMap[","] = new Operator();
-    reservedWordMap["."] = new Operator();
+    reservedWordMap[RW_SEMICOLON] = new Operator();
+    reservedWordMap[RW_COMMA] = new Operator();
+    reservedWordMap[RW_DOT] = new Operator();
 }
