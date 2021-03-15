@@ -6,26 +6,40 @@
 #define DESIGN_1_ABSTRACTSYNTAXTREE_H
 
 #include "ASTNode.h"
+#include "OriginObjectNode.h"
 #include <sstream>
 
 class AbstractSyntaxTree {
 private:
-    ASTNode *root;
+    ASTNode *root = nullptr;
+
+    OriginObjectNode *originObj;
 
     void printTree(ASTNode *node, std::ostream &fmt, std::string &indent) const;
 
+    void initObject();
+
+    void solveImport(AbstractSyntaxTree *(*load)(const std::string &));
 public:
+    class ASTHelper {
+    public:
+        AbstractSyntaxTree *(*load)(const std::string &);
+    };
+
     explicit AbstractSyntaxTree(ASTNode *rootNode);
 
     ~AbstractSyntaxTree();
 
     ASTNode *getRoot();
 
-    void translateToCppTree();
+    void translateToCppTree(AbstractSyntaxTree::ASTHelper *helper);
 
     friend std::ostream &operator<<(std::ostream &os, const AbstractSyntaxTree &tree);
 
+    void generateCppCode(IoUtil &ioUtil);
+
 };
+
 
 
 #endif //DESIGN_1_ABSTRACTSYNTAXTREE_H

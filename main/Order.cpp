@@ -5,7 +5,6 @@
 #include "Order.h"
 #include "../util/Log.h"
 #include "../lexer/Lexer.h"
-#include "../parser/Parser.h"
 
 Order::Order(std::string &src, std::string &target, OrderType type) {
     srcPath = src;
@@ -49,13 +48,23 @@ void CompileOrder::exec() {
     auto *ast = parseTree->toAST();
     Log::info(*ast);
 
-    delete lexer_ptr;
-    delete ruleSet;
-    delete ast;
+    auto *helper = new AbstractSyntaxTree::ASTHelper();
+    helper->load = CompileOrder::getAst;
 
-//    Token *t_ptr = lexer_ptr->read();
-//    while (t_ptr != nullptr && t_ptr->getTokenType() != TokenType::eof) {
-//        Log::info(*t_ptr);
-//        t_ptr = lexer_ptr->read();
-//    }
+    ast->translateToCppTree(helper);
+    ast->generateCppCode(ioUtil);
+}
+
+AbstractSyntaxTree *CompileOrder::getAst(const std::string &inPath) {
+    Log::info("compiling " + inPath);
+    IoUtil ioUtil(inPath);
+    auto *lexer_ptr = new Lexer(ioUtil);
+    auto *ruleSet = RuleSet::generate();
+    Parser parser(ruleSet, lexer_ptr);
+    parser.parse();
+    auto parseTree = parser.getParseTree();
+    Log::info(*parseTree);
+    auto *ast = parseTree->toAST();
+    Log::info(*ast);
+    return ast;
 }

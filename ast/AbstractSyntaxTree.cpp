@@ -3,6 +3,9 @@
 //
 
 #include "AbstractSyntaxTree.h"
+#include "OpNodeProgram.h"
+#include "OriginNumberNode.h"
+#include "OriginArrayNode.h"
 #include <iostream>
 
 AbstractSyntaxTree::AbstractSyntaxTree(ASTNode *rootNode) {
@@ -49,6 +52,30 @@ void AbstractSyntaxTree::printTree(ASTNode *node, std::ostream &fmt, std::string
     fmt << indent << ")";
 }
 
-void AbstractSyntaxTree::translateToCppTree() {
+void AbstractSyntaxTree::generateCppCode(IoUtil &ioUtil) {
+    initObject();
 
+}
+
+void AbstractSyntaxTree::translateToCppTree(AbstractSyntaxTree::ASTHelper *helper) {
+    solveImport(helper->load);
+
+}
+
+void AbstractSyntaxTree::solveImport(AbstractSyntaxTree *(*load)(const std::string &)) {
+
+}
+
+void AbstractSyntaxTree::initObject() {
+    originObj = new OriginObjectNode();
+    if (getRoot()->getType() == ASTNodeType::program) {
+        auto *program = dynamic_cast<OpNodeProgram *>(getRoot());
+        if (program == nullptr) {
+            return;
+        }
+        program->insertDefineNode(0, new OriginArrayNode);
+        program->insertDefineNode(0, new OriginNumberNode);
+        program->insertDefineNode(0, new OriginStringNode);
+        program->insertDefineNode(0, originObj);
+    }
 }
