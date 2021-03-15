@@ -8,6 +8,7 @@
 #include <vector>
 #include "../rule/RuleSeq.h"
 #include "../ast/ASTNode.h"
+#include "../ast/DefineNodeObject.h"
 
 /**
  * 语法分析树的基类
@@ -72,6 +73,8 @@ private:
     ASTNode *parseChildDirectly();
 
     static ASTNode *parsePostfixNode(ASTNode *prefixNode, ParseTreeNode *targetNode);
+
+    static void castMember(DefineNodeObject::Builder &builder, ASTNode *member);
 
 public:
     explicit ParseTreeNonLeaf(RuleItem *ruleItem);

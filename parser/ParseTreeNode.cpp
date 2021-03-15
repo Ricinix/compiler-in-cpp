@@ -21,6 +21,8 @@
 #include "../ast/OpNodeCallFunction.h"
 #include "../ast/OpNodeFetchArr.h"
 #include "../ast/DefineNodeFunction.h"
+#include "../ast/DefineNodeDomain.h"
+#include "../ast/DecorateNodeMethod.h"
 
 ParseTreeNode::ParseTreeNode(RuleItem *ruleItem) {
     symbol = ruleItem;
@@ -386,19 +388,52 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
         throw ParseException("decimals node should be parse in primary node case number");
     } else if (getRuleItem()->getSymbolName() == NS_CLASS) {
         // class 结点，类的声明
+        checkChildNum(4);
+        auto builder = DefineNodeObject::Builder();
+        builder.setClassName(getChild(1)->toASTNode());
+        builder.setExtendObj(getChild(2)->toASTNode());
+        auto *classBody = getChild(3);
+        castMember(builder, classBody->getChild(1)->toASTNode());
+        for (auto *bodyStar = classBody->getChild(2);bodyStar->childNum() == 3;bodyStar = bodyStar->getChild(2)) {
+            castMember(builder, bodyStar->getChild(1)->toASTNode());
+        }
     } else if (getRuleItem()->getSymbolName() == NS_EXTENDS) {
-        // extends 结点，表示是否有继承
+        // extends 结点，表示是否有继承，有则返回所继承的类名
+        if (childNum() == 2) {
+            return getChild(1)->toASTNode();
+        }
+        return nullptr;
     } else if (getRuleItem()->getSymbolName() == NS_CLASS_BODY) {
         // classBody 结点，标识类声明的内部
+        throw ParseException("classBody node should be parsed in class node");
     } else if (getRuleItem()->getSymbolName() == NS_CLASS_BODY_STAR) {
         // classBodyStar 结点，与blockStar结点类似，标识0个或多个member，应在classBody中处理
+        throw ParseException("classBodyStar node should be parsed in class node");
     } else if (getRuleItem()->getSymbolName() == NS_MEMBER_OR_NONE) {
         // memberOrNone 结点，表示是否有member结点
         return parseChildDirectly();
     } else if (getRuleItem()->getSymbolName() == NS_MEMBER) {
         // member 结点，表示类里面的成员，可能是simple也可能是方法，还要判断可见性修饰符
+        checkChildNum(2);
+        auto *staticNode = getChild(0)->toASTNode();
+        auto *memberStar = getChild(1);
+        if (memberStar->getChild(0)->getRuleItem()->getSymbolName() == NS_FUNC) {
+            // 方法结点
+            auto builder = DecorateNodeMethod::Builder();
+            builder.setFunc(dynamic_cast<DefineNodeFunction *>(memberStar->getChild(0)->toASTNode()));
+            builder.setStatic(staticNode != nullptr && staticNode->toString() == RW_STATIC);
+            return builder.build();
+        } else if (memberStar->getChild(0)->getRuleItem()->getSymbolName() == NS_SIMPLE) {
+            // 域定义结点
+            auto builder = DefineNodeDomain::Builder();
+            builder.setInitStatement(memberStar->getChild(0)->toASTNode());
+            builder.setStaticDomain(staticNode != nullptr && staticNode->toString() == RW_STATIC);
+            return builder.build();
+        }
+        return nullptr;
     } else if (getRuleItem()->getSymbolName() == NS_MEMBER_STAR) {
         // memberStar 结点，表示是simple还是方法
+        throw ParseException("memberStar node should be parsed in member node");
     } else if (getRuleItem()->getSymbolName() == NS_STATIC_OR_NONE) {
         // staticOrNone 结点，表示是否有static保留字
         return parseChildDirectly();
@@ -466,4 +501,19 @@ ASTNode *ParseTreeNonLeaf::parsePostfixNode(ASTNode *prefixNode, ParseTreeNode *
         return parsePostfixNode(builder.build(), targetNode->getChild(1));
     }
     throw ParseException("postfix parse can't find such grammar");
+}
+
+void ParseTreeNonLeaf::castMember(DefineNodeObject::Builder &builder, ASTNode *member) {
+    if (member == nullptr) {
+        return;
+    }
+    auto *method = dynamic_cast<DecorateNodeMethod *>(member);
+    if (method != nullptr) {
+        builder.addMethod(method);
+    } else {
+        auto *domain = dynamic_cast<DefineNodeDomain *>(member);
+        if (domain != nullptr) {
+            builder.addDomain(domain);
+        }
+    }
 }

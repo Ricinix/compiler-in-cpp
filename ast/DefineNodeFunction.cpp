@@ -24,6 +24,7 @@ DefineNodeFunction::DefineNodeFunction(ASTNode *funcName, std::vector<ASTNode *>
     functionName = funcName;
     params = paramSet;
     runBody = runPart;
+    addChild(funcName);
     addChild(runPart);
 }
 

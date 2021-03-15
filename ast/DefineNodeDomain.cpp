@@ -4,35 +4,17 @@
 
 #include "DefineNodeDomain.h"
 
-VisibleType DefineNodeDomain::getVisibleType() {
-    return type;
-}
-
-std::string DefineNodeDomain::getName() {
-    return name;
-}
-
-DefineNodeDomain::DefineNodeDomain(VisibleType objType, const std::string &objName, ASTNode *initStmtNode) {
-    type = objType;
-    name = objName;
+DefineNodeDomain::DefineNodeDomain(ASTNode *initStmtNode, bool isStaticDomain) {
     initStmt = initStmtNode;
     addChild(initStmtNode);
 }
 
 std::string DefineNodeDomain::toString() const {
-    return "ObjDomain: " + name;
+    return "ObjDomain: " + initStmt->child(0)->toString();
 }
 
 void DefineNodeDomain::genCode(IoUtil &ioUtil) {
     ASTList::genCode(ioUtil);
-}
-
-void DefineNodeDomain::Builder::setName(const std::string &objName) {
-    name = objName;
-}
-
-void DefineNodeDomain::Builder::setVisibleType(VisibleType objType) {
-    type = objType;
 }
 
 void DefineNodeDomain::Builder::setInitStatement(ASTNode *stmt) {
@@ -40,5 +22,9 @@ void DefineNodeDomain::Builder::setInitStatement(ASTNode *stmt) {
 }
 
 DefineNodeDomain *DefineNodeDomain::Builder::build() {
-    return new DefineNodeDomain(type, name, initStmt);
+    return new DefineNodeDomain(initStmt, isStatic);
+}
+
+void DefineNodeDomain::Builder::setStaticDomain(bool isStaticDomain) {
+    isStatic = isStaticDomain;
 }

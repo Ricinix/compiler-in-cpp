@@ -6,20 +6,23 @@
 #define DESIGN_1_DEFINENODEOBJECT_H
 
 #include "ASTNode.h"
+#include "DefineNodeDomain.h"
+#include "DecorateNodeMethod.h"
 
 class DefineNodeObject : public ASTList {
 private:
-    std::string className;
+    ASTNode *className;
 
-    std::vector<ASTNode *> domainSet;
+    ASTNode *extendObj;
 
-    std::vector<ASTNode *> functionSet;
+    std::vector<DefineNodeDomain *> domainSet;
 
-    DefineNodeObject(const std::string &name, std::vector<ASTNode *> &domains, std::vector<ASTNode *> &functions);
+    std::vector<DecorateNodeMethod *> methodSet;
+
+    DefineNodeObject(ASTNode *name, ASTNode *extendNode, std::vector<DefineNodeDomain *> &domains,
+                     std::vector<DecorateNodeMethod *> &methods);
 
 public:
-
-    ~DefineNodeObject() override;
 
     std::string toString() const override;
 
@@ -27,15 +30,18 @@ public:
 
     class Builder {
     private:
-        std::string className;
-        std::vector<ASTNode *> domainSet;
-        std::vector<ASTNode *> functionSet;
+        ASTNode *className;
+        ASTNode *extendObj = nullptr;
+        std::vector<DefineNodeDomain *> domainSet;
+        std::vector<DecorateNodeMethod *> methodSet;
     public:
-        void setClassName(const std::string &name);
+        void setClassName(ASTNode *name);
 
-        void addDomain(ASTNode *domain);
+        void setExtendObj(ASTNode *extendNode);
 
-        void addFunction(ASTNode *function);
+        void addDomain(DefineNodeDomain *domain);
+
+        void addMethod(DecorateNodeMethod *method);
 
         DefineNodeObject *build();
 

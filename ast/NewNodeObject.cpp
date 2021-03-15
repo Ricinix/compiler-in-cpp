@@ -14,6 +14,7 @@ void NewNodeObject::Builder::setObjName(ASTNode *objName) {
 
 NewNodeObject::NewNodeObject(ASTNode *objNameNode) {
     objNameId = objNameNode;
+    addChild(objNameNode);
 }
 
 std::string NewNodeObject::toString() const {

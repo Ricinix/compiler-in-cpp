@@ -4,31 +4,25 @@
 
 #include "DefineNodeObject.h"
 
-DefineNodeObject::~DefineNodeObject() {
-    for (auto &domain : domainSet) {
-        delete domain;
-        domain = nullptr;
-    }
-    for (auto &function : functionSet) {
-        delete function;
-        function = nullptr;
-    }
-}
-
 std::string DefineNodeObject::toString() const {
-    return className;
+    return "obj " + className->toString();
 }
 
-DefineNodeObject::DefineNodeObject(const std::string &name, std::vector<ASTNode *> &domains,
-                                   std::vector<ASTNode *> &functions) {
+DefineNodeObject::DefineNodeObject(ASTNode *name, ASTNode *extendNode, std::vector<DefineNodeDomain *> &domains,
+                                   std::vector<DecorateNodeMethod *> &methods) {
     className = name;
+    extendObj = extendNode;
     domainSet = domains;
-    functionSet = functions;
+    methodSet = methods;
+    addChild(name);
+    if (extendNode != nullptr) {
+        addChild(extendNode);
+    }
     for (auto &domain : domains) {
         addChild(domain);
     }
-    for (auto &function : functions) {
-        addChild(function);
+    for (auto &method : methods) {
+        addChild(method);
     }
 }
 
@@ -36,18 +30,22 @@ void DefineNodeObject::genCode(IoUtil &ioUtil) {
     ASTList::genCode(ioUtil);
 }
 
-void DefineNodeObject::Builder::setClassName(const std::string &name) {
+void DefineNodeObject::Builder::setClassName(ASTNode *name) {
     className = name;
 }
 
 DefineNodeObject *DefineNodeObject::Builder::build() {
-    return new DefineNodeObject(className, domainSet, functionSet);
+    return new DefineNodeObject(className, extendObj, domainSet, methodSet);
 }
 
-void DefineNodeObject::Builder::addDomain(ASTNode *domain) {
+void DefineNodeObject::Builder::addDomain(DefineNodeDomain *domain) {
     domainSet.push_back(domain);
 }
 
-void DefineNodeObject::Builder::addFunction(ASTNode *function) {
-    functionSet.push_back(function);
+void DefineNodeObject::Builder::addMethod(DecorateNodeMethod *method) {
+    methodSet.push_back(method);
+}
+
+void DefineNodeObject::Builder::setExtendObj(ASTNode *extendNode) {
+    extendObj = extendNode;
 }

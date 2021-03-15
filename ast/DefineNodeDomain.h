@@ -9,15 +9,12 @@
 
 class DefineNodeDomain : public ASTList {
 private:
-    VisibleType type;
-    std::string name;
-    ASTNode* initStmt;
-    DefineNodeDomain(VisibleType objType, const std::string &objName, ASTNode* initStmtNode);
+    bool isStatic;
+    ASTNode *initStmt;
+
+    DefineNodeDomain(ASTNode *initStmtNode, bool isStaticDomain);
+
 public:
-
-    VisibleType getVisibleType();
-
-    std::string getName();
 
     void genCode(IoUtil &ioUtil) override;
 
@@ -25,14 +22,14 @@ public:
 
     class Builder {
     private:
-        VisibleType type;
-        std::string name;
-        ASTNode* initStmt;
+        bool isStatic;
+        ASTNode *initStmt;
     public:
-        void setVisibleType(VisibleType objType);
-        void setName(const std::string &objName);
         void setInitStatement(ASTNode *stmt);
-        DefineNodeDomain* build();
+
+        void setStaticDomain(bool isStaticDomain);
+
+        DefineNodeDomain *build();
     };
 };
 
