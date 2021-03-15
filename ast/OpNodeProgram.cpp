@@ -13,6 +13,11 @@ OpNodeProgram *OpNodeProgram::Builder::build() {
 }
 
 void OpNodeProgram::genCode(IoUtil &ioUtil) {
+    ioUtil.appendContent("#include <string>\n");
+    ioUtil.appendContent("#include <sstream>\n");
+    ioUtil.appendContent("#include <map>\n");
+    ioUtil.appendContent("#include <iostream>\n");
+    ioUtil.newLine();
     ASTList::genCode(ioUtil);
 }
 
