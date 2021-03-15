@@ -100,6 +100,10 @@ void ASTLeaf::genCode(IoUtil &ioUtil) {
     ASTNode::genCode(ioUtil);
 }
 
+ASTNodeType ASTLeaf::getType() {
+    return ASTNode::getType();
+}
+
 ASTList::ASTList(const std::vector<ASTNode *> &v) {
     children = v;
     for (auto &child : children) {
@@ -179,4 +183,8 @@ void ASTList::remove(ASTNode *node) {
 void ASTList::append(ASTNode *node) {
     children.push_back(node);
     node->setFather(this);
+}
+
+ASTNodeType ASTList::getType() {
+    return ASTNode::getType();
 }

@@ -36,7 +36,11 @@ enum class OpType {
 
 enum class ASTNodeType {
     empty,
+    program,
     importNode,
+    clz,
+    func,
+    codePrinter
 };
 
 // 定义保留字

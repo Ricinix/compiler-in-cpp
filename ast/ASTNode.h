@@ -76,6 +76,8 @@ public:
     std::unique_ptr<ASTNode> work() override;
 
     void genCode(IoUtil &ioUtil) override;
+
+    ASTNodeType getType() override;
 };
 
 /**
@@ -115,6 +117,8 @@ public:
     std::unique_ptr<ASTNode> work() override;
 
     void genCode(IoUtil &ioUtil) override;
+
+    ASTNodeType getType() override;
 };
 
 

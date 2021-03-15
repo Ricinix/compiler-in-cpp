@@ -12,18 +12,33 @@
  */
 class OpNodeProgram : public ASTList {
 private:
+    std::vector<ASTNode *> defineList;
+    std::vector<ASTNode *> stmtList;
+
+    static bool isDefineNode(ASTNode *node);
+
     explicit OpNodeProgram(const std::vector<ASTNode *> &v);
+
 public:
     void genCode(IoUtil &ioUtil) override;
 
     std::string toString() const override;
 
+    ASTNodeType getType() override;
+
+    void addDefineNode(ASTNode *node);
+
+    void addStmtNode(ASTNode *node);
+
+    void insertDefineNode(int i, ASTNode *node);
+
     class Builder {
     private:
         std::vector<ASTNode *> programSet;
     public:
-        void appendChild(ASTNode* node);
-        OpNodeProgram* build();
+        void appendChild(ASTNode *node);
+
+        OpNodeProgram *build();
     };
 };
 

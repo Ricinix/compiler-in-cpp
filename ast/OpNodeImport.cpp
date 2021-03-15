@@ -17,6 +17,10 @@ void OpNodeImport::genCode(IoUtil &ioUtil) {
     ASTList::genCode(ioUtil);
 }
 
+ASTNodeType OpNodeImport::getType() {
+    return ASTNodeType::importNode;
+}
+
 void OpNodeImport::Builder::setPath(ASTNode *pathNode) {
     path = pathNode;
 }
