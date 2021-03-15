@@ -69,7 +69,11 @@ int IoUtil::getLineNumber() const {
 
 IoUtil::IoUtil(const std::string &srcPath, const std::string &targetPath) {
     inPath = srcPath;
-    outPath = targetPath;
+    if (targetPath.empty()) {
+        outPath = inPath.replace(inPath.find(".st"), 3, ".cpp");
+    } else {
+        outPath = targetPath;
+    }
     lineNo = 0;
     checkInit();
 }
