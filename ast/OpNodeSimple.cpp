@@ -27,5 +27,8 @@ void OpNodeSimple::genCode(IoUtil &ioUtil) {
 }
 
 std::string OpNodeSimple::toString() const {
+    if (isReturnStmt) {
+        return "return";
+    }
     return ";";
 }
