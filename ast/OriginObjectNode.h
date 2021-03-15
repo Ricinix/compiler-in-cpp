@@ -53,6 +53,14 @@ public:
     virtual Object *toString() { return nullptr; }
 
     virtual Object *hashCode() { return nullptr; }
+
+    virtual Object *at(Object *obj) { return nullptr; }
+
+    virtual Object *removeAt(Object *obj) { return nullptr; }
+
+    virtual Object *insert(Object *index, Object *obj);
+
+    virtual Object *clear();
 };
 
 class OriginTrueNode : public OriginObjectNode {
