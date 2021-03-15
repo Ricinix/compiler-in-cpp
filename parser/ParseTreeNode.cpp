@@ -7,6 +7,7 @@
 #include "../ast/NumberLiteral.h"
 #include "../ast/StringLiteral.h"
 #include "../ast/Identifier.h"
+#include "../ast/ReserveWord.h"
 #include "../ast/OpNodeProgram.h"
 #include "../ast/OpNodeIf.h"
 #include "../ast/OpNodeWhile.h"
@@ -20,9 +21,7 @@
 #include "../ast/OpNodeFetchDomain.h"
 #include "../ast/OpNodeCallFunction.h"
 #include "../ast/OpNodeFetchArr.h"
-#include "../ast/DefineNodeFunction.h"
-#include "../ast/DefineNodeDomain.h"
-#include "../ast/DecorateNodeMethod.h"
+#include "../ast/OpNodeImport.h"
 
 ParseTreeNode::ParseTreeNode(RuleItem *ruleItem) {
     symbol = ruleItem;
@@ -136,6 +135,8 @@ ASTNode *ParseTreeLeaf::toASTNode() {
         return new StringLiteral(getToken());
     } else if (getToken()->getTokenType() == TokenType::identifier) {
         return new Identifier(getToken());
+    } else if (getToken()->getTokenType() == TokenType::reserve) {
+        return new ReserveWord(getToken());
     }
     return nullptr;
 }
@@ -326,8 +327,15 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
             return parsePostfixNode(prefix, getChild(2));
         } else {
             // STRING
-            checkChildNum(1);
-            return parseChildDirectly();
+            checkChildNum(2);
+            auto *importNode = getChild(0)->toASTNode();
+            if (importNode != nullptr && importNode->toString() == RW_IMPORT) {
+                // import结点
+                auto builder = OpNodeImport::Builder();
+                builder.setPath(getChild(1)->toASTNode());
+                return builder.build();
+            }
+            return getChild(1)->toASTNode();
         }
     } else if (getRuleItem()->getSymbolName() == NS_PROGRAM_BODY) {
         // programBody 结点，其子节点可能空也可能是函数定义/类定义/语句
@@ -448,6 +456,9 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
         throw ParseException("elementsStar node should be parsed in primary node");
     } else if (getRuleItem()->getSymbolName() == NS_NEW) {
         // new 结点，表示是否有new关键词
+        return parseChildDirectly();
+    } else if (getRuleItem()->getSymbolName() == NS_IMPORT_OR_NONE) {
+        // importOrNone 结点，表示是否有import结点
         return parseChildDirectly();
     }
     return nullptr;

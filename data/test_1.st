@@ -1,3 +1,4 @@
+import "test_2.st"
 function fff(i) {
     return i + i
 }

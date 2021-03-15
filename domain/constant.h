@@ -50,6 +50,7 @@ enum class VisibleType {
 #define RW_EXTENDS "extends"
 #define RW_STATIC "static"
 #define RW_NEW "new"
+#define RW_IMPORT "import"
 #define RW_LEFT_BRACE "{"
 #define RW_RIGHT_BRACE "}"
 #define RW_LEFT_SQUARE_BRACKET "["
@@ -101,6 +102,7 @@ enum class VisibleType {
 #define NS_ELEMENTS_OR_NONE "elementsOrNone"
 #define NS_ELEMENTS_STAR "elementsStar"
 #define NS_NEW "new"
+#define NS_IMPORT_OR_NONE "importOrNone"
 
 
 #endif //DESIGN_1_CONSTANT_H

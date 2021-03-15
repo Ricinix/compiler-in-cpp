@@ -52,6 +52,7 @@ public:
 
 private:
     std::string text;
+    static TokenType checkType(const std::string &m);
 };
 
 class StrToken : public Token {

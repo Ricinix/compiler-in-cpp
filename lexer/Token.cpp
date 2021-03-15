@@ -5,6 +5,7 @@
 #include <iostream>
 #include "Token.h"
 #include "../domain/exception.h"
+#include "../rule/SymbolTable.h"
 
 Token::Token(int line, TokenType type) {
     lineNumber = line;
@@ -68,7 +69,7 @@ int NumToken::getNumber() const {
     return value;
 }
 
-IdToken::IdToken(int line, std::string &id) : Token(line, TokenType::identifier) {
+IdToken::IdToken(int line, std::string &id) : Token(line, checkType(id)) {
     text = id;
 }
 
@@ -80,6 +81,13 @@ IdToken::IdToken(int line, TokenType type) : Token(line, type) {
     if (type == TokenType::eol) {
         text = "\\n";
     }
+}
+
+TokenType IdToken::checkType(const std::string &m) {
+    if (SymbolTable::isReservedWord(m)) {
+        return TokenType::reserve;
+    }
+    return TokenType::identifier;
 }
 
 StrToken::StrToken(int line, std::string &str) : Token(line, TokenType::string) {

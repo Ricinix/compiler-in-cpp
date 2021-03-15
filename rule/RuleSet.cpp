@@ -83,7 +83,7 @@ RuleSet *RuleSet::generate() {
     factor->makeNewSeq()->appendTerminalSymbol("-")->appendNonTerminalSymbol(NS_PRIMARY);
     factor->makeNewSeq()->appendNonTerminalSymbol(NS_PRIMARY);
 
-    // primary 语法，包含了5个新产生式
+    // primary 语法，包含了6个新产生式
     auto *primary = ruleSet->makeNewRule(NS_PRIMARY);
     primary->makeNewSeq()->appendTerminalSymbol(RW_LEFT_SQUARE_BRACKET)->appendNonTerminalSymbol(NS_ELEMENTS_OR_NONE)
     ->appendTerminalSymbol(RW_RIGHT_SQUARE_BRACKET);
@@ -92,7 +92,7 @@ RuleSet *RuleSet::generate() {
     primary->makeNewSeq()->appendTerminalSymbol(TokenType::number)->appendNonTerminalSymbol(NS_DECIMALS);
     primary->makeNewSeq()->appendNonTerminalSymbol(NS_NEW)->appendTerminalSymbol(TokenType::identifier)
     ->appendNonTerminalSymbol(NS_PRIMARY_STAR);
-    primary->makeNewSeq()->appendTerminalSymbol(TokenType::string);
+    primary->makeNewSeq()->appendNonTerminalSymbol(NS_IMPORT_OR_NONE)->appendTerminalSymbol(TokenType::string);
     auto *primary2 = ruleSet->makeNewRule(NS_PRIMARY_STAR);
     primary2->makeNewSeq()->appendNonTerminalSymbol(NS_POSTFIX)->appendNonTerminalSymbol(NS_PRIMARY_STAR);
     primary2->makeEmptySeq();
@@ -105,6 +105,9 @@ RuleSet *RuleSet::generate() {
     auto *newOrNone = ruleSet->makeNewRule(NS_NEW);
     newOrNone->makeNewSeq()->appendTerminalSymbol(RW_NEW);
     newOrNone->makeEmptySeq();
+    auto *importOrNone = ruleSet->makeNewRule(NS_IMPORT_OR_NONE);
+    importOrNone->makeNewSeq()->appendTerminalSymbol(RW_IMPORT);
+    importOrNone->makeEmptySeq();
 
     // param 语法，包含了1个新产生式
     auto *param = ruleSet->makeNewRule(NS_PARAM);

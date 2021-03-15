@@ -13,6 +13,7 @@ private:
     static std::map<std::string, bool> reservedWordMap;
 public:
     static bool isReservedWord(const std::string &word);
+    static void addReservedWord(const std::string &word);
 };
 
 

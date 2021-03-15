@@ -3,6 +3,7 @@
 //
 
 #include "RuleSeq.h"
+#include "SymbolTable.h"
 
 RuleSeq::~RuleSeq() {
     for (auto &item : ruleItemSet) {
@@ -20,6 +21,7 @@ RuleSeq* RuleSeq::appendNonTerminalSymbol(const std::string &name) {
 RuleSeq* RuleSeq::appendTerminalSymbol(const std::string &name) {
     auto* item = new TerminalSymbol(name);
     ruleItemSet.push_back(item);
+    SymbolTable::addReservedWord(name);
     return this;
 }
 
