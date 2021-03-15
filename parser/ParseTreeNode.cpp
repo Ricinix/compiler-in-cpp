@@ -309,8 +309,7 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
                 return new NumberLiteral(getChild(0)->getToken(), getChild(1)->getChild(1)->getToken());
             }
             return getChild(0)->toASTNode();
-        } else if (childNum() == 3 && getChild(0)->getToken() != nullptr
-                   && getChild(1)->getToken()->getTokenType() == TokenType::identifier) {
+        } else if (childNum() == 3 && getChild(1)->getToken()->getTokenType() == TokenType::identifier) {
             // 标识符的情况，需要判别有函数调用以及对象实例化
             auto *newNode = getChild(0)->toASTNode();
             ASTNode *prefix = nullptr;
@@ -364,7 +363,7 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
         throw ParseException("postfixOrNone node should be parsed in postfix recursive: parsePostfixNode");
     } else if (getRuleItem()->getSymbolName() == NS_PARAM) {
         // param 结点，函数声明参数
-        throw ParseException("param node should be parsed in func node");
+        return parseChildDirectly();
     } else if (getRuleItem()->getSymbolName() == NS_PARAMS) {
         // params 结点，多个函数声明参数
         throw ParseException("params node should be parsed in func node");
