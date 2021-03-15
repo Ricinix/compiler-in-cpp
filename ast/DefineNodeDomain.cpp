@@ -6,6 +6,7 @@
 
 DefineNodeDomain::DefineNodeDomain(ASTNode *initStmtNode, bool isStaticDomain) {
     initStmt = initStmtNode;
+    isStatic = isStaticDomain;
     addChild(initStmtNode);
 }
 

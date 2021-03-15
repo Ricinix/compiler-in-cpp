@@ -396,6 +396,7 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
         for (auto *bodyStar = classBody->getChild(2);bodyStar->childNum() == 3;bodyStar = bodyStar->getChild(2)) {
             castMember(builder, bodyStar->getChild(1)->toASTNode());
         }
+        return builder.build();
     } else if (getRuleItem()->getSymbolName() == NS_EXTENDS) {
         // extends 结点，表示是否有继承，有则返回所继承的类名
         if (childNum() == 2) {
