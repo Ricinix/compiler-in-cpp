@@ -6,6 +6,10 @@
 #include "CodePrinter.h"
 
 void OriginStringNode::init() {
+    if (isInit) {
+        return;
+    }
+    isInit = true;
     addDomain(new OriginNodePrivateDomain("std::string s;"));
     addMethod(new OriginNodePublicMethod(
             "explicit String(const std::string &str) {\n"
@@ -84,10 +88,7 @@ void OriginStringNode::init() {
 }
 
 void OriginStringNode::genCode(IoUtil &ioUtil) {
-    if (!isInit) {
-        init();
-        isInit = true;
-    }
+    init();
     ioUtil.appendContent("class String : public Object {\n");
     for (auto &domain : domainSet) {
         domain->genCode(ioUtil);

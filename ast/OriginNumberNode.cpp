@@ -6,10 +6,7 @@
 #include "CodePrinter.h"
 
 void OriginNumberNode::genCode(IoUtil &ioUtil) {
-    if (!isInit) {
-        init();
-        isInit = true;
-    }
+    init();
     ioUtil.appendContent("class Number : public Object {\n");
     for (auto &domain : domainSet) {
         domain->genCode(ioUtil);
@@ -21,6 +18,10 @@ void OriginNumberNode::genCode(IoUtil &ioUtil) {
 }
 
 void OriginNumberNode::init() {
+    if (isInit) {
+        return;
+    }
+    isInit = true;
     addDomain(new OriginNodePrivateDomain("int _integer = 0;"));
     addDomain(new OriginNodePrivateDomain("double _number = 0;"));
     addDomain(new OriginNodePrivateDomain("bool _isInteger = true;"));

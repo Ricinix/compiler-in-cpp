@@ -26,6 +26,10 @@ public:
 };
 
 class Object {
+public:
+    static Object *newObj() {
+        return new Object;
+    }
     virtual Object *plus(Object *obj) { return nullptr; }
 
     virtual Object *minus(Object *obj) { return nullptr; }
@@ -49,6 +53,14 @@ class Object {
     virtual Object *toString() { return nullptr; }
 
     virtual Object *hashCode() { return nullptr; }
+};
+
+class OriginTrueNode : public OriginObjectNode {
+private:
+    bool isInit = false;
+    void init();
+public:
+    void genCode(IoUtil &ioUtil) override;
 };
 
 class True : public Object {
