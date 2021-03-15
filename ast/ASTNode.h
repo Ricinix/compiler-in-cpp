@@ -9,7 +9,6 @@
 #include <string>
 #include <memory>
 #include "../lexer/Token.h"
-#include "../rule/Operator.h"
 #include "../util/IoUtil.h"
 
 class ASTNode {

@@ -6,12 +6,11 @@
 #define DESIGN_1_SYMBOLTABLE_H
 
 #include <map>
-#include "Operator.h"
 
 class SymbolTable {
 private:
     static void initReservedWordMap();
-    static std::map<std::string, Operator *> reservedWordMap;
+    static std::map<std::string, bool> reservedWordMap;
 public:
     static bool isReservedWord(const std::string &word);
 };
