@@ -16,10 +16,14 @@ private:
 
     OpNodeBinaryExpr(ASTNode *leftNode, ASTNode *rightNode, Token *t);
 
+    void addOp(const std::string &opName, IoUtil &ioUtil);
+
 public:
     void genCode(IoUtil &ioUtil) override;
 
     std::string toString() const override;
+
+    ASTNodeType getType() override;
 
     class Builder {
     private:
