@@ -12,7 +12,7 @@ void Identifier::genCode(IoUtil &ioUtil) {
     if (token_ptr->getText() == "print") {
         ioUtil.appendContent("printStr ");
     } else {
-        ioUtil.appendContent(token_ptr->getText() + " ");
+        ioUtil.appendContent(token_ptr->getText());
     }
 }
 
