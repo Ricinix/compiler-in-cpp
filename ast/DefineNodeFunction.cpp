@@ -33,7 +33,7 @@ void DefineNodeFunction::genCode(IoUtil &ioUtil) {
     functionName->genCode(ioUtil);
     ioUtil.appendContent("(");
     for (int i = 0; i < paramNum(); ++i) {
-        ioUtil.appendContent("Object ");
+        ioUtil.appendContent("Object *");
         params[i]->genCode(ioUtil);
         if (i != paramNum() -1) {
             ioUtil.appendContent(", ");

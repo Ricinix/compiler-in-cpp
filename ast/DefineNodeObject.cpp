@@ -93,6 +93,7 @@ void DefineNodeObject::genDefaultConstructor(IoUtil &ioUtil) {
     ioUtil.appendContent(" *newObj(){\n")
             .appendContent("return new ");
     className->genCode(ioUtil);
+    ioUtil.appendContent(";\n");
     ioUtil.appendContent("}\n");
 }
 
