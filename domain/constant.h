@@ -40,8 +40,11 @@ enum class ASTNodeType {
     importNode,
     clz,
     method,
+    domain,
     func,
-    codePrinter
+    primary,
+    id,
+    newArr
 };
 
 // 定义保留字

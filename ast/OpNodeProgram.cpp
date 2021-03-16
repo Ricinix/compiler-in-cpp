@@ -13,10 +13,12 @@ OpNodeProgram *OpNodeProgram::Builder::build() {
 }
 
 void OpNodeProgram::genCode(IoUtil &ioUtil) {
-    ioUtil.appendContent("#include <string>\n");
-    ioUtil.appendContent("#include <sstream>\n");
-    ioUtil.appendContent("#include <map>\n");
-    ioUtil.appendContent("#include <iostream>\n");
+    ioUtil.appendContent("#include <string>\n")
+    .appendContent("#include <sstream>\n")
+    .appendContent("#include <map>\n")
+    .appendContent("#include <iostream>\n")
+    .appendContent("#include <initializer_list>\n");
+
     ioUtil.newLine();
     for (auto &child : defineList) {
         child->genCode(ioUtil);

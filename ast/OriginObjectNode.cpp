@@ -54,6 +54,7 @@ void OriginObjectNode::init() {
     addMethod(new OriginNodeVirtualMethod("removeAt", 1));
     addMethod(new OriginNodeVirtualMethod("insert", 2));
     addMethod(new OriginNodeVirtualMethod("clear", 0));
+    addMethod(new OriginNodeVirtualMethod("size", 0));
 }
 
 void OriginObjectNode::addVirtualMethod(ASTNode *methodNode) {

@@ -7,8 +7,10 @@
 
 #include "OriginObjectNode.h"
 #include "OriginStringNode.h"
+#include "OriginNumberNode.h"
 #include <map>
 #include <sstream>
+#include <initializer_list>
 
 class OriginArrayNode : public OriginBaseObjDefineNode {
 public:
@@ -23,6 +25,14 @@ private:
 public:
     static Array *newObj() {
         return new Array();
+    }
+    static Array *newObj(std::initializer_list<Object*> objArr) {
+        auto *arr = new Array();
+        int i = 0;
+        for (auto &obj : objArr){
+            arr->container[std::to_string(i)] = obj;
+        }
+        return arr;
     }
 
     Object *at(Object *obj) override {
@@ -60,6 +70,10 @@ public:
         return nullptr;
     }
 
+    Object *size() override {
+        return Number::newObj((int)container.size());
+    }
+
     Object *toString() override {
         std::ostringstream fmt("[");
         int i = 0;
@@ -77,6 +91,11 @@ public:
         return String::newObj(fmt.str());
     }
 };
+
+void test() {
+
+    Array::newObj({Object::newObj(), Object::newObj()});
+}
 
 
 #endif //DESIGN_1_ORIGINARRAYNODE_H

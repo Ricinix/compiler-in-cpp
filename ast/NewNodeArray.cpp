@@ -13,7 +13,22 @@ std::string NewNodeArray::toString() const {
 }
 
 void NewNodeArray::genCode(IoUtil &ioUtil) {
-    ASTList::genCode(ioUtil);
+    ioUtil.appendContent("Array::newObj(");
+    if (!elements.empty()) {
+        ioUtil.appendContent("{");
+        for (int i = 0; i < elements.size(); ++i) {
+            elements[i]->genCode(ioUtil);
+            if (i != elements.size() - 1) {
+                ioUtil.appendContent(", ");
+            }
+        }
+        ioUtil.appendContent("}");
+    }
+    ioUtil.appendContent(")");
+}
+
+ASTNodeType NewNodeArray::getType() {
+    return ASTNodeType::newArr;
 }
 
 void NewNodeArray::Builder::addElement(ASTNode *element) {

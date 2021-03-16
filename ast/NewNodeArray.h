@@ -18,6 +18,8 @@ public:
 
     void genCode(IoUtil &ioUtil) override;
 
+    ASTNodeType getType() override;
+
     class Builder {
     private:
         std::vector<ASTNode *> elements;

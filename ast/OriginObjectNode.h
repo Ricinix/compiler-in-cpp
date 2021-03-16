@@ -64,6 +64,8 @@ public:
     virtual Object *insert(Object *index, Object *obj) { return nullptr; }
 
     virtual Object *clear() { return nullptr; }
+
+    virtual Object *size() { return nullptr; }
 };
 
 class OriginTrueNode : public OriginBaseObjDefineNode {
