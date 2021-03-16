@@ -13,7 +13,7 @@ class AbstractSyntaxTree {
 private:
     ASTNode *root = nullptr;
 
-    OriginObjectNode *originObj;
+    OriginObjectNode *originObj = nullptr;
 
     void printTree(ASTNode *node, std::ostream &fmt, std::string &indent) const;
 

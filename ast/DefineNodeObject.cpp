@@ -50,6 +50,11 @@ void DefineNodeObject::addMethod(DecorateNodeMethod *method) {
     addChild(method);
 }
 
+DefineNodeObject::DefineNodeObject() {
+    className = nullptr;
+    extendObj = nullptr;
+}
+
 void DefineNodeObject::Builder::setClassName(ASTNode *name) {
     className = name;
 }

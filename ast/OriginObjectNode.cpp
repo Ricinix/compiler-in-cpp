@@ -5,9 +5,7 @@
 #include "OriginObjectNode.h"
 #include "CodePrinter.h"
 
-OriginObjectNode::OriginObjectNode() : DefineNodeObject(nullptr, nullptr, domainSet, methodSet) {
-
-}
+OriginObjectNode::OriginObjectNode() = default;
 
 std::string OriginObjectNode::toString() const {
     return "Object";

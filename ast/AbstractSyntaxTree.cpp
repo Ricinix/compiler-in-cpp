@@ -54,7 +54,7 @@ void AbstractSyntaxTree::printTree(ASTNode *node, std::ostream &fmt, std::string
 
 void AbstractSyntaxTree::generateCppCode(IoUtil &ioUtil) {
     initObject();
-
+    getRoot()->genCode(ioUtil);
 }
 
 void AbstractSyntaxTree::translateToCppTree(AbstractSyntaxTree::ASTHelper *helper) {
@@ -67,6 +67,9 @@ void AbstractSyntaxTree::solveImport(AbstractSyntaxTree *(*load)(const std::stri
 }
 
 void AbstractSyntaxTree::initObject() {
+    if (originObj != nullptr || getRoot() == nullptr) {
+        return;
+    }
     originObj = new OriginObjectNode();
     if (getRoot()->getType() == ASTNodeType::program) {
         auto *program = dynamic_cast<OpNodeProgram *>(getRoot());
@@ -76,6 +79,7 @@ void AbstractSyntaxTree::initObject() {
         program->insertDefineNode(0, new OriginArrayNode);
         program->insertDefineNode(0, new OriginNumberNode);
         program->insertDefineNode(0, new OriginStringNode);
+        program->insertDefineNode(0, new OriginTrueNode);
         program->insertDefineNode(0, originObj);
     }
 }

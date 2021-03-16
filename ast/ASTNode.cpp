@@ -156,6 +156,9 @@ void ASTList::genCode(IoUtil &ioUtil) {
 }
 
 void ASTList::addChild(ASTNode *node) {
+    if (node == nullptr) {
+        return;
+    }
     children.push_back(node);
     node->setFather(this);
 }

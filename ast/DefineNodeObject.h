@@ -19,9 +19,11 @@ private:
 
     std::vector<DecorateNodeMethod *> methodSet;
 
-protected:
     DefineNodeObject(ASTNode *name, ASTNode *extendNode, std::vector<DefineNodeDomain *> &domains,
                      std::vector<DecorateNodeMethod *> &methods);
+
+protected:
+    DefineNodeObject();
 
 public:
 
