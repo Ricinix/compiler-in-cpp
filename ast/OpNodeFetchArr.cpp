@@ -5,7 +5,20 @@
 #include "OpNodeFetchArr.h"
 
 void OpNodeFetchArr::genCode(IoUtil &ioUtil) {
-    ASTList::genCode(ioUtil);
+    arrName->genCode(ioUtil);
+    if (insertNode == nullptr) {
+        // 取值
+        ioUtil.appendContent("->at(");
+        index->genCode(ioUtil);
+        ioUtil.appendContent(")");
+    } else {
+        // 赋值
+        ioUtil.appendContent("->insert(");
+        index->genCode(ioUtil);
+        ioUtil.appendContent(", ");
+        insertNode->genCode(ioUtil);
+        ioUtil.appendContent(")");
+    }
 }
 
 OpNodeFetchArr::OpNodeFetchArr(ASTNode *arrNameNode, ASTNode *indexNode) {
@@ -17,6 +30,14 @@ OpNodeFetchArr::OpNodeFetchArr(ASTNode *arrNameNode, ASTNode *indexNode) {
 
 std::string OpNodeFetchArr::toString() const {
     return "Arr get";
+}
+
+ASTNodeType OpNodeFetchArr::getType() {
+    return ASTNodeType::opFetchArr;
+}
+
+void OpNodeFetchArr::setInsertNode(ASTNode *node) {
+    insertNode = node;
 }
 
 void OpNodeFetchArr::Builder::setArrName(ASTNode *arrNameNode) {

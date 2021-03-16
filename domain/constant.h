@@ -51,6 +51,7 @@ enum class ASTNodeType {
     block,
     funcCall,
     opElse,
+    opFetchArr
 };
 
 // 定义保留字

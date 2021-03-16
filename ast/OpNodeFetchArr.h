@@ -12,12 +12,18 @@ private:
     ASTNode *arrName;
     ASTNode *index;
 
+    ASTNode *insertNode = nullptr;
+
     OpNodeFetchArr(ASTNode *arrNameNode, ASTNode *indexNode);
 
 public:
     void genCode(IoUtil &ioUtil) override;
 
     std::string toString() const override;
+
+    ASTNodeType getType() override;
+
+    void setInsertNode(ASTNode *node);
 
     class Builder {
     private:

@@ -3,6 +3,7 @@
 //
 
 #include "OpNodeBinaryExpr.h"
+#include "OpNodeFetchArr.h"
 
 void OpNodeBinaryExpr::Builder::setLeftNode(ASTNode *leftNode) {
     left = leftNode;
@@ -29,9 +30,12 @@ OpNodeBinaryExpr::OpNodeBinaryExpr(ASTNode *leftNode, ASTNode *rightNode, Token 
 }
 
 void OpNodeBinaryExpr::genCode(IoUtil &ioUtil) {
+    if (checkArr()) {
+        return;
+    }
     left->genCode(ioUtil);
     if (token->getTokenType() == TokenType::op) {
-        auto *opToken = dynamic_cast<OpToken*>(token);
+        auto *opToken = dynamic_cast<OpToken *>(token);
         if (opToken != nullptr) {
             if (opToken->getOpType() == OpType::more) {
                 addOp("moreThan", ioUtil);
@@ -49,11 +53,11 @@ void OpNodeBinaryExpr::genCode(IoUtil &ioUtil) {
                 addOp("divide", ioUtil);
             } else if (opToken->getOpType() == OpType::times) {
                 addOp("times", ioUtil);
-            }else if (opToken->getOpType() == OpType::mod) {
+            } else if (opToken->getOpType() == OpType::mod) {
                 addOp("mod", ioUtil);
-            }else if (opToken->getOpType() == OpType::equal) {
+            } else if (opToken->getOpType() == OpType::equal) {
                 addOp("equal", ioUtil);
-            }else {
+            } else {
                 ioUtil.appendContent(token->getText());
                 right->genCode(ioUtil);
             }
@@ -80,4 +84,23 @@ void OpNodeBinaryExpr::addOp(const std::string &opName, IoUtil &ioUtil) {
     ioUtil.appendContent("->" + opName + "(");
     right->genCode(ioUtil);
     ioUtil.appendContent(")");
+}
+
+/**
+ * 如果左值中的是数组，则当前结点将演化为向数组中插入值
+ *
+ * @return
+ */
+bool OpNodeBinaryExpr::checkArr() {
+    if (token->getTokenType() == TokenType::op && left->getType() == ASTNodeType::opFetchArr) {
+        auto *opToken = dynamic_cast<OpToken *>(token);
+        if (opToken != nullptr && opToken->getOpType() == OpType::assign) {
+            auto *leftArrNode = dynamic_cast<OpNodeFetchArr *>(left);
+            if (leftArrNode != nullptr) {
+                leftArrNode->setInsertNode(right);
+                return true;
+            }
+        }
+    }
+    return false;
 }

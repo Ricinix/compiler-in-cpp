@@ -18,6 +18,8 @@ private:
 
     void addOp(const std::string &opName, IoUtil &ioUtil);
 
+    bool checkArr();
+
 public:
     void genCode(IoUtil &ioUtil) override;
 
