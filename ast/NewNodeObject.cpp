@@ -22,5 +22,10 @@ std::string NewNodeObject::toString() const {
 }
 
 void NewNodeObject::genCode(IoUtil &ioUtil) {
-    ASTList::genCode(ioUtil);
+    objNameId->genCode(ioUtil);
+    ioUtil.appendContent("::newObj");
+}
+
+ASTNodeType NewNodeObject::getType() {
+    return ASTNodeType::newObj;
 }

@@ -44,7 +44,10 @@ enum class ASTNodeType {
     func,
     primary,
     id,
-    newArr
+    number,
+    newArr,
+    newObj,
+    opBinaryExpr,
 };
 
 // 定义保留字

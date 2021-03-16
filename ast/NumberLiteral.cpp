@@ -9,14 +9,20 @@ NumberLiteral::NumberLiteral(Token *token_ptr) : ASTLeaf(token_ptr) {
 }
 
 void NumberLiteral::genCode(IoUtil &ioUtil) {
+    ioUtil.appendContent("Number::newObj(");
     ioUtil.appendContent(token_ptr->getText());
     if (decimalsToken != nullptr) {
         ioUtil.appendContent(".")
                 .appendContent(decimalsToken->getText());
     }
+    ioUtil.appendContent(")");
     ioUtil.appendContent(" ");
 }
 
 NumberLiteral::NumberLiteral(Token *integer, Token *decimals) : ASTLeaf(integer) {
     decimalsToken = decimals;
+}
+
+ASTNodeType NumberLiteral::getType() {
+    return ASTNodeType::number;
 }

@@ -17,6 +17,8 @@ public:
     void genCode(IoUtil &ioUtil) override;
     std::string toString() const override;
 
+    ASTNodeType getType() override;
+
     class Builder {
     private:
         ASTNode *objNameId;

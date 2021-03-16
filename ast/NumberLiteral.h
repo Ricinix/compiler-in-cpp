@@ -16,6 +16,8 @@ public:
 
     NumberLiteral(Token *integer, Token *decimals);
 
+    ASTNodeType getType() override;
+
     void genCode(IoUtil &ioUtil) override;
 };
 
