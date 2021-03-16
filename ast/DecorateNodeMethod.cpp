@@ -11,6 +11,11 @@ DecorateNodeMethod::DecorateNodeMethod(DefineNodeFunction *funcNode, bool isStat
 }
 
 void DecorateNodeMethod::genCode(IoUtil &ioUtil) {
+    if (func->child(0)->toString()[0] == '_') {
+        ioUtil.appendContent("private:\n");
+    } else {
+        ioUtil.appendContent("public:\n");
+    }
     if (isStatic) {
         ioUtil.appendContent("static ");
     }
