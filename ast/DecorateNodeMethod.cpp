@@ -19,6 +19,9 @@ std::string DecorateNodeMethod::toString() const {
 }
 
 std::string DecorateNodeMethod::getHashMsg() const {
+    if (func == nullptr) {
+        return "";
+    }
     return func->toString() + "_" + std::to_string(func->paramNum());
 }
 

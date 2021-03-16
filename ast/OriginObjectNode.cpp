@@ -40,22 +40,22 @@ void OriginObjectNode::init() {
             "        return new Object;\n"
             "    }\n"
     ));
-    addMethod(new OriginNOdeVirtualMethod("plus", 1));
-    addMethod(new OriginNOdeVirtualMethod("minus", 1));
-    addMethod(new OriginNOdeVirtualMethod("divide", 1));
-    addMethod(new OriginNOdeVirtualMethod("times", 1));
-    addMethod(new OriginNOdeVirtualMethod("mod", 1));
-    addMethod(new OriginNOdeVirtualMethod("lessThan", 1));
-    addMethod(new OriginNOdeVirtualMethod("lessEqualThan", 1));
-    addMethod(new OriginNOdeVirtualMethod("moreThan", 1));
-    addMethod(new OriginNOdeVirtualMethod("moreEqualThan", 1));
-    addMethod(new OriginNOdeVirtualMethod("equal", 1));
-    addMethod(new OriginNOdeVirtualMethod("toString", 1));
-    addMethod(new OriginNOdeVirtualMethod("hashCode", 1));
-    addMethod(new OriginNOdeVirtualMethod("at", 1));
-    addMethod(new OriginNOdeVirtualMethod("removeAt", 1));
-    addMethod(new OriginNOdeVirtualMethod("insert", 2));
-    addMethod(new OriginNOdeVirtualMethod("clear", 0));
+    addMethod(new OriginNodeVirtualMethod("plus", 1));
+    addMethod(new OriginNodeVirtualMethod("minus", 1));
+    addMethod(new OriginNodeVirtualMethod("divide", 1));
+    addMethod(new OriginNodeVirtualMethod("times", 1));
+    addMethod(new OriginNodeVirtualMethod("mod", 1));
+    addMethod(new OriginNodeVirtualMethod("lessThan", 1));
+    addMethod(new OriginNodeVirtualMethod("lessEqualThan", 1));
+    addMethod(new OriginNodeVirtualMethod("moreThan", 1));
+    addMethod(new OriginNodeVirtualMethod("moreEqualThan", 1));
+    addMethod(new OriginNodeVirtualMethod("equal", 1));
+    addMethod(new OriginNodeVirtualMethod("toString", 1));
+    addMethod(new OriginNodeVirtualMethod("hashCode", 1));
+    addMethod(new OriginNodeVirtualMethod("at", 1));
+    addMethod(new OriginNodeVirtualMethod("removeAt", 1));
+    addMethod(new OriginNodeVirtualMethod("insert", 2));
+    addMethod(new OriginNodeVirtualMethod("clear", 0));
 }
 
 void OriginObjectNode::addVirtualMethod(ASTNode *methodNode) {
@@ -71,7 +71,7 @@ void OriginObjectNode::addVirtualMethod(ASTNode *methodNode) {
             return;
         }
     }
-    addMethod(new OriginNOdeVirtualMethod(method));
+    addMethod(new OriginNodeVirtualMethod(method));
 }
 
 void OriginTrueNode::init() {

@@ -92,16 +92,16 @@ void OriginNodePrivateMethod::genCode(IoUtil &ioUtil) {
     ioUtil.newLine();
 }
 
-std::string OriginNOdeVirtualMethod::getHashMsg() const {
+std::string OriginNodeVirtualMethod::getHashMsg() const {
     return methodName + "_" + std::to_string(paramNum);
 }
 
-OriginNOdeVirtualMethod::OriginNOdeVirtualMethod(const std::string &name, int paramCount) {
+OriginNodeVirtualMethod::OriginNodeVirtualMethod(const std::string &name, int paramCount) {
     methodName = name;
     paramNum = paramCount;
 }
 
-void OriginNOdeVirtualMethod::genCode(IoUtil &ioUtil) {
+void OriginNodeVirtualMethod::genCode(IoUtil &ioUtil) {
     if (methodName.empty()) {
         return;
     }
@@ -117,7 +117,7 @@ void OriginNOdeVirtualMethod::genCode(IoUtil &ioUtil) {
     ioUtil.appendContent(") { return nullptr; }");
 }
 
-OriginNOdeVirtualMethod::OriginNOdeVirtualMethod(DecorateNodeMethod *node) {
+OriginNodeVirtualMethod::OriginNodeVirtualMethod(DecorateNodeMethod *node) {
     if (node == nullptr) {
         paramNum = 0;
     } else {
