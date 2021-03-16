@@ -28,8 +28,7 @@ void OpNodeProgram::genCode(IoUtil &ioUtil) {
     for (auto &stmt : stmtList) {
         stmt->genCode(ioUtil);
     }
-    ioUtil.appendContent("std::cout << std::endl;\n")
-            .appendContent("system(\"pause\");\n")
+    ioUtil.appendContent("system(\"pause\");\n")
             .appendContent("return 0;\n")
             .appendContent("}\n");
 }

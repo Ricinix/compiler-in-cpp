@@ -16,11 +16,16 @@ public:
 };
 
 //Object *printStr(Object *obj) {
-//    auto str = dynamic_cast<String *>(obj);
-//    if (str == nullptr) {
+//    if (obj == nullptr) {
+//        std::cout << "null" << std::endl;
 //        return nullptr;
 //    }
-//    std::cout << str->getString();
+//    auto str = dynamic_cast<String *>(obj->toString());
+//    if (str == nullptr) {
+//        std::cout << "null" << std::endl;
+//        return nullptr;
+//    }
+//    std::cout << str->getString() << std::endl;
 //    return nullptr;
 //}
 

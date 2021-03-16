@@ -11,11 +11,16 @@ std::string OriginPrintFuncNode::toString() const {
 void OriginPrintFuncNode::genCode(IoUtil &ioUtil) {
     ioUtil.appendContent(
             "Object *printStr(Object *obj) {\n"
-            "    auto str = dynamic_cast<String *>(obj);\n"
-            "    if (str == nullptr) {\n"
+            "    if (obj == nullptr) {\n"
+            "        std::cout << \"null\" << std::endl;\n"
             "        return nullptr;\n"
             "    }\n"
-            "    std::cout << str->getString();\n"
+            "    auto str = dynamic_cast<String *>(obj->toString());\n"
+            "    if (str == nullptr) {\n"
+            "        std::cout << \"null\" << std::endl;\n"
+            "        return nullptr;\n"
+            "    }\n"
+            "    std::cout << str->getString() << std::endl;\n"
             "    return nullptr;\n"
             "}\n"
     );

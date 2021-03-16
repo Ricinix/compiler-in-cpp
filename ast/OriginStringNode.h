@@ -10,6 +10,7 @@
 class OriginStringNode : public OriginBaseObjDefineNode {
 public:
     void genCode(IoUtil &ioUtil) override;
+
     std::string toString() const override;
 };
 
@@ -20,56 +21,69 @@ public:
     explicit String(const std::string &str) {
         s = str;
     }
+
     std::string getString() {
         return s;
     }
+
     static String *newObj() {
         return new String("");
     }
+
     static String *newObj(const std::string &str) {
         return new String(str);
     }
-    Object * plus(Object *obj) override {
+
+    Object *plus(Object *obj) override {
         auto str = dynamic_cast<String *>(obj);
         if (str == nullptr) {
             return nullptr;
         }
         return String::newObj(s + str->getString());
     }
-    Object * lessThan(Object *obj) override {
+
+    Object *lessThan(Object *obj) override {
         auto str = dynamic_cast<String *>(obj);
         if (str == nullptr) {
             return nullptr;
         }
         return s < str->getString() ? True::newObj() : nullptr;
     }
-    Object * lessEqualThan(Object *obj) override {
+
+    Object *lessEqualThan(Object *obj) override {
         auto str = dynamic_cast<String *>(obj);
         if (str == nullptr) {
             return nullptr;
         }
         return s <= str->getString() ? True::newObj() : nullptr;
     }
-    Object * moreThan(Object *obj) override {
+
+    Object *moreThan(Object *obj) override {
         auto str = dynamic_cast<String *>(obj);
         if (str == nullptr) {
             return nullptr;
         }
         return s > str->getString() ? True::newObj() : nullptr;
     }
-    Object * moreEqualThan(Object *obj) override {
+
+    Object *moreEqualThan(Object *obj) override {
         auto str = dynamic_cast<String *>(obj);
         if (str == nullptr) {
             return nullptr;
         }
         return s >= str->getString() ? True::newObj() : nullptr;
     }
-    Object * equal(Object *obj) override {
+
+    Object *equal(Object *obj) override {
         auto str = dynamic_cast<String *>(obj);
         if (str == nullptr) {
             return nullptr;
         }
         return s == str->getString() ? True::newObj() : nullptr;
+    }
+
+    Object *toString() override {
+        return this;
     }
 
 };
