@@ -5,20 +5,17 @@
 #ifndef DESIGN_1_ORIGINOBJECTNODE_H
 #define DESIGN_1_ORIGINOBJECTNODE_H
 
-#include "DefineNodeObject.h"
+#include "OriginBaseObjDefineNode.h"
 
-class OriginObjectNode : public DefineNodeObject {
+class OriginObjectNode : public OriginBaseObjDefineNode {
 private:
     bool isInit = false;
-    void init();
-protected:
     std::vector<DefineNodeDomain *> domainSet;
-
     std::vector<DecorateNodeMethod *> methodSet;
 
-public:
-    OriginObjectNode();
+    void init();
 
+public:
     std::string toString() const override;
 
     void genCode(IoUtil &ioUtil) override;
@@ -35,6 +32,7 @@ public:
     static Object *newObj() {
         return new Object;
     }
+
     virtual Object *plus(Object *obj) { return nullptr; }
 
     virtual Object *minus(Object *obj) { return nullptr; }
@@ -68,12 +66,10 @@ public:
     virtual Object *clear() { return nullptr; }
 };
 
-class OriginTrueNode : public OriginObjectNode {
-private:
-    bool isInit = false;
-    void init();
+class OriginTrueNode : public OriginBaseObjDefineNode {
 public:
     void genCode(IoUtil &ioUtil) override;
+    std::string toString() const override;
 };
 
 class True : public Object {

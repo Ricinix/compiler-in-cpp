@@ -18,9 +18,14 @@ void OpNodeProgram::genCode(IoUtil &ioUtil) {
     ioUtil.appendContent("#include <map>\n");
     ioUtil.appendContent("#include <iostream>\n");
     ioUtil.newLine();
-    for (auto &child : children) {
+    for (auto &child : defineList) {
         child->genCode(ioUtil);
     }
+    ioUtil.appendContent("void main() {\n");
+    for (auto &stmt : stmtList) {
+        stmt->genCode(ioUtil);
+    }
+    ioUtil.appendContent("}\n");
 }
 
 OpNodeProgram::OpNodeProgram(const std::vector<ASTNode *> &v) : ASTList(v) {

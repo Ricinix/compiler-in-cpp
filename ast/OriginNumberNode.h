@@ -200,12 +200,9 @@ public:
 };
 
 class OriginNumberNode : public OriginObjectNode {
-private:
-    bool isInit = false;
-
-    void init();
 public:
     void genCode(IoUtil &ioUtil) override;
+    std::string toString() const override;
 };
 
 

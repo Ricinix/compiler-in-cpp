@@ -3,58 +3,36 @@
 //
 
 #include "OriginNumberNode.h"
-#include "CodePrinter.h"
 
 void OriginNumberNode::genCode(IoUtil &ioUtil) {
-    init();
-    ioUtil.appendContent("class Number : public Object {\n");
-    for (auto &domain : domainSet) {
-        domain->genCode(ioUtil);
-    }
-    for (auto &method : methodSet) {
-        method->genCode(ioUtil);
-    }
-    ioUtil.appendContent("}\n");
-}
-
-void OriginNumberNode::init() {
-    if (isInit) {
-        return;
-    }
-    isInit = true;
-    addDomain(new OriginNodePrivateDomain("int _integer = 0;"));
-    addDomain(new OriginNodePrivateDomain("double _number = 0;"));
-    addDomain(new OriginNodePrivateDomain("bool _isInteger = true;"));
-    addMethod(new OriginNodePrivateMethod(
-            "bool _isInt() {\n"
+    ioUtil.appendContent(
+            "class Number : public Object {\n"
+            "private:\n"
+            "    int _integer = 0;\n"
+            "    double _number = 0;\n"
+            "    bool _isInteger = true;\n"
+            "    bool _isInt() {\n"
             "        return _isInteger;\n"
             "    }\n"
-    ));
-    // 两种构造器
-    addMethod(new OriginNodePublicMethod(
-            "explicit Number(int n) {\n"
+            "public:\n"
+            "    explicit Number(int n) {\n"
             "        _integer = n;\n"
             "    }\n"
-    ));
-    addMethod(new OriginNodePublicMethod(
-            "explicit Number(double n) {\n"
+            "\n"
+            "    explicit Number(double n) {\n"
             "        _number = n;\n"
             "        _isInteger = false;\n"
             "    }\n"
-    ));
-    addMethod(new OriginNodePublicMethod(
-            "static Number *newObj(double n) {\n"
+            "\n"
+            "    static Number *newObj(double n) {\n"
             "        return new Number(n);\n"
             "    }\n"
-    ));
-    addMethod(new OriginNodePublicMethod(
-            "static Number *newObj(int n) {\n"
+            "\n"
+            "    static Number *newObj(int n) {\n"
             "        return new Number(n);\n"
             "    }\n"
-    ));
-    // 加法
-    addMethod(new OriginNodePublicMethod(
-            "Object *plus(Object *obj) override {\n"
+            "\n"
+            "    Object *plus(Object *obj) override {\n"
             "        auto num = dynamic_cast<Number *>(obj);\n"
             "        if (num == nullptr) {\n"
             "            return nullptr;\n"
@@ -69,10 +47,8 @@ void OriginNumberNode::init() {
             "            return Number::newObj(_number + num->_number);\n"
             "        }\n"
             "    }\n"
-    ));
-    // 减法
-    addMethod(new OriginNodePublicMethod(
-            "Object *minus(Object *obj) override {\n"
+            "\n"
+            "    Object *minus(Object *obj) override {\n"
             "        auto num = dynamic_cast<Number *>(obj);\n"
             "        if (num == nullptr) {\n"
             "            return nullptr;\n"
@@ -87,10 +63,8 @@ void OriginNumberNode::init() {
             "            return Number::newObj(_number - num->_number);\n"
             "        }\n"
             "    }\n"
-    ));
-    // 乘法
-    addMethod(new OriginNodePublicMethod(
-            "Object *times(Object *obj) override {\n"
+            "\n"
+            "    Object *times(Object *obj) override {\n"
             "        auto num = dynamic_cast<Number *>(obj);\n"
             "        if (num == nullptr) {\n"
             "            return nullptr;\n"
@@ -105,10 +79,8 @@ void OriginNumberNode::init() {
             "            return Number::newObj(_number * num->_number);\n"
             "        }\n"
             "    }\n"
-    ));
-    // 除法
-    addMethod(new OriginNodePublicMethod(
-            "Object *divide(Object *obj) override {\n"
+            "\n"
+            "    Object *divide(Object *obj) override {\n"
             "        auto num = dynamic_cast<Number *>(obj);\n"
             "        if (num == nullptr) {\n"
             "            return nullptr;\n"
@@ -127,20 +99,17 @@ void OriginNumberNode::init() {
             "            return Number::newObj(_number / num->_number);\n"
             "        }\n"
             "    }\n"
-    ));
-    // 求余数
-    addMethod(new OriginNodePublicMethod(
-            "Object *mod(Object *obj) override {\n"
+            "\n"
+            "    Object *mod(Object *obj) override {\n"
             "        auto num = dynamic_cast<Number *>(obj);\n"
             "        if (num == nullptr) {\n"
             "            return nullptr;\n"
             "        }\n"
             "        return Number::newObj(_integer % num->_integer);\n"
             "    }\n"
-    ));
-    // <
-    addMethod(new OriginNodePublicMethod(
-            "auto num = dynamic_cast<Number *>(obj);\n"
+            "\n"
+            "    Object * lessThan(Object *obj) override {\n"
+            "        auto num = dynamic_cast<Number *>(obj);\n"
             "        if (num == nullptr) {\n"
             "            return nullptr;\n"
             "        }\n"
@@ -153,10 +122,10 @@ void OriginNumberNode::init() {
             "        } else {\n"
             "            return _number < num->_number ? True::newObj() : nullptr;\n"
             "        }\n"
-    ));
-    // <=
-    addMethod(new OriginNodePublicMethod(
-            "auto num = dynamic_cast<Number *>(obj);\n"
+            "    }\n"
+            "\n"
+            "    Object * lessEqualThan(Object *obj) override {\n"
+            "        auto num = dynamic_cast<Number *>(obj);\n"
             "        if (num == nullptr) {\n"
             "            return nullptr;\n"
             "        }\n"
@@ -169,10 +138,10 @@ void OriginNumberNode::init() {
             "        } else {\n"
             "            return _number <= num->_number ? True::newObj() : nullptr;\n"
             "        }\n"
-    ));
-    // >
-    addMethod(new OriginNodePublicMethod(
-            "auto num = dynamic_cast<Number *>(obj);\n"
+            "    }\n"
+            "\n"
+            "    Object * moreThan(Object *obj) override {\n"
+            "        auto num = dynamic_cast<Number *>(obj);\n"
             "        if (num == nullptr) {\n"
             "            return nullptr;\n"
             "        }\n"
@@ -185,10 +154,10 @@ void OriginNumberNode::init() {
             "        } else {\n"
             "            return _number > num->_number ? True::newObj() : nullptr;\n"
             "        }\n"
-    ));
-    // >=
-    addMethod(new OriginNodePublicMethod(
-            "auto num = dynamic_cast<Number *>(obj);\n"
+            "    }\n"
+            "\n"
+            "    Object * moreEqualThan(Object *obj) override {\n"
+            "        auto num = dynamic_cast<Number *>(obj);\n"
             "        if (num == nullptr) {\n"
             "            return nullptr;\n"
             "        }\n"
@@ -201,10 +170,10 @@ void OriginNumberNode::init() {
             "        } else {\n"
             "            return _number >= num->_number ? True::newObj() : nullptr;\n"
             "        }\n"
-    ));
-    // ==
-    addMethod(new OriginNodePublicMethod(
-            "auto num = dynamic_cast<Number *>(obj);\n"
+            "    }\n"
+            "\n"
+            "    Object * equal(Object *obj) override {\n"
+            "        auto num = dynamic_cast<Number *>(obj);\n"
             "        if (num == nullptr) {\n"
             "            return nullptr;\n"
             "        }\n"
@@ -217,15 +186,21 @@ void OriginNumberNode::init() {
             "        } else {\n"
             "            return _number == num->_number ? True::newObj() : nullptr;\n"
             "        }\n"
-    ));
-    addMethod(new OriginNodePublicMethod(
-            "Object * toString() override {\n"
+            "    }\n"
+            "\n"
+            "    Object * toString() override {\n"
             "        if (_isInt()) {\n"
             "            return String::newObj(std::to_string(_integer));\n"
             "        }\n"
             "        return String::newObj(std::to_string(_number));\n"
             "    }\n"
-    ));
+            "};"
+    );
+    ioUtil.newLine();
+}
+
+std::string OriginNumberNode::toString() const {
+    return "Number";
 }
 
 

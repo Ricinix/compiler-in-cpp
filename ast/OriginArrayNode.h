@@ -10,20 +10,21 @@
 #include <map>
 #include <sstream>
 
-class OriginArrayNode : public OriginObjectNode {
-private:
-    bool isInit = false;
-
-    void init();
-
+class OriginArrayNode : public OriginBaseObjDefineNode {
 public:
     void genCode(IoUtil &ioUtil) override;
+
+    std::string toString() const override;
 };
 
 class Array : public Object {
 private:
     std::map<std::string, Object *> container;
 public:
+    static Array *newObj() {
+        return new Array();
+    }
+
     Object *at(Object *obj) override {
         auto *str = dynamic_cast<String *>(obj);
         if (str == nullptr) {
@@ -45,7 +46,7 @@ public:
         return nullptr;
     }
 
-    Object * insert(Object *index, Object *obj) override {
+    Object *insert(Object *index, Object *obj) override {
         auto *str = dynamic_cast<String *>(obj);
         if (str == nullptr) {
             return nullptr;
@@ -54,16 +55,16 @@ public:
         return obj;
     }
 
-    Object * clear() override {
+    Object *clear() override {
         container.clear();
         return nullptr;
     }
 
-    Object * toString() override {
+    Object *toString() override {
         std::ostringstream fmt("[");
         int i = 0;
         for (auto &element : container) {
-            auto *str = dynamic_cast<String*>(element.second->toString());
+            auto *str = dynamic_cast<String *>(element.second->toString());
             if (str != nullptr) {
                 fmt << str->getString();
             }

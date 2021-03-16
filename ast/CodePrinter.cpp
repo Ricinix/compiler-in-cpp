@@ -47,46 +47,12 @@ std::string MethodCodePrinter::getHashMsg() const {
     return DecorateNodeMethod::getHashMsg();
 }
 
-DomainCodePrinter::DomainCodePrinter() : DefineNodeDomain(nullptr, false) {
-
-}
-
-void DomainCodePrinter::genCode(IoUtil &ioUtil) {
-    DefineNodeDomain::genCode(ioUtil);
-}
-
-std::string DomainCodePrinter::toString() const {
-    return "DomainCodePrinter";
-}
-
-OriginNodePrivateDomain::OriginNodePrivateDomain(const std::string &content) {
-    stmt = content;
-}
-
-void OriginNodePrivateDomain::genCode(IoUtil &ioUtil) {
-    ioUtil.appendContent("private:");
-    ioUtil.newLine();
-    ioUtil.appendContent(stmt);
-    ioUtil.newLine();
-}
-
 OriginNodePublicMethod::OriginNodePublicMethod(const std::string &content) {
     block = content;
 }
 
 void OriginNodePublicMethod::genCode(IoUtil &ioUtil) {
     ioUtil.appendContent("public:");
-    ioUtil.newLine();
-    ioUtil.appendContent(block);
-    ioUtil.newLine();
-}
-
-OriginNodePrivateMethod::OriginNodePrivateMethod(const std::string &content) {
-    block = content;
-}
-
-void OriginNodePrivateMethod::genCode(IoUtil &ioUtil) {
-    ioUtil.appendContent("private:");
     ioUtil.newLine();
     ioUtil.appendContent(block);
     ioUtil.newLine();
@@ -114,7 +80,7 @@ void OriginNodeVirtualMethod::genCode(IoUtil &ioUtil) {
             ioUtil.appendContent(", ");
         }
     }
-    ioUtil.appendContent(") { return nullptr; }");
+    ioUtil.appendContent(") { return nullptr; }\n");
 }
 
 OriginNodeVirtualMethod::OriginNodeVirtualMethod(DecorateNodeMethod *node) {

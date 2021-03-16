@@ -7,15 +7,10 @@
 
 #include "OriginObjectNode.h"
 
-class OriginStringNode : public OriginObjectNode {
-
-private:
-    bool isInit = false;
-
-    void init();
-
+class OriginStringNode : public OriginBaseObjDefineNode {
 public:
     void genCode(IoUtil &ioUtil) override;
+    std::string toString() const override;
 };
 
 class String : public Object {

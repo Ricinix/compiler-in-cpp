@@ -43,29 +43,6 @@ public:
     void genCode(IoUtil &ioUtil) override;
 };
 
-class OriginNodePrivateMethod : public MethodCodePrinter {
-private:
-    std::string block;
-public:
-    explicit OriginNodePrivateMethod(const std::string &content);
-    void genCode(IoUtil &ioUtil) override;
-};
-
-class DomainCodePrinter : public DefineNodeDomain {
-public:
-    DomainCodePrinter();
-    void genCode(IoUtil &ioUtil) override;
-    std::string toString() const override;
-};
-
-class OriginNodePrivateDomain : public DomainCodePrinter {
-private:
-    std::string stmt;
-public:
-    explicit OriginNodePrivateDomain(const std::string &content);
-    void genCode(IoUtil &ioUtil) override;
-};
-
 class OriginNodeVirtualMethod : public MethodCodePrinter {
 private:
     std::string methodName;
