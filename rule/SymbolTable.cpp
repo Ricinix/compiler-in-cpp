@@ -3,9 +3,10 @@
 //
 
 #include "SymbolTable.h"
-#include "../domain/constant.h"
+#include <algorithm>
 
 std::map<std::string, bool> SymbolTable::reservedWordMap;
+TableCell *SymbolTable::tail = new TableCell;
 
 /**
  * 不包含Op
@@ -40,4 +41,36 @@ void SymbolTable::initReservedWordMap() {
 
 void SymbolTable::addReservedWord(const std::string &word) {
     reservedWordMap[word] = true;
+}
+
+void SymbolTable::newCell() {
+    tail->next = new TableCell;
+    tail->next->prior = tail;
+    tail = tail->next;
+}
+
+void SymbolTable::popCell() {
+    tail = tail->prior;
+    delete tail->next;
+    tail->next = nullptr;
+}
+
+bool SymbolTable::insert(const std::string &id) {
+    auto *cell = tail;
+    while (cell != nullptr) {
+        if (cell->exist(id)) {
+            return false;
+        }
+        cell = cell->prior;
+    }
+    tail->add(id);
+    return true;
+}
+
+bool TableCell::exist(const std::string &id) {
+    return std::find(idList.cbegin(), idList.cend(), id) != idList.end();
+}
+
+void TableCell::add(const std::string &id) {
+    idList.push_back(id);
 }

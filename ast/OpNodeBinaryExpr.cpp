@@ -4,6 +4,7 @@
 
 #include "OpNodeBinaryExpr.h"
 #include "OpNodeFetchArr.h"
+#include "../rule/SymbolTable.h"
 
 void OpNodeBinaryExpr::Builder::setLeftNode(ASTNode *leftNode) {
     left = leftNode;
@@ -33,10 +34,14 @@ void OpNodeBinaryExpr::genCode(IoUtil &ioUtil) {
     if (checkArr()) {
         return;
     }
-    left->genCode(ioUtil);
     if (token->getTokenType() == TokenType::op) {
         auto *opToken = dynamic_cast<OpToken *>(token);
         if (opToken != nullptr) {
+            if (opToken->getOpType() == OpType::assign && left->getType() == ASTNodeType::id
+                && SymbolTable::insert(left->toString())) {
+                ioUtil.appendContent("Object *");
+            }
+            left->genCode(ioUtil);
             if (opToken->getOpType() == OpType::more) {
                 addOp("moreThan", ioUtil);
             } else if (opToken->getOpType() == OpType::moreEqual) {
@@ -62,10 +67,12 @@ void OpNodeBinaryExpr::genCode(IoUtil &ioUtil) {
                 right->genCode(ioUtil);
             }
         } else {
+            left->genCode(ioUtil);
             ioUtil.appendContent(token->getText());
             right->genCode(ioUtil);
         }
     } else {
+        left->genCode(ioUtil);
         ioUtil.appendContent(token->getText());
         right->genCode(ioUtil);
     }

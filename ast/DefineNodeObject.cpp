@@ -3,6 +3,7 @@
 //
 
 #include "DefineNodeObject.h"
+#include "../rule/SymbolTable.h"
 
 std::string DefineNodeObject::toString() const {
     return className->toString();
@@ -34,12 +35,14 @@ void DefineNodeObject::genCode(IoUtil &ioUtil) {
         extendObj->genCode(ioUtil);
     }
     ioUtil.appendContent("{\n");
+    SymbolTable::newCell();
     for (auto &domain : domainSet) {
         domain->genCode(ioUtil);
     }
     for (auto &method : methodSet) {
         method->genCode(ioUtil);
     }
+    SymbolTable::popCell();
     ioUtil.appendContent("}\n");
 }
 

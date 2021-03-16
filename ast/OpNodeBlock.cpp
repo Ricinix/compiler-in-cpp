@@ -3,6 +3,7 @@
 //
 
 #include "OpNodeBlock.h"
+#include "../rule/SymbolTable.h"
 
 OpNodeBlock::OpNodeBlock(const std::vector<ASTNode *> &v) : ASTList(v) {
 
@@ -10,9 +11,11 @@ OpNodeBlock::OpNodeBlock(const std::vector<ASTNode *> &v) : ASTList(v) {
 
 void OpNodeBlock::genCode(IoUtil &ioUtil) {
     ioUtil.appendContent("{\n");
+    SymbolTable::newCell();
     for (auto &child : children) {
         child->genCode(ioUtil);
     }
+    SymbolTable::popCell();
     ioUtil.appendContent("}\n");
 }
 
