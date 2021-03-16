@@ -11,11 +11,34 @@ OpNodeSingleExpr::OpNodeSingleExpr(ASTNode *factorNode, Token *opToken) {
 }
 
 void OpNodeSingleExpr::genCode(IoUtil &ioUtil) {
-    ASTList::genCode(ioUtil);
+    ioUtil.appendContent("Number::newObj(0)");
+    auto opType = getOpType();
+    if (opType == OpType::minus) {
+        ioUtil.appendContent("->minus(");
+        factor->genCode(ioUtil);
+        ioUtil.appendContent(")");
+    } else {
+        ioUtil.appendContent(token->getText());
+        factor->genCode(ioUtil);
+    }
 }
 
 std::string OpNodeSingleExpr::toString() const {
     return token->getText();
+}
+
+ASTNodeType OpNodeSingleExpr::getType() {
+    return ASTNodeType::opSingleExpr;
+}
+
+OpType OpNodeSingleExpr::getOpType() {
+    if (token->getTokenType() == TokenType::op) {
+        auto *opToken = dynamic_cast<OpToken *>(token);
+        if (opToken != nullptr) {
+            return opToken->getOpType();
+        }
+    }
+    return OpType::none;
 }
 
 void OpNodeSingleExpr::Builder::setOpToken(Token *t) {

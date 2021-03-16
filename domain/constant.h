@@ -48,6 +48,7 @@ enum class ASTNodeType {
     newArr,
     newObj,
     opBinaryExpr,
+    opSingleExpr,
     block,
     funcCall,
     opElse,
