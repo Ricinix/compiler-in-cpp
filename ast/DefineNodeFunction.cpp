@@ -39,3 +39,16 @@ std::string DefineNodeFunction::toString() const {
 int DefineNodeFunction::paramNum() const {
     return params.size();
 }
+
+DefineNodeFunction::DefineNodeFunction() {
+    functionName = nullptr;
+    runBody = nullptr;
+}
+
+ASTNodeType DefineNodeFunction::getType() {
+    return ASTNodeType::func;
+}
+
+std::string DefineNodeFunction::getHashMsg() {
+    return functionName->toString() + "_" + std::to_string(paramNum());
+}

@@ -6,6 +6,7 @@
 #include "OpNodeProgram.h"
 #include "OriginNumberNode.h"
 #include "OriginArrayNode.h"
+#include "OriginPrintFuncNode.h"
 #include <iostream>
 
 AbstractSyntaxTree::AbstractSyntaxTree(ASTNode *rootNode) {
@@ -76,6 +77,7 @@ void AbstractSyntaxTree::initObject() {
         if (program == nullptr) {
             return;
         }
+        program->insertDefineNode(0, new OriginPrintFuncNode);
         program->insertDefineNode(0, new OriginArrayNode);
         program->insertDefineNode(0, new OriginNumberNode);
         program->insertDefineNode(0, new OriginStringNode);

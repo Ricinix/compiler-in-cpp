@@ -15,6 +15,9 @@ private:
 
     DefineNodeFunction(ASTNode *funcName, std::vector<ASTNode *> &paramSet, ASTNode *runPart);
 
+protected:
+    DefineNodeFunction();
+
 public:
 
     void genCode(IoUtil &ioUtil) override;
@@ -22,6 +25,10 @@ public:
     std::string toString() const override;
 
     int paramNum() const;
+
+    ASTNodeType getType() override;
+
+    virtual std::string getHashMsg();
 
     class Builder {
     private:
