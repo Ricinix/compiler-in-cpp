@@ -11,6 +11,7 @@ std::string OpNodeCallFunction::toString() const {
 OpNodeCallFunction::OpNodeCallFunction(std::vector<ASTNode *> &argList, ASTNode *funcName) {
     functionName = funcName;
     addChild(funcName);
+    args = argList;
     for (auto &arg : argList) {
         addChild(arg);
     }
