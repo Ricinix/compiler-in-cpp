@@ -49,7 +49,7 @@ void OriginObjectNode::init() {
     addMethod(new OriginNodeVirtualMethod("moreThan", 1));
     addMethod(new OriginNodeVirtualMethod("moreEqualThan", 1));
     addMethod(new OriginNodeVirtualMethod("equal", 1));
-    addMethod(new OriginNodeVirtualMethod("toString", 1));
+    addMethod(new OriginNodeVirtualMethod("toString", 0));
     addMethod(new OriginNodeVirtualMethod("hashCode", 1));
     addMethod(new OriginNodeVirtualMethod("at", 1));
     addMethod(new OriginNodeVirtualMethod("removeAt", 1));
