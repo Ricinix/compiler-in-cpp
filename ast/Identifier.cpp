@@ -9,7 +9,11 @@ Identifier::Identifier(Token *token_ptr) : ASTLeaf(token_ptr) {
 }
 
 void Identifier::genCode(IoUtil &ioUtil) {
-    ioUtil.appendContent(token_ptr->getText() + " ");
+    if (token_ptr->getText() == "print") {
+        ioUtil.appendContent("printStr ");
+    } else {
+        ioUtil.appendContent(token_ptr->getText() + " ");
+    }
 }
 
 ASTNodeType Identifier::getType() {
