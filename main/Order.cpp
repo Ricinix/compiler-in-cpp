@@ -73,7 +73,7 @@ AbstractSyntaxTree *CompileOrder::getAst(const std::string &inPath) {
 void CompileOrder::generateExe(IoUtil &ioUtil) {
     std::ostringstream fmt;
     std::string exePath = ioUtil.getOutPath();
-    fmt << "g++ ";
+    fmt << "mingw/mingw32/bin/g++ ";
     fmt << ioUtil.getOutPath();
     fmt << " -o ";
     int lastIndex = exePath.find_last_of('/');
