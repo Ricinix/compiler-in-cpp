@@ -8,6 +8,4 @@ std::string OriginBaseObjDefineNode::toString() const {
     return "Origin Object define";
 }
 
-void OriginBaseObjDefineNode::genCode(IoUtil &ioUtil) {
-    DefineNodeObject::genCode(ioUtil);
-}
+void OriginBaseObjDefineNode::genCode(IoUtil &ioUtil) {}

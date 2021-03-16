@@ -28,9 +28,9 @@ public:
 
     int getLineNumber() const;
 
-    void appendContent(const std::string &content);
+    IoUtil &appendContent(const std::string &content);
 
-    void newLine();
+    IoUtil &newLine();
 
     explicit IoUtil(const std::string &val_path);
 

@@ -5,7 +5,7 @@
 #include "DefineNodeObject.h"
 
 std::string DefineNodeObject::toString() const {
-    return "obj " + className->toString();
+    return className->toString();
 }
 
 DefineNodeObject::DefineNodeObject(ASTNode *name, ASTNode *extendNode, std::vector<DefineNodeDomain *> &domains,
@@ -27,7 +27,20 @@ DefineNodeObject::DefineNodeObject(ASTNode *name, ASTNode *extendNode, std::vect
 }
 
 void DefineNodeObject::genCode(IoUtil &ioUtil) {
-    ASTList::genCode(ioUtil);
+    ioUtil.appendContent("class ");
+    className->genCode(ioUtil);
+    if (extendObj != nullptr) {
+        ioUtil.appendContent(": public ");
+        extendObj->genCode(ioUtil);
+    }
+    ioUtil.appendContent("{\n");
+    for (auto &domain : domainSet) {
+        domain->genCode(ioUtil);
+    }
+    for (auto &method : methodSet) {
+        method->genCode(ioUtil);
+    }
+    ioUtil.appendContent("}\n");
 }
 
 void DefineNodeObject::addDomain(DefineNodeDomain *domain) {
@@ -53,6 +66,10 @@ void DefineNodeObject::addMethod(DecorateNodeMethod *method) {
 DefineNodeObject::DefineNodeObject() {
     className = nullptr;
     extendObj = nullptr;
+}
+
+ASTNodeType DefineNodeObject::getType() {
+    return ASTNodeType::clz;
 }
 
 void DefineNodeObject::Builder::setClassName(ASTNode *name) {

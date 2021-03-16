@@ -9,7 +9,12 @@ NumberLiteral::NumberLiteral(Token *token_ptr) : ASTLeaf(token_ptr) {
 }
 
 void NumberLiteral::genCode(IoUtil &ioUtil) {
-    ioUtil.appendContent(token_ptr->getText() + " ");
+    ioUtil.appendContent(token_ptr->getText());
+    if (decimalsToken != nullptr) {
+        ioUtil.appendContent(".")
+                .appendContent(decimalsToken->getText());
+    }
+    ioUtil.appendContent(" ");
 }
 
 NumberLiteral::NumberLiteral(Token *integer, Token *decimals) : ASTLeaf(integer) {

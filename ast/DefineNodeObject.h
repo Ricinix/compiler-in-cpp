@@ -35,6 +35,8 @@ public:
 
     virtual void addMethod(DecorateNodeMethod *method);
 
+    ASTNodeType getType() override;
+
     class Builder {
     private:
         ASTNode *className;
