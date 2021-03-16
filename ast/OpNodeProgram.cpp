@@ -14,7 +14,7 @@ OpNodeProgram *OpNodeProgram::Builder::build() {
 
 void OpNodeProgram::genCode(IoUtil &ioUtil) {
     ioUtil.appendContent("#include <string>\n")
-            .appendContent("#include <stdlib.h>")
+            .appendContent("#include <stdlib.h>\n")
             .appendContent("#include <sstream>\n")
             .appendContent("#include <map>\n")
             .appendContent("#include <iostream>\n")
@@ -28,8 +28,8 @@ void OpNodeProgram::genCode(IoUtil &ioUtil) {
     for (auto &stmt : stmtList) {
         stmt->genCode(ioUtil);
     }
-    ioUtil.appendContent("std::cout << std::endl")
-            .appendContent("system(\"pause\");")
+    ioUtil.appendContent("std::cout << std::endl\n")
+            .appendContent("system(\"pause\");\n")
             .appendContent("return 0;\n")
             .appendContent("}\n");
 }
