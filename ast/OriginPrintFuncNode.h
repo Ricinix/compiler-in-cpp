@@ -15,14 +15,14 @@ public:
     std::string getHashMsg() override;
 };
 
-Object *printStr(Object *obj) {
-    auto str = dynamic_cast<String *>(obj);
-    if (str == nullptr) {
-        return nullptr;
-    }
-    std::cout << str->getString();
-    return nullptr;
-}
+//Object *printStr(Object *obj) {
+//    auto str = dynamic_cast<String *>(obj);
+//    if (str == nullptr) {
+//        return nullptr;
+//    }
+//    std::cout << str->getString();
+//    return nullptr;
+//}
 
 
 #endif //DESIGN_1_ORIGINPRINTFUNCNODE_H

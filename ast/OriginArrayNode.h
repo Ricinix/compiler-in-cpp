@@ -92,10 +92,5 @@ public:
     }
 };
 
-void test() {
-
-    Array::newObj({Object::newObj(), Object::newObj()});
-}
-
 
 #endif //DESIGN_1_ORIGINARRAYNODE_H
