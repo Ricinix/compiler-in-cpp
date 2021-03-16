@@ -14,11 +14,21 @@ OpNodeIf::OpNodeIf(ASTNode *conditionNode, ASTNode *runBodyNode, ASTNode *elseNo
 }
 
 void OpNodeIf::genCode(IoUtil &ioUtil) {
-    ASTList::genCode(ioUtil);
+    ioUtil.appendContent("if(");
+    condition->genCode(ioUtil);
+    ioUtil.appendContent(")");
+    runBody->genCode(ioUtil);
+    if (elsePart != nullptr) {
+        elsePart->genCode(ioUtil);
+    }
 }
 
 std::string OpNodeIf::toString() const {
     return "if";
+}
+
+ASTNodeType OpNodeIf::getType() {
+    return ASTNodeType::opIf;
 }
 
 void OpNodeIf::Builder::setCondition(ASTNode *node) {

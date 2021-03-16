@@ -51,6 +51,7 @@ enum class ASTNodeType {
     block,
     funcCall,
     opElse,
+    opIf,
     opFetchArr,
     opFetchDomain,
 };
