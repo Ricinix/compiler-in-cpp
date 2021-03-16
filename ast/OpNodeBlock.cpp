@@ -9,11 +9,19 @@ OpNodeBlock::OpNodeBlock(const std::vector<ASTNode *> &v) : ASTList(v) {
 }
 
 void OpNodeBlock::genCode(IoUtil &ioUtil) {
-    ASTList::genCode(ioUtil);
+    ioUtil.appendContent("{\n");
+    for (auto &child : children) {
+        child->genCode(ioUtil);
+    }
+    ioUtil.appendContent("}\n");
 }
 
 std::string OpNodeBlock::toString() const {
     return "{}";
+}
+
+ASTNodeType OpNodeBlock::getType() {
+    return ASTNodeType::block;
 }
 
 void OpNodeBlock::Builder::appendChild(ASTNode *node) {

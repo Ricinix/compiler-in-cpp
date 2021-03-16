@@ -48,6 +48,7 @@ enum class ASTNodeType {
     newArr,
     newObj,
     opBinaryExpr,
+    block
 };
 
 // 定义保留字

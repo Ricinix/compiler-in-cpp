@@ -18,6 +18,8 @@ public:
 
     std::string toString() const override;
 
+    ASTNodeType getType() override;
+
     class Builder {
     private:
         std::vector<ASTNode *> stmtSet;
