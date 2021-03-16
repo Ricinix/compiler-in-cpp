@@ -53,6 +53,7 @@ void CompileOrder::exec() {
 
     ast->translateToCppTree(helper);
     ast->generateCppCode(ioUtil);
+    ioUtil.finish();
     generateExe(ioUtil);
 }
 

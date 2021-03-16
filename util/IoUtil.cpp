@@ -109,3 +109,12 @@ IoUtil &IoUtil::newLine() {
 std::string IoUtil::getOutPath() {
     return outPath;
 }
+
+void IoUtil::finish() {
+    if (fileIn.is_open()) {
+        fileIn.close();
+    }
+    if (fileOut.is_open()) {
+        fileOut.close();
+    }
+}

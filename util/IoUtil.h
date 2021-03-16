@@ -22,6 +22,8 @@ private:
     void checkInit();
 
 public:
+    void finish();
+
     std::string getOutPath();
 
     char getNext();
