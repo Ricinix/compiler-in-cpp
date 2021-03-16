@@ -11,7 +11,10 @@ DecorateNodeMethod::DecorateNodeMethod(DefineNodeFunction *funcNode, bool isStat
 }
 
 void DecorateNodeMethod::genCode(IoUtil &ioUtil) {
-    ASTList::genCode(ioUtil);
+    if (isStatic) {
+        ioUtil.appendContent("static ");
+    }
+    func->genCode(ioUtil);
 }
 
 std::string DecorateNodeMethod::toString() const {

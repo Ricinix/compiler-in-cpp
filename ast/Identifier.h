@@ -12,6 +12,7 @@ class Identifier: public ASTLeaf {
 public:
     explicit Identifier(Token* token_ptr);
     void genCode(IoUtil &ioUtil) override;
+    ASTNodeType getType() override;
 };
 
 

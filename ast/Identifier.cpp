@@ -12,3 +12,7 @@ void Identifier::genCode(IoUtil &ioUtil) {
     ioUtil.appendContent(token_ptr->getText() + " ");
 }
 
+ASTNodeType Identifier::getType() {
+    return ASTNodeType::id;
+}
+

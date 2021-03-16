@@ -19,6 +19,10 @@ std::string DecorateNodePrimary::toString() const {
     return "(expr)";
 }
 
+ASTNodeType DecorateNodePrimary::getType() {
+    return ASTNodeType::primary;
+}
+
 void DecorateNodePrimary::Builder::setExprNode(ASTNode *exprNode) {
     expr = exprNode;
 }

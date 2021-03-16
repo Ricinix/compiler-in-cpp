@@ -18,7 +18,15 @@ std::string DefineNodeDomain::toString() const {
 }
 
 void DefineNodeDomain::genCode(IoUtil &ioUtil) {
-    ASTList::genCode(ioUtil);
+    ioUtil.appendContent("private: \n");
+    if (isStatic) {
+        ioUtil.appendContent("static ");
+    }
+    initStmt->genCode(ioUtil);
+}
+
+ASTNodeType DefineNodeDomain::getType() {
+    return ASTNodeType::domain;
 }
 
 void DefineNodeDomain::Builder::setInitStatement(ASTNode *stmt) {

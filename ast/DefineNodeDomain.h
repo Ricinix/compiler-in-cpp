@@ -16,6 +16,7 @@ protected:
     DefineNodeDomain(ASTNode *initStmtNode, bool isStaticDomain);
 
 public:
+    ASTNodeType getType() override;
 
     void genCode(IoUtil &ioUtil) override;
 

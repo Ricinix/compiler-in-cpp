@@ -29,7 +29,18 @@ DefineNodeFunction::DefineNodeFunction(ASTNode *funcName, std::vector<ASTNode *>
 }
 
 void DefineNodeFunction::genCode(IoUtil &ioUtil) {
-    ASTList::genCode(ioUtil);
+    ioUtil.appendContent("Object *");
+    functionName->genCode(ioUtil);
+    ioUtil.appendContent("(");
+    for (int i = 0; i < paramNum(); ++i) {
+        ioUtil.appendContent("Object ");
+        params[i]->genCode(ioUtil);
+        if (i != paramNum() -1) {
+            ioUtil.appendContent(", ");
+        }
+    }
+    ioUtil.appendContent(")");
+    runBody->genCode(ioUtil);
 }
 
 std::string DefineNodeFunction::toString() const {
