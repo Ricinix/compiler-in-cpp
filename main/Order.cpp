@@ -76,7 +76,8 @@ void CompileOrder::generateExe(IoUtil &ioUtil) {
     fmt << R"(mingw\mingw32\bin\g++ )";
     fmt << ioUtil.getOutPath();
     fmt << " -o ";
-    int lastIndex = exePath.find_last_of('/');
-    fmt << exePath.replace(lastIndex, exePath.size() - lastIndex, "");
+    int lastIndex = exePath.find_last_of('.');
+    fmt << exePath.replace(lastIndex, exePath.size() - lastIndex, ".exe");
+    Log::info(fmt.str());
     system(fmt.str().c_str());
 }
