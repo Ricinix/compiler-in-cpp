@@ -66,6 +66,17 @@ public:
     void genCode(IoUtil &ioUtil) override;
 };
 
+class OriginNOdeVirtualMethod : public MethodCodePrinter {
+private:
+    std::string methodName;
+    int paramNum;
+public:
+    OriginNOdeVirtualMethod(const std::string &name, int paramCount);
+    explicit OriginNOdeVirtualMethod(DecorateNodeMethod *node);
+    void genCode(IoUtil &ioUtil) override;
+    std::string getHashMsg() const override;
+};
+
 
 
 

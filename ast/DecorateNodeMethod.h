@@ -18,9 +18,16 @@ protected:
 
 public:
     void genCode(IoUtil &ioUtil) override;
+
     std::string toString() const override;
 
+    ASTNodeType getType() override;
+
     virtual std::string getHashMsg() const;
+
+    std::string getMethodName();
+
+    int getParamNum();
 
     class Builder {
     private:
@@ -28,8 +35,10 @@ public:
         DefineNodeFunction *func;
     public:
         void setStatic(bool isStaticMethod);
+
         void setFunc(DefineNodeFunction *funcNode);
-        DecorateNodeMethod* build();
+
+        DecorateNodeMethod *build();
     };
 };
 

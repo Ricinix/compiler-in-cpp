@@ -8,6 +8,9 @@
 #include "DefineNodeObject.h"
 
 class OriginObjectNode : public DefineNodeObject {
+private:
+    bool isInit = false;
+    void init();
 protected:
     std::vector<DefineNodeDomain *> domainSet;
 
@@ -23,6 +26,8 @@ public:
     void addDomain(DefineNodeDomain *domain) override;
 
     void addMethod(DecorateNodeMethod *method) override;
+
+    void addVirtualMethod(ASTNode *methodNode);
 };
 
 class Object {
@@ -58,9 +63,9 @@ public:
 
     virtual Object *removeAt(Object *obj) { return nullptr; }
 
-    virtual Object *insert(Object *index, Object *obj);
+    virtual Object *insert(Object *index, Object *obj) { return nullptr; }
 
-    virtual Object *clear();
+    virtual Object *clear() { return nullptr; }
 };
 
 class OriginTrueNode : public OriginObjectNode {

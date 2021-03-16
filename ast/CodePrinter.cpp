@@ -47,7 +47,7 @@ std::string MethodCodePrinter::getHashMsg() const {
     return DecorateNodeMethod::getHashMsg();
 }
 
-DomainCodePrinter::DomainCodePrinter() : DefineNodeDomain(nullptr, false){
+DomainCodePrinter::DomainCodePrinter() : DefineNodeDomain(nullptr, false) {
 
 }
 
@@ -90,4 +90,38 @@ void OriginNodePrivateMethod::genCode(IoUtil &ioUtil) {
     ioUtil.newLine();
     ioUtil.appendContent(block);
     ioUtil.newLine();
+}
+
+std::string OriginNOdeVirtualMethod::getHashMsg() const {
+    return methodName + "_" + std::to_string(paramNum);
+}
+
+OriginNOdeVirtualMethod::OriginNOdeVirtualMethod(const std::string &name, int paramCount) {
+    methodName = name;
+    paramNum = paramCount;
+}
+
+void OriginNOdeVirtualMethod::genCode(IoUtil &ioUtil) {
+    if (methodName.empty()) {
+        return;
+    }
+    ioUtil.appendContent("virtual Object *");
+    ioUtil.appendContent(methodName);
+    ioUtil.appendContent("(");
+    for (int i = 0; i < paramNum; ++i) {
+        ioUtil.appendContent("Object *arg" + std::to_string(i + 1));
+        if (i != paramNum - 1) {
+            ioUtil.appendContent(", ");
+        }
+    }
+    ioUtil.appendContent(") { return nullptr; }");
+}
+
+OriginNOdeVirtualMethod::OriginNOdeVirtualMethod(DecorateNodeMethod *node) {
+    if (node == nullptr) {
+        paramNum = 0;
+    } else {
+        paramNum = node->getParamNum();
+        methodName = node->getMethodName();
+    }
 }

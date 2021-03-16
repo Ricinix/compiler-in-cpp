@@ -39,6 +39,7 @@ enum class ASTNodeType {
     program,
     importNode,
     clz,
+    method,
     func,
     codePrinter
 };

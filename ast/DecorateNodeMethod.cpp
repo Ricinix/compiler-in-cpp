@@ -22,6 +22,18 @@ std::string DecorateNodeMethod::getHashMsg() const {
     return func->toString() + "_" + std::to_string(func->paramNum());
 }
 
+ASTNodeType DecorateNodeMethod::getType() {
+    return ASTNodeType::method;
+}
+
+std::string DecorateNodeMethod::getMethodName() {
+    return func->toString();
+}
+
+int DecorateNodeMethod::getParamNum() {
+    return func->paramNum();
+}
+
 void DecorateNodeMethod::Builder::setStatic(bool isStaticMethod) {
     isStatic = isStaticMethod;
 }
