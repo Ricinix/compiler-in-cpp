@@ -11,7 +11,8 @@ std::string OriginObjectNode::toString() const {
 
 void OriginObjectNode::genCode(IoUtil &ioUtil) {
     init();
-    ioUtil.appendContent("class Object {\n");
+    ioUtil.appendContent("class Object {\n")
+    .appendContent("public: \n");
     for (auto &method : methodSet) {
         method->genCode(ioUtil);
     }
@@ -62,7 +63,7 @@ void OriginObjectNode::addVirtualMethod(ASTNode *methodNode) {
         return;
     }
     auto *method = dynamic_cast<DecorateNodeMethod *>(methodNode);
-    if (method == nullptr) {
+    if (method == nullptr || method->getHashMsg().empty()) {
         return;
     }
     for (auto &m : methodSet) {

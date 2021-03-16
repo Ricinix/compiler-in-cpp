@@ -20,6 +20,8 @@ private:
     void initObject();
 
     void solveImport(AbstractSyntaxTree *(*load)(const std::string &));
+
+    void checkFunc(ASTNode *node);
 public:
     class ASTHelper {
     public:

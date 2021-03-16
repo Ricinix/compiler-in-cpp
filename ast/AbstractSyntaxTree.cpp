@@ -55,6 +55,7 @@ void AbstractSyntaxTree::printTree(ASTNode *node, std::ostream &fmt, std::string
 
 void AbstractSyntaxTree::generateCppCode(IoUtil &ioUtil) {
     initObject();
+    checkFunc(root);
     getRoot()->genCode(ioUtil);
 }
 
@@ -83,5 +84,15 @@ void AbstractSyntaxTree::initObject() {
         program->insertDefineNode(0, new OriginStringNode);
         program->insertDefineNode(0, new OriginTrueNode);
         program->insertDefineNode(0, originObj);
+    }
+}
+
+void AbstractSyntaxTree::checkFunc(ASTNode *node) {
+    if (node->getType() == ASTNodeType::method) {
+        originObj->addVirtualMethod(node);
+        return;
+    }
+    for (int i = 0; i < node->numChildren(); ++i) {
+        checkFunc(node->child(i));
     }
 }
