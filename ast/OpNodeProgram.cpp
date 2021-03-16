@@ -14,10 +14,11 @@ OpNodeProgram *OpNodeProgram::Builder::build() {
 
 void OpNodeProgram::genCode(IoUtil &ioUtil) {
     ioUtil.appendContent("#include <string>\n")
-    .appendContent("#include <sstream>\n")
-    .appendContent("#include <map>\n")
-    .appendContent("#include <iostream>\n")
-    .appendContent("#include <initializer_list>\n");
+            .appendContent("#include <stdlib.h>")
+            .appendContent("#include <sstream>\n")
+            .appendContent("#include <map>\n")
+            .appendContent("#include <iostream>\n")
+            .appendContent("#include <initializer_list>\n");
 
     ioUtil.newLine();
     for (auto &child : defineList) {
@@ -27,8 +28,10 @@ void OpNodeProgram::genCode(IoUtil &ioUtil) {
     for (auto &stmt : stmtList) {
         stmt->genCode(ioUtil);
     }
-    ioUtil.appendContent("return 0;\n");
-    ioUtil.appendContent("}\n");
+    ioUtil.appendContent("std::cout << std::endl")
+            .appendContent("system(\"pause\");")
+            .appendContent("return 0;\n")
+            .appendContent("}\n");
 }
 
 OpNodeProgram::OpNodeProgram(const std::vector<ASTNode *> &v) : ASTList(v) {
