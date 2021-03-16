@@ -22,6 +22,8 @@ private:
     void checkInit();
 
 public:
+    std::string getOutPath();
+
     char getNext();
 
     std::string readLine();

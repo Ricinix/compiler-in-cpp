@@ -105,3 +105,7 @@ IoUtil &IoUtil::newLine() {
     fileOut << std::endl;
     return *this;
 }
+
+std::string IoUtil::getOutPath() {
+    return outPath;
+}

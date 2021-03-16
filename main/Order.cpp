@@ -53,6 +53,7 @@ void CompileOrder::exec() {
 
     ast->translateToCppTree(helper);
     ast->generateCppCode(ioUtil);
+    generateExe(ioUtil);
 }
 
 AbstractSyntaxTree *CompileOrder::getAst(const std::string &inPath) {
@@ -67,4 +68,15 @@ AbstractSyntaxTree *CompileOrder::getAst(const std::string &inPath) {
     auto *ast = parseTree->toAST();
     Log::info(*ast);
     return ast;
+}
+
+void CompileOrder::generateExe(IoUtil &ioUtil) {
+    std::ostringstream fmt;
+    std::string exePath = ioUtil.getOutPath();
+    fmt << "g++ ";
+    fmt << ioUtil.getOutPath();
+    fmt << " -o ";
+    int lastIndex = exePath.find_last_of('/');
+    fmt << exePath.replace(lastIndex, exePath.size() - lastIndex, "");
+    system(fmt.str().c_str());
 }
