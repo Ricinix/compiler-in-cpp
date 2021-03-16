@@ -12,6 +12,11 @@ class DecorateNodeMethod : public ASTList {
 private:
     bool isStatic;
     DefineNodeFunction *func;
+
+    bool genConstructor(IoUtil &ioUtil);
+
+    void printParamList(IoUtil &ioUtil, bool printType);
+
 protected:
     DecorateNodeMethod(DefineNodeFunction *funcNode, bool isStaticMethod);
 

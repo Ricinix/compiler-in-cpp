@@ -40,6 +40,7 @@ enum class ASTNodeType {
     importNode,
     clz,
     method,
+    constructor,
     domain,
     func,
     primary,

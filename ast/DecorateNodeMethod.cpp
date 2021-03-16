@@ -11,6 +11,9 @@ DecorateNodeMethod::DecorateNodeMethod(DefineNodeFunction *funcNode, bool isStat
 }
 
 void DecorateNodeMethod::genCode(IoUtil &ioUtil) {
+    if (genConstructor(ioUtil)) {
+        return;
+    }
     if (func->child(0)->toString()[0] == '_') {
         ioUtil.appendContent("private:\n");
     } else {
@@ -36,6 +39,9 @@ std::string DecorateNodeMethod::getHashMsg() const {
 }
 
 ASTNodeType DecorateNodeMethod::getType() {
+    if (isConstructor()) {
+        return ASTNodeType::constructor;
+    }
     return ASTNodeType::method;
 }
 
@@ -49,6 +55,42 @@ int DecorateNodeMethod::getParamNum() {
 
 bool DecorateNodeMethod::isConstructor() {
     return func->toString() == "init";
+}
+
+bool DecorateNodeMethod::genConstructor(IoUtil &ioUtil) {
+    if (!isConstructor()) {
+        return false;
+    }
+    // 先生成c++的构造器
+    ioUtil.appendContent("public:\n")
+            .appendContent("explicit ")
+            .appendContent(getFather()->toString());
+    printParamList(ioUtil, true);
+    func->getRunBody()->genCode(ioUtil);
+    // 再生成hook一层的构造器
+    ioUtil.appendContent("static Object *newObj");
+    printParamList(ioUtil, true);
+    ioUtil.appendContent("{\n")
+            .appendContent("return new ")
+            .appendContent(getFather()->toString());
+    printParamList(ioUtil, false);
+    ioUtil.appendContent(";")
+            .appendContent("}\n");
+    return true;
+}
+
+void DecorateNodeMethod::printParamList(IoUtil &ioUtil, bool printType) {
+    ioUtil.appendContent("(");
+    for (int i = 0; i < func->paramNum(); ++i) {
+        if (printType) {
+            ioUtil.appendContent("Object *");
+        }
+        func->getParamName(i)->genCode(ioUtil);
+        if (i != func->paramNum() - 1) {
+            ioUtil.appendContent(", ");
+        }
+    }
+    ioUtil.appendContent(")");
 }
 
 void DecorateNodeMethod::Builder::setStatic(bool isStaticMethod) {

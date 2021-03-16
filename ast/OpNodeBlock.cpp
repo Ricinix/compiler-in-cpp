@@ -20,7 +20,8 @@ void OpNodeBlock::genCode(IoUtil &ioUtil) {
         }
     }
     SymbolTable::popCell();
-    if (getFather()->getType() == ASTNodeType::func && !hasReturn) {
+    if (getFather()->getType() == ASTNodeType::func
+        && getFather()->getFather()->getType() != ASTNodeType::constructor && !hasReturn) {
         ioUtil.appendContent("return nullptr;\n");
     }
     ioUtil.appendContent("}\n");

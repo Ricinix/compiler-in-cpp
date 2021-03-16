@@ -31,6 +31,10 @@ public:
 
     ASTNodeType getType() override;
 
+    ASTNode *getRunBody();
+
+    ASTNode *getParamName(int i);
+
     virtual std::string getHashMsg();
 
     class Builder {

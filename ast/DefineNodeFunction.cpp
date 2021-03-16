@@ -70,3 +70,11 @@ std::string DefineNodeFunction::getHashMsg() {
 void DefineNodeFunction::setNeedOverride(bool need) {
     needOverride = need;
 }
+
+ASTNode *DefineNodeFunction::getRunBody() {
+    return runBody;
+}
+
+ASTNode *DefineNodeFunction::getParamName(int i) {
+    return params[i];
+}
