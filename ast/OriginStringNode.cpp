@@ -65,7 +65,7 @@ void OriginStringNode::genCode(IoUtil &ioUtil) {
             "        return s == str->getString() ? True::newObj() : nullptr;\n"
             "    }\n"
             "\n"
-            "}\n;"
+            "};\n"
     );
     ioUtil.newLine();
 }

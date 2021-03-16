@@ -16,7 +16,7 @@ void OriginObjectNode::genCode(IoUtil &ioUtil) {
     for (auto &method : methodSet) {
         method->genCode(ioUtil);
     }
-    ioUtil.appendContent("}\n");
+    ioUtil.appendContent("};\n");
 }
 
 void OriginObjectNode::addDomain(DefineNodeDomain *domain) {

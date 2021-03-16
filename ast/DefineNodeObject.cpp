@@ -52,7 +52,7 @@ void DefineNodeObject::genCode(IoUtil &ioUtil) {
         genDefaultConstructor(ioUtil);
     }
     SymbolTable::popCell();
-    ioUtil.appendContent("}\n");
+    ioUtil.appendContent("};\n");
 }
 
 void DefineNodeObject::addDomain(DefineNodeDomain *domain) {
