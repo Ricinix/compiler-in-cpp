@@ -23,10 +23,11 @@ void OpNodeProgram::genCode(IoUtil &ioUtil) {
     for (auto &child : defineList) {
         child->genCode(ioUtil);
     }
-    ioUtil.appendContent("void main() {\n");
+    ioUtil.appendContent("int main() {\n");
     for (auto &stmt : stmtList) {
         stmt->genCode(ioUtil);
     }
+    ioUtil.appendContent("return 0;\n");
     ioUtil.appendContent("}\n");
 }
 

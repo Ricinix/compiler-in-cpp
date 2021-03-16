@@ -12,10 +12,17 @@ OpNodeBlock::OpNodeBlock(const std::vector<ASTNode *> &v) : ASTList(v) {
 void OpNodeBlock::genCode(IoUtil &ioUtil) {
     ioUtil.appendContent("{\n");
     SymbolTable::newCell();
+    bool hasReturn = false;
     for (auto &child : children) {
         child->genCode(ioUtil);
+        if (child->getType() == ASTNodeType::returnStmt) {
+            hasReturn = true;
+        }
     }
     SymbolTable::popCell();
+    if (getFather()->getType() == ASTNodeType::func && !hasReturn) {
+        ioUtil.appendContent("return nullptr;\n");
+    }
     ioUtil.appendContent("}\n");
 }
 
