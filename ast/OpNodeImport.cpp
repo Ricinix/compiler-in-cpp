@@ -21,6 +21,10 @@ ASTNodeType OpNodeImport::getType() {
     return ASTNodeType::importNode;
 }
 
+std::string OpNodeImport::getPathInStr() {
+    return path->toString();
+}
+
 void OpNodeImport::Builder::setPath(ASTNode *pathNode) {
     path = pathNode;
 }

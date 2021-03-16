@@ -7,6 +7,9 @@
 
 #include "ASTNode.h"
 
+/**
+ * TODO 此结点需要在生成代码前解析并去掉
+ */
 class OpNodeImport : public ASTList {
 private:
     ASTNode *path;
@@ -19,6 +22,8 @@ public:
     std::string toString() const override;
 
     ASTNodeType getType() override;
+
+    std::string getPathInStr();
 
     class Builder {
     private:

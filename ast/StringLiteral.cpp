@@ -13,5 +13,5 @@ void StringLiteral::genCode(IoUtil &ioUtil) {
 }
 
 std::string StringLiteral::toString() const {
-    return "\"" + token_ptr->getText() + "\"";
+    return token_ptr->getText();
 }
