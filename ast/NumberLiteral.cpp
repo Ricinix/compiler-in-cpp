@@ -16,7 +16,6 @@ void NumberLiteral::genCode(IoUtil &ioUtil) {
                 .appendContent(decimalsToken->getText());
     }
     ioUtil.appendContent(")");
-    ioUtil.appendContent(" ");
 }
 
 NumberLiteral::NumberLiteral(Token *integer, Token *decimals) : ASTLeaf(integer) {

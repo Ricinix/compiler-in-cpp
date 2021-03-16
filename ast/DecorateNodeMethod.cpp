@@ -74,7 +74,7 @@ bool DecorateNodeMethod::genConstructor(IoUtil &ioUtil) {
             .appendContent("return new ")
             .appendContent(getFather()->toString());
     printParamList(ioUtil, false);
-    ioUtil.appendContent(";")
+    ioUtil.appendContent(";\n")
             .appendContent("}\n");
     return true;
 }
