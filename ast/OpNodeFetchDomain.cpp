@@ -16,7 +16,13 @@ OpNodeFetchDomain::OpNodeFetchDomain(ASTNode *prefix, ASTNode *domain) {
 }
 
 void OpNodeFetchDomain::genCode(IoUtil &ioUtil) {
-    ASTList::genCode(ioUtil);
+    prefixNode->genCode(ioUtil);
+    ioUtil.appendContent("->");
+    domainNode->genCode(ioUtil);
+}
+
+ASTNodeType OpNodeFetchDomain::getType() {
+    return ASTNodeType::opFetchDomain;
 }
 
 void OpNodeFetchDomain::Builder::setPrefixNode(ASTNode *prefix) {

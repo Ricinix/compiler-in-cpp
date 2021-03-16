@@ -51,7 +51,8 @@ enum class ASTNodeType {
     block,
     funcCall,
     opElse,
-    opFetchArr
+    opFetchArr,
+    opFetchDomain,
 };
 
 // 定义保留字
