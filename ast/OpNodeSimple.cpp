@@ -23,7 +23,11 @@ OpNodeSimple::OpNodeSimple(ASTNode *simpleStmtNode, bool isReturn) {
 }
 
 void OpNodeSimple::genCode(IoUtil &ioUtil) {
-    ASTList::genCode(ioUtil);
+    if (isReturnStmt) {
+        ioUtil.appendContent("return ");
+    }
+    simpleStmt->genCode(ioUtil);
+    ioUtil.appendContent(";\n");
 }
 
 std::string OpNodeSimple::toString() const {
@@ -31,4 +35,11 @@ std::string OpNodeSimple::toString() const {
         return "return";
     }
     return ";";
+}
+
+ASTNodeType OpNodeSimple::getType() {
+    if (isReturnStmt) {
+        return ASTNodeType::returnStmt;
+    }
+    return ASTNodeType::normalStmt;
 }

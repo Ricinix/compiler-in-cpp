@@ -21,6 +21,8 @@ public:
 
     std::string toString() const override;
 
+    ASTNodeType getType() override;
+
     class Builder {
     private:
         ASTNode *simpleStmt = nullptr;

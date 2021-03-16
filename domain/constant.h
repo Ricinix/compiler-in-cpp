@@ -54,6 +54,8 @@ enum class ASTNodeType {
     opIf,
     opFetchArr,
     opFetchDomain,
+    normalStmt,
+    returnStmt,
 };
 
 // 定义保留字
