@@ -40,6 +40,9 @@ void DefineNodeFunction::genCode(IoUtil &ioUtil) {
         }
     }
     ioUtil.appendContent(")");
+    if (needOverride) {
+        ioUtil.appendContent(" override ");
+    }
     runBody->genCode(ioUtil);
 }
 
@@ -62,4 +65,8 @@ ASTNodeType DefineNodeFunction::getType() {
 
 std::string DefineNodeFunction::getHashMsg() {
     return functionName->toString() + "_" + std::to_string(paramNum());
+}
+
+void DefineNodeFunction::setNeedOverride(bool need) {
+    needOverride = need;
 }

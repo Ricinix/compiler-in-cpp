@@ -12,6 +12,7 @@ private:
     ASTNode *functionName;
     std::vector<ASTNode *> params;
     ASTNode *runBody;
+    bool needOverride = false;
 
     DefineNodeFunction(ASTNode *funcName, std::vector<ASTNode *> &paramSet, ASTNode *runPart);
 
@@ -25,6 +26,8 @@ public:
     std::string toString() const override;
 
     int paramNum() const;
+
+    void setNeedOverride(bool need);
 
     ASTNodeType getType() override;
 

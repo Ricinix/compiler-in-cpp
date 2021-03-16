@@ -18,6 +18,8 @@ void DecorateNodeMethod::genCode(IoUtil &ioUtil) {
     }
     if (isStatic) {
         ioUtil.appendContent("static ");
+    } else {
+        func->setNeedOverride(true);
     }
     func->genCode(ioUtil);
 }
