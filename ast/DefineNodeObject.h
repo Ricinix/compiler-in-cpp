@@ -22,6 +22,8 @@ private:
     DefineNodeObject(ASTNode *name, ASTNode *extendNode, std::vector<DefineNodeDomain *> &domains,
                      std::vector<DecorateNodeMethod *> &methods);
 
+    void genDefaultConstructor(IoUtil &ioUtil);
+
 protected:
     DefineNodeObject();
 

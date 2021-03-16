@@ -45,6 +45,10 @@ int DecorateNodeMethod::getParamNum() {
     return func->paramNum();
 }
 
+bool DecorateNodeMethod::isConstructor() {
+    return func->toString() == "init";
+}
+
 void DecorateNodeMethod::Builder::setStatic(bool isStaticMethod) {
     isStatic = isStaticMethod;
 }

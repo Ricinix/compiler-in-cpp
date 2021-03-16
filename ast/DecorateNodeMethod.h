@@ -12,7 +12,6 @@ class DecorateNodeMethod : public ASTList {
 private:
     bool isStatic;
     DefineNodeFunction *func;
-
 protected:
     DecorateNodeMethod(DefineNodeFunction *funcNode, bool isStaticMethod);
 
@@ -28,6 +27,8 @@ public:
     std::string getMethodName();
 
     int getParamNum();
+
+    bool isConstructor();
 
     class Builder {
     private:

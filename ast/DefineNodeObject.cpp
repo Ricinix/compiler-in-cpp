@@ -30,17 +30,26 @@ DefineNodeObject::DefineNodeObject(ASTNode *name, ASTNode *extendNode, std::vect
 void DefineNodeObject::genCode(IoUtil &ioUtil) {
     ioUtil.appendContent("class ");
     className->genCode(ioUtil);
+    ioUtil.appendContent(": public ");
     if (extendObj != nullptr) {
-        ioUtil.appendContent(": public ");
         extendObj->genCode(ioUtil);
+    } else {
+        ioUtil.appendContent("Object");
     }
     ioUtil.appendContent("{\n");
     SymbolTable::newCell();
     for (auto &domain : domainSet) {
         domain->genCode(ioUtil);
     }
+    bool hasConstructor = false;
     for (auto &method : methodSet) {
+        if (method->isConstructor()) {
+            hasConstructor = true;
+        }
         method->genCode(ioUtil);
+    }
+    if (!hasConstructor) {
+        genDefaultConstructor(ioUtil);
     }
     SymbolTable::popCell();
     ioUtil.appendContent("}\n");
@@ -73,6 +82,18 @@ DefineNodeObject::DefineNodeObject() {
 
 ASTNodeType DefineNodeObject::getType() {
     return ASTNodeType::clz;
+}
+
+void DefineNodeObject::genDefaultConstructor(IoUtil &ioUtil) {
+    ioUtil.appendContent("public:\n");
+    className->genCode(ioUtil);
+    ioUtil.appendContent("() {}\n")
+    .appendContent("static ");
+    className->genCode(ioUtil);
+    ioUtil.appendContent(" *newObj(){\n")
+            .appendContent("return new ");
+    className->genCode(ioUtil);
+    ioUtil.appendContent("}\n");
 }
 
 void DefineNodeObject::Builder::setClassName(ASTNode *name) {
