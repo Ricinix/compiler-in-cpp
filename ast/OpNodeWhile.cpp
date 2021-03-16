@@ -17,7 +17,10 @@ OpNodeWhile *OpNodeWhile::Builder::build() {
 }
 
 void OpNodeWhile::genCode(IoUtil &ioUtil) {
-    ASTList::genCode(ioUtil);
+    ioUtil.appendContent("while(");
+    condition->genCode(ioUtil);
+    ioUtil.appendContent(")");
+    runBody->genCode(ioUtil);
 }
 
 OpNodeWhile::OpNodeWhile(ASTNode *conditionNode, ASTNode *runBodyNode) {
@@ -29,4 +32,8 @@ OpNodeWhile::OpNodeWhile(ASTNode *conditionNode, ASTNode *runBodyNode) {
 
 std::string OpNodeWhile::toString() const {
     return "while";
+}
+
+ASTNodeType OpNodeWhile::getType() {
+    return ASTNodeType::opWhile;
 }

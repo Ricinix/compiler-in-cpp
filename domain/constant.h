@@ -53,6 +53,7 @@ enum class ASTNodeType {
     funcCall,
     opElse,
     opIf,
+    opWhile,
     opFetchArr,
     opFetchDomain,
     normalStmt,
