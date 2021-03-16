@@ -5,7 +5,8 @@
 #include "OpNodeElse.h"
 
 void OpNodeElse::genCode(IoUtil &ioUtil) {
-    ASTList::genCode(ioUtil);
+    ioUtil.appendContent("else ");
+    runBody->genCode(ioUtil);
 }
 
 OpNodeElse::OpNodeElse(ASTNode *runBodyNode) {
@@ -15,6 +16,10 @@ OpNodeElse::OpNodeElse(ASTNode *runBodyNode) {
 
 std::string OpNodeElse::toString() const {
     return "else";
+}
+
+ASTNodeType OpNodeElse::getType() {
+    return ASTNodeType::opElse;
 }
 
 void OpNodeElse::Builder::setRunBody(ASTNode *runBodyNode) {

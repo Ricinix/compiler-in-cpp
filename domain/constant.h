@@ -50,6 +50,7 @@ enum class ASTNodeType {
     opBinaryExpr,
     block,
     funcCall,
+    opElse,
 };
 
 // 定义保留字
