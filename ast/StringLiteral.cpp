@@ -9,7 +9,9 @@ StringLiteral::StringLiteral(Token *t) : ASTLeaf(t) {
 }
 
 void StringLiteral::genCode(IoUtil &ioUtil) {
-    ioUtil.appendContent("\"" + token_ptr->getText() + "\" ");
+    ioUtil.appendContent("String::newObj(\"")
+    .appendContent(token_ptr->getText())
+    .appendContent("\")");
 }
 
 std::string StringLiteral::toString() const {
