@@ -6,6 +6,8 @@
 #include "../util/Log.h"
 #include "../lexer/Lexer.h"
 
+RuleSet *CompileOrder::ruleSet= RuleSet::generate();
+
 Order::Order(std::string &src, std::string &target, OrderType type) {
     srcPath = src;
     targetPath = target;
@@ -39,36 +41,12 @@ CompileOrder::CompileOrder(std::string &src, std::string &target, OrderType type
 void CompileOrder::exec() {
     Log::info("compiling" + getSrcPath());
     IoUtil ioUtil(getSrcPath(), getTargetPath());
-    auto *lexer_ptr = new Lexer(ioUtil);
-    auto *ruleSet = RuleSet::generate();
-    Parser parser(ruleSet, lexer_ptr);
-    parser.parse();
-    auto parseTree = parser.getParseTree();
-    Log::info(*parseTree);
-    auto *ast = parseTree->toAST();
-    Log::info(*ast);
-
-    auto *helper = new AbstractSyntaxTree::ASTHelper();
-    helper->load = CompileOrder::getAst;
-
-    ast->translateToCppTree(helper);
+    auto *ast = getAst(ioUtil);
+    // 打印cpp代码
     ast->generateCppCode(ioUtil);
     ioUtil.finish();
+    // 通过g++生成exe
     generateExe(ioUtil);
-}
-
-AbstractSyntaxTree *CompileOrder::getAst(const std::string &inPath) {
-    Log::info("compiling " + inPath);
-    IoUtil ioUtil(inPath);
-    auto *lexer_ptr = new Lexer(ioUtil);
-    auto *ruleSet = RuleSet::generate();
-    Parser parser(ruleSet, lexer_ptr);
-    parser.parse();
-    auto parseTree = parser.getParseTree();
-    Log::info(*parseTree);
-    auto *ast = parseTree->toAST();
-    Log::info(*ast);
-    return ast;
 }
 
 void CompileOrder::generateExe(IoUtil &ioUtil) {
@@ -81,4 +59,31 @@ void CompileOrder::generateExe(IoUtil &ioUtil) {
     fmt << exePath.replace(lastIndex, exePath.size() - lastIndex, ".exe");
     Log::info(fmt.str());
     system(fmt.str().c_str());
+}
+
+AbstractSyntaxTree *CompileOrder::getAst(IoUtil &ioUtil) {
+    // 词法分析
+    Lexer lexer(ioUtil);
+    // 语法分析
+    Parser parser(ruleSet, &lexer);
+    parser.parse();
+    auto *parseTree = parser.getParseTree();
+    Log::info(*parseTree);
+    // 语法分析树转抽象语法树
+    auto *ast = parseTree->toAST();
+    Log::info(*ast);
+    // 转cpp的抽象语法树
+    auto *helper = new AbstractSyntaxTree::ASTHelper();
+    helper->load = CompileOrder::getAstByInPath;
+    ast->translateToCppTree(helper);
+    delete parseTree;
+    return ast;
+}
+
+AbstractSyntaxTree *CompileOrder::getAstByInPath(const std::string &inPath) {
+    Log::info("compiling" + inPath);
+    IoUtil ioUtil(inPath);
+    auto *ast = getAst(ioUtil);
+    ioUtil.finish();
+    return ast;
 }

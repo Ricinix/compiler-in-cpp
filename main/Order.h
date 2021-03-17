@@ -35,8 +35,14 @@ protected:
 
 class CompileOrder : public Order {
 private:
-    static AbstractSyntaxTree *getAst(const std::string &inPath);
-    void generateExe(IoUtil &ioUtil);
+    static RuleSet *ruleSet;
+
+    static AbstractSyntaxTree *getAstByInPath(const std::string &inPath);
+
+    static AbstractSyntaxTree *getAst(IoUtil &ioUtil);
+
+    static void generateExe(IoUtil &ioUtil);
+
 public:
     CompileOrder(std::string &src, std::string &target, OrderType type);
 

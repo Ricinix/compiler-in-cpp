@@ -34,14 +34,7 @@ Token *Lexer::peek(int i) {
     }
 }
 
-Lexer::~Lexer() {
-    for (auto &ptr: ptrStore) {
-        if (ptr != nullptr) {
-            delete ptr;
-            ptr = nullptr;
-        }
-    }
-}
+Lexer::~Lexer() = default;
 
 Token *Lexer::getEofToken() {
     auto *eofToken = new Token(TokenType::eof);
