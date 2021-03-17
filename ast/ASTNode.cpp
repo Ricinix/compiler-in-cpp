@@ -214,8 +214,11 @@ void ASTList::remove(int i) {
 }
 
 void ASTList::remove(ASTNode *node) {
-    auto iter = std::find(children.cbegin(), children.cend(), node);
-    children.erase(iter, iter + 1);
+    for (int i = 0; i < numChildren(); ++i) {
+        if (child(i) == node) {
+            remove(i);
+        }
+    }
 }
 
 void ASTList::clear() {

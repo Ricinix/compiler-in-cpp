@@ -133,13 +133,24 @@ void OpNodeProgram::removeAndDelete(ASTNode *node) {
 void OpNodeProgram::removeChildNoDelete(ASTNode *node) {
     if (isDefineNode(node)) {
         // 定义结点
-        auto iter = std::find(defineList.cbegin(), defineList.cend(), node);
-        defineList.erase(iter, iter + 1);
+        for (int i = 0; i < defineNum(); ++i) {
+            if (defineList[i] == node) {
+                defineList.erase(defineList.begin() + i);
+                Log::info("找到define并删除");
+                return;
+            }
+        }
     } else {
         // 语句结点
-        auto iter = std::find(stmtList.cbegin(), stmtList.cend(), node);
-        stmtList.erase(iter, iter + 1);
+        for (int i = 0; i < stmtNum(); ++i) {
+            if (stmtList[i] == node) {
+                stmtList.erase(stmtList.begin() + i);
+                Log::info("找到stmt并删除");
+                return;
+            }
+        }
     }
+    Log::info("没找到：" + node->toString());
 }
 
 void OpNodeProgram::clear() {

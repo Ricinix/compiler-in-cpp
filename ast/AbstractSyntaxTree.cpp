@@ -65,18 +65,22 @@ void AbstractSyntaxTree::translateToCppTree(AbstractSyntaxTree::ASTHelper *helpe
 }
 
 void AbstractSyntaxTree::solveImport(AbstractSyntaxTree::ASTHelper *helper) {
+    std::vector<OpNodeImport *> importNodeList;
     for (int i = 0; i < getRootInProgram()->stmtNum(); ++i) {
         auto *stmt = getRootInProgram()->getStmt(i);
-        if (stmt->child(0) != nullptr && stmt->child(0)->getType() == ASTNodeType::importNode) {
+        if (stmt->numChildren() > 0 && stmt->child(0)->getType() == ASTNodeType::importNode) {
             auto *import = dynamic_cast<OpNodeImport *>(stmt->child(0));
             if (import != nullptr) {
-                auto *ast = helper->loadModule(import->getPathInStr());
-                concat(ast);
-                // 然后销毁新树和当前import结点
-                delete ast;
-                getRoot()->removeAndDelete(i);
+                importNodeList.push_back(import);
             }
         }
+    }
+    for (auto &import : importNodeList) {
+        auto *ast = helper->loadModule(import->getPathInStr());
+        concat(ast);
+        // 然后销毁新树和当前import结点
+        delete ast;
+        getRoot()->removeAndDelete(import->getFather());
     }
 }
 
@@ -122,8 +126,8 @@ void AbstractSyntaxTree::concat(AbstractSyntaxTree *ast) {
     for (int i = 0; i < ast->getRoot()->numChildren(); ++i) {
         auto *child = ast->getRoot()->child(i);
         getRootInProgram()->addNode(child);
-        ast->getRoot()->remove(i);
     }
+    ast->getRoot()->clear();
 }
 
 AbstractSyntaxTree::ASTHelper::ASTHelper(const std::string &inPath, AbstractSyntaxTree *(*loadFunc)(const std::string &)) {
