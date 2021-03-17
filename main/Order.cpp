@@ -3,8 +3,7 @@
 //
 
 #include "Order.h"
-#include "../util/Log.h"
-#include "../lexer/Lexer.h"
+#include "../rule/SymbolTable.h"
 
 RuleSet *CompileOrder::ruleSet= RuleSet::generate();
 
@@ -41,6 +40,7 @@ CompileOrder::CompileOrder(std::string &src, std::string &target, OrderType type
 void CompileOrder::exec() {
     Log::info("compiling" + getSrcPath());
     IoUtil ioUtil(getSrcPath(), getTargetPath());
+    SymbolTable::addModule(getSrcPath());
     auto *ast = getAst(ioUtil);
     // 打印cpp代码
     Log::info("final tree: ");

@@ -2,11 +2,13 @@
 // Created by laugh on 2021/3/2.
 //
 
+#include "../util/Log.h"
 #include "SymbolTable.h"
 #include <algorithm>
 
 std::map<std::string, bool> SymbolTable::reservedWordMap;
 TableCell *SymbolTable::tail = new TableCell;
+std::vector<std::string> SymbolTable::modulePathList;
 
 /**
  * 不包含Op
@@ -65,6 +67,38 @@ bool SymbolTable::insert(const std::string &id) {
     }
     tail->add(id);
     return true;
+}
+
+bool SymbolTable::addModule(const std::string &path) {
+    std::string modulePath = formatPath(path);
+    if (std::find(modulePathList.cbegin(), modulePathList.cend(), modulePath) != modulePathList.end()) {
+        return false;
+    }
+    modulePathList.push_back(modulePath);
+    Log::info("record module: " + modulePath);
+    return true;
+}
+
+std::string SymbolTable::formatPath(const std::string &path) {
+    int dotDotIndex;
+    std::string modulePath = path;
+    dotDotIndex = modulePath.find("..");
+    while (dotDotIndex != std::string::npos) {
+        int startIndex = dotDotIndex;
+        int backslashCount = 0;
+        while (startIndex > 0) {
+            if (modulePath[startIndex] == '/') {
+                ++backslashCount;
+                if (backslashCount == 2) {
+                    break;
+                }
+            }
+            --startIndex;
+        }
+        modulePath = modulePath.replace(startIndex, dotDotIndex + 3 - startIndex, "");
+        dotDotIndex = modulePath.find("..");
+    }
+    return modulePath;
 }
 
 bool TableCell::exist(const std::string &id) {

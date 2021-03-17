@@ -8,6 +8,7 @@
 #include "OriginArrayNode.h"
 #include "OriginPrintFuncNode.h"
 #include "../domain/exception.h"
+#include "../rule/SymbolTable.h"
 #include <iostream>
 
 AbstractSyntaxTree::AbstractSyntaxTree(ASTNode *rootNode) {
@@ -77,9 +78,11 @@ void AbstractSyntaxTree::solveImport(AbstractSyntaxTree::ASTHelper *helper) {
     }
     for (auto &import : importNodeList) {
         auto *ast = helper->loadModule(import->getPathInStr());
-        concat(ast);
-        // 然后销毁新树和当前import结点
-        delete ast;
+        if (ast != nullptr) {
+            concat(ast);
+            delete ast;
+        }
+        // 然后销毁当前import结点
         getRoot()->removeAndDelete(import->getFather());
     }
 }
@@ -139,5 +142,8 @@ AbstractSyntaxTree *AbstractSyntaxTree::ASTHelper::loadModule(const std::string 
     std::string targetPath = originPath;
     int index = targetPath.find_last_of('/');
     targetPath = targetPath.replace(index, targetPath.size() - index, "/" + path);
+    if (!SymbolTable::addModule(targetPath)) {
+        return nullptr;
+    }
     return load(targetPath);
 }
