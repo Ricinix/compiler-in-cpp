@@ -46,6 +46,10 @@ public:
 
     void removeAndDelete(ASTNode *node) override;
 
+    void clear() override;
+
+    void clearAndDelete() override;
+
     /**
      * 该方法没有判断是否重复定义
      * @param i

@@ -72,13 +72,23 @@ void OpNodeProgram::addDefineNode(ASTNode *node) {
             }
         }
     }
-    defineList.push_back(node);
-    addChild(node);
+    if (defineNum() == 0) {
+        defineList.push_back(node);
+        addChild(node);
+    } else {
+        defineList.insert(defineList.cbegin(), node);
+        insert(0, node);
+    }
 }
 
 void OpNodeProgram::addStmtNode(ASTNode *node) {
-    stmtList.push_back(node);
-    addChild(node);
+    if (stmtNum() == 0) {
+        stmtList.push_back(node);
+        addChild(node);
+    } else {
+        stmtList.insert(stmtList.cbegin(), node);
+        insert(0, node);
+    }
 }
 
 void OpNodeProgram::insertDefineNode(int i, ASTNode *node) {
@@ -130,4 +140,16 @@ void OpNodeProgram::removeChildNoDelete(ASTNode *node) {
         auto iter = std::find(stmtList.cbegin(), stmtList.cend(), node);
         stmtList.erase(iter, iter + 1);
     }
+}
+
+void OpNodeProgram::clear() {
+    ASTList::clear();
+    stmtList.clear();
+    defineList.clear();
+}
+
+void OpNodeProgram::clearAndDelete() {
+    stmtList.clear();
+    defineList.clear();
+    ASTList::clearAndDelete();
 }
