@@ -43,6 +43,8 @@ void CompileOrder::exec() {
     IoUtil ioUtil(getSrcPath(), getTargetPath());
     auto *ast = getAst(ioUtil);
     // 打印cpp代码
+    Log::info("final tree: ");
+    Log::info(*ast);
     ast->generateCppCode(ioUtil);
     ioUtil.finish();
     // 通过g++生成exe
