@@ -19,6 +19,12 @@ private:
 
     explicit OpNodeProgram(const std::vector<ASTNode *> &v);
 
+    void removeChildNoDelete(ASTNode *node);
+
+    void addDefineNode(ASTNode *node);
+
+    void addStmtNode(ASTNode *node);
+
 public:
     void genCode(IoUtil &ioUtil) override;
 
@@ -26,18 +32,25 @@ public:
 
     ASTNodeType getType() override;
 
-    void addDefineNode(ASTNode *node);
-
     int defineNum();
 
     ASTNode *getDefineNum(int i);
-
-    void addStmtNode(ASTNode *node);
 
     int stmtNum();
 
     ASTNode *getStmt(int i);
 
+    void addNode(ASTNode *node);
+
+    void remove(ASTNode *node) override;
+
+    void removeAndDelete(ASTNode *node) override;
+
+    /**
+     * 该方法没有判断是否重复定义
+     * @param i
+     * @param node
+     */
     void insertDefineNode(int i, ASTNode *node);
 
     class Builder {

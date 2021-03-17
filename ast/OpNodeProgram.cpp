@@ -4,6 +4,7 @@
 
 #include "OpNodeProgram.h"
 #include "DefineNodeFunction.h"
+#include <algorithm>
 
 void OpNodeProgram::Builder::appendChild(ASTNode *node) {
     programSet.push_back(node);
@@ -99,4 +100,34 @@ int OpNodeProgram::stmtNum() {
 
 ASTNode *OpNodeProgram::getStmt(int i) {
     return stmtList[i];
+}
+
+void OpNodeProgram::addNode(ASTNode *node) {
+    if (isDefineNode(node)) {
+        addDefineNode(node);
+    } else {
+        addStmtNode(node);
+    }
+}
+
+void OpNodeProgram::remove(ASTNode *node) {
+    ASTList::remove(node);
+    removeChildNoDelete(node);
+}
+
+void OpNodeProgram::removeAndDelete(ASTNode *node) {
+    removeChildNoDelete(node);
+    ASTList::removeAndDelete(node);
+}
+
+void OpNodeProgram::removeChildNoDelete(ASTNode *node) {
+    if (isDefineNode(node)) {
+        // 定义结点
+        auto iter = std::find(defineList.cbegin(), defineList.cend(), node);
+        defineList.erase(iter, iter + 1);
+    } else {
+        // 语句结点
+        auto iter = std::find(stmtList.cbegin(), stmtList.cend(), node);
+        stmtList.erase(iter, iter + 1);
+    }
 }
