@@ -3,10 +3,11 @@
 //
 
 #include "AbstractSyntaxTree.h"
-#include "OpNodeProgram.h"
+#include "OpNodeImport.h"
 #include "OriginNumberNode.h"
 #include "OriginArrayNode.h"
 #include "OriginPrintFuncNode.h"
+#include "../domain/exception.h"
 #include <iostream>
 
 AbstractSyntaxTree::AbstractSyntaxTree(ASTNode *rootNode) {
@@ -31,7 +32,7 @@ std::ostream &operator<<(std::ostream &os, const AbstractSyntaxTree &tree) {
     return os;
 }
 
-void AbstractSyntaxTree::printTree(ASTNode *node, std::ostream &fmt, std::string &indent) const{
+void AbstractSyntaxTree::printTree(ASTNode *node, std::ostream &fmt, std::string &indent) const {
     if (node == nullptr) {
         fmt << indent << "null";
         return;
@@ -60,12 +61,24 @@ void AbstractSyntaxTree::generateCppCode(IoUtil &ioUtil) {
 }
 
 void AbstractSyntaxTree::translateToCppTree(AbstractSyntaxTree::ASTHelper *helper) {
-    solveImport(helper->load);
+    solveImport(helper);
 
 }
 
-void AbstractSyntaxTree::solveImport(AbstractSyntaxTree *(*load)(const std::string &)) {
+void AbstractSyntaxTree::solveImport(AbstractSyntaxTree::ASTHelper *helper) {
+    for (int i = 0; i < getRootInProgram()->stmtNum(); ++i) {
+        auto *stmt = getRootInProgram()->getStmt(i);
+        if (stmt->child(0) != nullptr && stmt->child(0)->getType() == ASTNodeType::importNode) {
+            auto *import = dynamic_cast<OpNodeImport *>(stmt->child(0));
+            if (import != nullptr) {
+                auto *ast = helper->loadModule(import->getPathInStr());
+                concat(ast);
+                // TODO 然后销毁新树和当前import结点
+                delete ast;
 
+            }
+        }
+    }
 }
 
 void AbstractSyntaxTree::initObject() {
@@ -73,18 +86,12 @@ void AbstractSyntaxTree::initObject() {
         return;
     }
     originObj = new OriginObjectNode();
-    if (getRoot()->getType() == ASTNodeType::program) {
-        auto *program = dynamic_cast<OpNodeProgram *>(getRoot());
-        if (program == nullptr) {
-            return;
-        }
-        program->insertDefineNode(0, new OriginPrintFuncNode);
-        program->insertDefineNode(0, new OriginArrayNode);
-        program->insertDefineNode(0, new OriginNumberNode);
-        program->insertDefineNode(0, new OriginStringNode);
-        program->insertDefineNode(0, new OriginTrueNode);
-        program->insertDefineNode(0, originObj);
-    }
+    getRootInProgram()->insertDefineNode(0, new OriginPrintFuncNode);
+    getRootInProgram()->insertDefineNode(0, new OriginArrayNode);
+    getRootInProgram()->insertDefineNode(0, new OriginNumberNode);
+    getRootInProgram()->insertDefineNode(0, new OriginStringNode);
+    getRootInProgram()->insertDefineNode(0, new OriginTrueNode);
+    getRootInProgram()->insertDefineNode(0, originObj);
 }
 
 void AbstractSyntaxTree::checkFunc(ASTNode *node) {
@@ -95,4 +102,35 @@ void AbstractSyntaxTree::checkFunc(ASTNode *node) {
     for (int i = 0; i < node->numChildren(); ++i) {
         checkFunc(node->child(i));
     }
+}
+
+OpNodeProgram *AbstractSyntaxTree::getRootInProgram() {
+    if (programRoot != nullptr) {
+        return programRoot;
+    }
+    if (getRoot()->getType() == ASTNodeType::program) {
+        auto *program = dynamic_cast<OpNodeProgram *>(getRoot());
+        programRoot = program;
+        if (programRoot == nullptr) {
+            throw ParseException("ast root is not program node");
+        }
+        return programRoot;
+    }
+    return nullptr;
+}
+
+void AbstractSyntaxTree::concat(AbstractSyntaxTree *ast) {
+
+}
+
+AbstractSyntaxTree::ASTHelper::ASTHelper(const std::string &inPath, AbstractSyntaxTree *(*loadFunc)(const std::string &)) {
+    originPath = inPath;
+    load = loadFunc;
+}
+
+AbstractSyntaxTree *AbstractSyntaxTree::ASTHelper::loadModule(const std::string &path) {
+    std::string targetPath = originPath;
+    int index = targetPath.find_last_of('/');
+    targetPath = targetPath.replace(index, targetPath.size() - index, "/" + path);
+    return load(targetPath);
 }

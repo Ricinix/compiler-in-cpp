@@ -3,6 +3,7 @@
 //
 
 #include <sstream>
+#include <algorithm>
 #include "ASTNode.h"
 #include "../domain/exception.h"
 
@@ -43,11 +44,11 @@ void ASTNode::insert(int i, ASTNode *node) {
     throw IndexOutOfBoundsException(i);
 }
 
-void ASTNode::remove(int i) {
+void ASTNode::removeAndDelete(int i) {
     throw IndexOutOfBoundsException(i);
 }
 
-void ASTNode::remove(ASTNode* node) {
+void ASTNode::removeAndDelete(ASTNode* node) {
     throw IndexOutOfBoundsException(0);
 }
 
@@ -57,6 +58,14 @@ void ASTNode::append(ASTNode *node) {
 
 ASTNodeType ASTNode::getType() {
     return ASTNodeType::empty;
+}
+
+void ASTNode::remove(int i) {
+    throw IndexOutOfBoundsException(i);
+}
+
+void ASTNode::remove(ASTNode *node) {
+    throw IndexOutOfBoundsException(0);
 }
 
 ASTLeaf::ASTLeaf(Token *token_p) {
@@ -168,16 +177,16 @@ void ASTList::insert(int i, ASTNode *node) {
     node->setFather(this);
 }
 
-void ASTList::remove(int i) {
+void ASTList::removeAndDelete(int i) {
     auto *node = children[i];
     children.erase(children.cbegin() + i, children.cbegin() + i + 1);
     delete node;
 }
 
-void ASTList::remove(ASTNode *node) {
+void ASTList::removeAndDelete(ASTNode *node) {
     for (int i = 0; i < children.size(); ++i) {
         if (children[i] == node) {
-            remove(i);
+            removeAndDelete(i);
             break;
         }
     }
@@ -190,4 +199,13 @@ void ASTList::append(ASTNode *node) {
 
 ASTNodeType ASTList::getType() {
     return ASTNode::getType();
+}
+
+void ASTList::remove(int i) {
+    children.erase(children.cbegin() + i, children.cbegin() + i + 1);
+}
+
+void ASTList::remove(ASTNode *node) {
+    auto iter = std::find(children.cbegin(), children.cend(), node);
+    children.erase(iter, iter + 1);
 }

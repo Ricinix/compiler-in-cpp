@@ -7,11 +7,14 @@
 
 #include "ASTNode.h"
 #include "OriginObjectNode.h"
+#include "OpNodeProgram.h"
 #include <sstream>
 
 class AbstractSyntaxTree {
 private:
     ASTNode *root = nullptr;
+
+    OpNodeProgram *programRoot = nullptr;
 
     OriginObjectNode *originObj = nullptr;
 
@@ -19,13 +22,17 @@ private:
 
     void initObject();
 
-    void solveImport(AbstractSyntaxTree *(*load)(const std::string &));
-
     void checkFunc(ASTNode *node);
+
+    void concat(AbstractSyntaxTree *ast);
 public:
     class ASTHelper {
-    public:
+    private:
+        std::string originPath;
         AbstractSyntaxTree *(*load)(const std::string &);
+    public:
+        ASTHelper(const std::string &inPath, AbstractSyntaxTree *(*loadFunc)(const std::string &));
+        AbstractSyntaxTree *loadModule(const std::string &path);
     };
 
     explicit AbstractSyntaxTree(ASTNode *rootNode);
@@ -34,11 +41,16 @@ public:
 
     ASTNode *getRoot();
 
+    OpNodeProgram *getRootInProgram();
+
     void translateToCppTree(AbstractSyntaxTree::ASTHelper *helper);
 
     friend std::ostream &operator<<(std::ostream &os, const AbstractSyntaxTree &tree);
 
     void generateCppCode(IoUtil &ioUtil);
+
+private:
+    void solveImport(AbstractSyntaxTree::ASTHelper *helper);
 
 };
 

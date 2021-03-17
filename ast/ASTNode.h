@@ -23,6 +23,10 @@ public:
 
     virtual void append(ASTNode *node);
 
+    virtual void removeAndDelete(int i);
+
+    virtual void removeAndDelete(ASTNode *node);
+
     virtual void remove(int i);
 
     virtual void remove(ASTNode *node);
@@ -101,6 +105,10 @@ public:
     void insert(int i, ASTNode *node) override;
 
     void append(ASTNode *node) override;
+
+    void removeAndDelete(int i) override;
+
+    void removeAndDelete(ASTNode *node) override;
 
     void remove(int i) override;
 

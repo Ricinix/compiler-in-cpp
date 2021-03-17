@@ -28,7 +28,15 @@ public:
 
     void addDefineNode(ASTNode *node);
 
+    int defineNum();
+
+    ASTNode *getDefineNum(int i);
+
     void addStmtNode(ASTNode *node);
+
+    int stmtNum();
+
+    ASTNode *getStmt(int i);
 
     void insertDefineNode(int i, ASTNode *node);
 

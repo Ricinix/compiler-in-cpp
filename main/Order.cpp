@@ -73,9 +73,8 @@ AbstractSyntaxTree *CompileOrder::getAst(IoUtil &ioUtil) {
     auto *ast = parseTree->toAST();
     Log::info(*ast);
     // 转cpp的抽象语法树
-    auto *helper = new AbstractSyntaxTree::ASTHelper();
-    helper->load = CompileOrder::getAstByInPath;
-    ast->translateToCppTree(helper);
+    AbstractSyntaxTree::ASTHelper helper(ioUtil.getInPath(), CompileOrder::getAstByInPath);
+    ast->translateToCppTree(&helper);
     delete parseTree;
     return ast;
 }

@@ -3,6 +3,7 @@
 //
 
 #include "OpNodeProgram.h"
+#include "DefineNodeFunction.h"
 
 void OpNodeProgram::Builder::appendChild(ASTNode *node) {
     programSet.push_back(node);
@@ -56,6 +57,20 @@ bool OpNodeProgram::isDefineNode(ASTNode *node) {
 }
 
 void OpNodeProgram::addDefineNode(ASTNode *node) {
+    for (auto &child : defineList) {
+        if (node->getType() == ASTNodeType::clz && child->getType() == ASTNodeType::clz
+            && child->toString() == node->toString()) {
+            // 同名class则抛弃
+            return;
+        } else if (node->getType() == ASTNodeType::func && child->getType() == ASTNodeType::func) {
+            // 同一个函数则抛弃
+            auto *funcNode = dynamic_cast<DefineNodeFunction *>(node);
+            auto *funcChild = dynamic_cast<DefineNodeFunction *>(child);
+            if (funcNode != nullptr && funcChild != nullptr && funcNode->getHashMsg() == funcChild->getHashMsg()) {
+                return;
+            }
+        }
+    }
     defineList.push_back(node);
     addChild(node);
 }
@@ -68,4 +83,20 @@ void OpNodeProgram::addStmtNode(ASTNode *node) {
 void OpNodeProgram::insertDefineNode(int i, ASTNode *node) {
     defineList.insert(defineList.cbegin() + i, node);
     insert(i, node);
+}
+
+int OpNodeProgram::defineNum() {
+    return defineList.size();
+}
+
+ASTNode *OpNodeProgram::getDefineNum(int i) {
+    return defineList[i];
+}
+
+int OpNodeProgram::stmtNum() {
+    return stmtList.size();
+}
+
+ASTNode *OpNodeProgram::getStmt(int i) {
+    return stmtList[i];
 }

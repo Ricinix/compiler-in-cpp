@@ -26,6 +26,8 @@ public:
 
     std::string getOutPath();
 
+    std::string getInPath();
+
     char getNext();
 
     std::string readLine();

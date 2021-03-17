@@ -118,3 +118,7 @@ void IoUtil::finish() {
         fileOut.close();
     }
 }
+
+std::string IoUtil::getInPath() {
+    return inPath;
+}
