@@ -68,6 +68,14 @@ void ASTNode::remove(ASTNode *node) {
     throw IndexOutOfBoundsException(0);
 }
 
+void ASTNode::clear() {
+
+}
+
+void ASTNode::clearAndDelete() {
+
+}
+
 ASTLeaf::ASTLeaf(Token *token_p) {
     token_ptr = token_p;
 }
@@ -208,4 +216,15 @@ void ASTList::remove(int i) {
 void ASTList::remove(ASTNode *node) {
     auto iter = std::find(children.cbegin(), children.cend(), node);
     children.erase(iter, iter + 1);
+}
+
+void ASTList::clear() {
+    children.clear();
+}
+
+void ASTList::clearAndDelete() {
+    for (auto &node_ptr : children) {
+        delete node_ptr;
+    }
+    children.clear();
 }

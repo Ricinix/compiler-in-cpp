@@ -31,6 +31,10 @@ public:
 
     virtual void remove(ASTNode *node);
 
+    virtual void clear();
+
+    virtual void clearAndDelete();
+
     virtual ASTNode *child(int i);
 
     virtual int numChildren() const;
@@ -113,6 +117,10 @@ public:
     void remove(int i) override;
 
     void remove(ASTNode *node) override;
+
+    void clear() override;
+
+    void clearAndDelete() override;
 
     int numChildren() const override;
 
