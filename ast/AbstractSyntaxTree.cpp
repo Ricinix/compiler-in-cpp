@@ -62,7 +62,6 @@ void AbstractSyntaxTree::generateCppCode(IoUtil &ioUtil) {
 
 void AbstractSyntaxTree::translateToCppTree(AbstractSyntaxTree::ASTHelper *helper) {
     solveImport(helper);
-
 }
 
 void AbstractSyntaxTree::solveImport(AbstractSyntaxTree::ASTHelper *helper) {
@@ -73,9 +72,9 @@ void AbstractSyntaxTree::solveImport(AbstractSyntaxTree::ASTHelper *helper) {
             if (import != nullptr) {
                 auto *ast = helper->loadModule(import->getPathInStr());
                 concat(ast);
-                // TODO 然后销毁新树和当前import结点
+                // 然后销毁新树和当前import结点
                 delete ast;
-
+                getRoot()->removeAndDelete(i);
             }
         }
     }
@@ -120,7 +119,11 @@ OpNodeProgram *AbstractSyntaxTree::getRootInProgram() {
 }
 
 void AbstractSyntaxTree::concat(AbstractSyntaxTree *ast) {
-
+    for (int i = 0; i < ast->getRoot()->numChildren(); ++i) {
+        auto *child = ast->getRoot()->child(i);
+        getRootInProgram()->addNode(child);
+        ast->getRoot()->remove(i);
+    }
 }
 
 AbstractSyntaxTree::ASTHelper::ASTHelper(const std::string &inPath, AbstractSyntaxTree *(*loadFunc)(const std::string &)) {
