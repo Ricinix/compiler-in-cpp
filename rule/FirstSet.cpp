@@ -21,7 +21,7 @@ FirstSet::Builder::Builder(RuleItem *who) : BaseSymbolSetBuilder(who) {
 
 FirstSet *FirstSet::Builder::build() {
     std::ostringstream fmt("generate first set: ");
-    fmt << "FIRST(" << belongTo->getSymbolName() << ") = { ";
+    fmt << "FIRST(" << belongTo->getSymbolName() << ", " << std::to_string(multipleNum) << ") = { ";
     for (auto &r : symbolSet) {
         fmt << r->getSymbolName() << ", ";
     }

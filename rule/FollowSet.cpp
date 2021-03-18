@@ -2,13 +2,22 @@
 // Created by laugh on 2021/3/18.
 //
 
+#include <sstream>
 #include "FollowSet.h"
+#include "../util/Log.h"
 
 FollowSet::Builder::Builder(RuleItem *who) : BaseSymbolSetBuilder(who) {
 
 }
 
 FollowSet *FollowSet::Builder::build() {
+    std::ostringstream fmt("generate first set: ");
+    fmt << "FOLLOW(" << belongTo->getSymbolName() << ") = { ";
+    for (auto &r : symbolSet) {
+        fmt << r->getSymbolName() << ", ";
+    }
+    fmt << " }";
+    Log::info(fmt.str());
     return new FollowSet(belongTo, symbolSet);
 }
 
