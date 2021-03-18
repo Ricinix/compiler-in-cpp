@@ -6,8 +6,9 @@
 #include "FirstSet.h"
 #include "../util/Log.h"
 
-FirstSet::FirstSet(RuleItem *who, std::vector<RuleItem *> &first, bool hasEmptySymbol) : BaseSymbolSet(who, first) {
+FirstSet::FirstSet(RuleItem *who, std::vector<RuleItem *> &first, bool hasEmptySymbol, int multiple) : BaseSymbolSet(who, first) {
     hasEmpty = hasEmptySymbol;
+    multipleNum = multiple;
 }
 
 bool FirstSet::hasEmptySymbol() const {
@@ -26,7 +27,7 @@ FirstSet *FirstSet::Builder::build() {
     }
     fmt << " }";
     Log::info(fmt.str());
-    return new FirstSet(belongTo, symbolSet, hasEmpty);
+    return new FirstSet(belongTo, symbolSet, hasEmpty, multipleNum);
 }
 
 void FirstSet::Builder::addTerminalSymbol(RuleItem *ruleItem) {
@@ -43,4 +44,12 @@ void FirstSet::Builder::addEmptySymbol() {
     }
     hasEmpty = true;
     addTerminalSymbol(new EmptySymbol);
+}
+
+void FirstSet::Builder::setMultipleNum(int multiple) {
+    multipleNum = multiple;
+}
+
+void FirstSet::Builder::concatSymbolSet(BaseSymbolSet *set) {
+    BaseSymbolSetBuilder::concatSymbolSet(set);
 }

@@ -2,6 +2,7 @@
 // Created by laugh on 2021/3/1.
 //
 
+#include <sstream>
 #include "RuleSet.h"
 #include "../domain/exception.h"
 
@@ -314,4 +315,38 @@ void RuleSet::findFollow(FollowSet::Builder &builder, RuleItem *ruleItem) {
             }
         }
     }
+}
+
+FirstSet *RuleSet::getFirstSet(RuleSeq *ruleSeq, int startIndex, int endIndex) {
+    std::ostringstream fmt;
+    for (int i = startIndex; i < endIndex; ++i) {
+        fmt << ruleSeq->getRuleItemByPos(i)->getSymbolName();
+        if (i != endIndex - 1) {
+            fmt << "_";
+        }
+    }
+    auto firstPair = firstSet.find(fmt.str());
+    if (firstPair != firstSet.end()) {
+        return firstPair->second;
+    }
+    auto builder = FirstSet::Builder(ruleSeq->getRuleItemByPos(startIndex));
+    builder.setMultipleNum(endIndex - startIndex);
+    for (int i = startIndex; i < endIndex; ++i) {
+        auto *item = ruleSeq->getRuleItemByPos(i);
+        if (item->getRuleItemType() == RuleItemType::NonTerminal) {
+            // 非终结符
+            auto *first = getFirstSet(item);
+            builder.concatSymbolSet(first);
+            if (!first->hasEmptySymbol()) {
+                break;
+            }
+        } else {
+            // 终结符
+            builder.addTerminalSymbol(item);
+            break;
+        }
+    }
+    auto *first = builder.build();
+    firstSet[fmt.str()] = first;
+    return first;
 }

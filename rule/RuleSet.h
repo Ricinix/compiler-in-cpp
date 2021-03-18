@@ -53,6 +53,8 @@ public:
 
     FirstSet *getFirstSet(RuleItem *ruleItem);
 
+    FirstSet *getFirstSet(RuleSeq *ruleSeq, int startIndex, int endIndex);
+
     FollowSet *getFollowSet(RuleItem *ruleItem);
 };
 
