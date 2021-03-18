@@ -320,7 +320,11 @@ void RuleSet::findFollow(FollowSet::Builder &builder, RuleItem *ruleItem) {
 FirstSet *RuleSet::getFirstSet(RuleSeq *ruleSeq, int startIndex, int endIndex) {
     std::ostringstream fmt;
     for (int i = startIndex; i < endIndex; ++i) {
-        fmt << ruleSeq->getRuleItemByPos(i)->getSymbolName();
+        auto *item = ruleSeq->getRuleItemByPos(i);
+        if (item->getRuleItemType() != RuleItemType::NonTerminal) {
+            fmt << "T-";
+        }
+        fmt << item->getSymbolName();
         if (i != endIndex - 1) {
             fmt << "_";
         }
