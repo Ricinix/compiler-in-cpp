@@ -31,6 +31,8 @@ private:
 
     FollowSet *initFollowSet(RuleItem *ruleItem);
 
+    void findFollow(FollowSet::Builder &builder, RuleItem *ruleItem);
+
 public:
     Rule *makeNewRule(const std::string &name);
 

@@ -13,6 +13,7 @@ enum class RuleItemType {
     NonTerminal,
     Terminal,
     Empty,
+    End, // 给follow集用的
 };
 
 /**
@@ -58,6 +59,13 @@ class EmptySymbol : public RuleItem {
 
 public:
     explicit EmptySymbol();
+    RuleItemType getRuleItemType() override;
+    bool matchToken(Token *token) override;
+};
+
+class EndSymbol : public RuleItem {
+public:
+    explicit EndSymbol();
     RuleItemType getRuleItemType() override;
     bool matchToken(Token *token) override;
 };

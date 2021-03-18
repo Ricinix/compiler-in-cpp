@@ -9,9 +9,13 @@
 
 class FirstSet : public BaseSymbolSet {
 private:
-    FirstSet(RuleItem *who, std::vector<RuleItem *> &first);
+    bool hasEmpty;
+
+    FirstSet(RuleItem *who, std::vector<RuleItem *> &first, bool hasEmptySymbol);
 
 public:
+    bool hasEmptySymbol() const;
+
     class Builder : BaseSymbolSetBuilder {
     private:
         bool hasEmpty = false;
@@ -22,7 +26,7 @@ public:
 
         void addEmptySymbol();
 
-        RuleItem * getBelongSymbol() override;
+        RuleItem *getBelongSymbol() override;
 
         FirstSet *build();
     };

@@ -245,7 +245,7 @@ FirstSet *RuleSet::initFirstSet(RuleItem *ruleItem) {
 
 FollowSet *RuleSet::initFollowSet(RuleItem *ruleItem) {
     auto builder = FollowSet::Builder(ruleItem);
-    // TODO
+    findFollow(builder, ruleItem);
     auto *follow = builder.build();
     followSet[ruleItem->getSymbolName()] = follow;
     return follow;
@@ -285,4 +285,33 @@ bool RuleSet::findFirst(FirstSet::Builder &builder, RuleItem *ruleItem) {
         }
     }
     return hasEmpty;
+}
+
+void RuleSet::findFollow(FollowSet::Builder &builder, RuleItem *ruleItem) {
+    for (auto &rule : ruleSet) {
+        if (rule->getStartSymbol()->getSymbolName() == ruleItem->getSymbolName()) {
+            // 开始符号需要加入$
+            builder.addEndSymbol();
+        }
+        for (int i = 0; i < rule->ruleSeqNum(); ++i) {
+            // 检查每一条产生式
+            auto *ruleSeq = rule->getRuleSeq(i);
+            bool findFlag = false;
+            bool finishFlag = false;
+            for (int j = 0; j < ruleSeq->ruleItemNum() && !finishFlag; ++j) {
+                auto *symbol = ruleSeq->getRuleItemByPos(j);
+                if (findFlag) {
+                    auto *first = getFirstSet(symbol);
+                    builder.concatSymbolSet(first);
+                    finishFlag = !first->hasEmptySymbol();
+                }
+                if (symbol->getSymbolName() == ruleItem->getSymbolName()) {
+                    findFlag = true;
+                }
+            }
+            if (findFlag && !finishFlag && ruleItem->getSymbolName() != rule->getStartSymbol()->getSymbolName()) {
+                builder.concatSymbolSet(getFollowSet(rule->getStartSymbol()));
+            }
+        }
+    }
 }

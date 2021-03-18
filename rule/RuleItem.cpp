@@ -68,3 +68,15 @@ bool EmptySymbol::matchToken(Token *token) {
 RuleItemType EmptySymbol::getRuleItemType() {
     return RuleItemType::Empty;
 }
+
+bool EndSymbol::matchToken(Token *token) {
+    return false;
+}
+
+RuleItemType EndSymbol::getRuleItemType() {
+    return RuleItemType::End;
+}
+
+EndSymbol::EndSymbol() : RuleItem("$") {
+
+}

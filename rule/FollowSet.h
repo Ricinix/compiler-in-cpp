@@ -15,6 +15,8 @@ public:
     public:
         Builder(RuleItem *who);
         void addTerminalSymbol(RuleItem *ruleItem) override;
+        void addEndSymbol();
+        void concatSymbolSet(BaseSymbolSet *set) override;
         FollowSet *build();
     };
 };
