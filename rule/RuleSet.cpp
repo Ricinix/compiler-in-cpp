@@ -342,7 +342,11 @@ FirstSet *RuleSet::getFirstSet(RuleSeq *ruleSeq, int startIndex, int endIndex) {
             auto *first = getFirstSet(item);
             builder.concatSymbolSet(first);
             if (!first->hasEmptySymbol()) {
+                // 如果没有空则不需要继续往后查first集了
                 break;
+            }
+            if (i == endIndex - 1) {
+                builder.addEmptySymbol();
             }
         } else {
             // 终结符
