@@ -274,7 +274,7 @@ bool RuleSet::findFirst(FirstSet::Builder &builder, RuleItem *ruleItem) {
                 // 如果当前产生式所有都是空，则加入空
                 builder.addEmptySymbol();
             }
-        } else if (first->getRuleItemType() == RuleItemType::Terminal){
+        } else if (first->getRuleItemType() == RuleItemType::Terminal) {
             // 直接加入first集
             builder.addTerminalSymbol(first);
         } else {
@@ -357,4 +357,29 @@ FirstSet *RuleSet::getFirstSet(RuleSeq *ruleSeq, int startIndex, int endIndex) {
     auto *first = builder.build();
     firstSet[fmt.str()] = first;
     return first;
+}
+
+bool RuleSet::isLLOne() {
+    for (auto &rule : ruleSet) {
+        if (rule->ruleSeqNum() < 2) {
+            continue;
+        }
+        for (int i = 0; i < rule->ruleSeqNum() - 1; ++i) {
+            for (int j = i + 1; j < rule->ruleSeqNum(); ++j) {
+                auto *seqOne = rule->getRuleSeq(i);
+                auto *firstOne = getFirstSet(seqOne, 0, seqOne->ruleItemNum());
+                auto *seqTwo = rule->getRuleSeq(j);
+                auto *firstTwo = getFirstSet(seqTwo, 0, seqTwo->ruleItemNum());
+                if (firstOne->cross(firstTwo)) {
+                    return false;
+                }
+                if (firstOne->hasEmptySymbol() && firstTwo->cross(getFollowSet(rule->getStartSymbol()))) {
+                    return false;
+                } else if (firstTwo->hasEmptySymbol() && firstOne->cross(getFollowSet(rule->getStartSymbol()))) {
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
 }

@@ -56,6 +56,8 @@ public:
     FirstSet *getFirstSet(RuleSeq *ruleSeq, int startIndex, int endIndex);
 
     FollowSet *getFollowSet(RuleItem *ruleItem);
+
+    bool isLLOne();
 };
 
 

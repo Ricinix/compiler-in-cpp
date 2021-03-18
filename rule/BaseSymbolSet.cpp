@@ -17,6 +17,19 @@ RuleItem *BaseSymbolSet::getSymbolByPos(int i) {
     return symbolSet[i];
 }
 
+bool BaseSymbolSet::cross(BaseSymbolSet *set) {
+    for (int i = 0; i < set->SymbolNum(); ++i) {
+        for (auto &symbol : symbolSet) {
+            auto *other = set->getSymbolByPos(i);
+            if (symbol == other || (symbol->getRuleItemType() == other->getRuleItemType()
+                                   && symbol->getSymbolName() == other->getSymbolName())) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 void BaseSymbolSetBuilder::addTerminalSymbol(RuleItem *ruleItem) {
     for (auto &item : symbolSet) {
         if (item == ruleItem || (item->getSymbolName() == ruleItem->getSymbolName()

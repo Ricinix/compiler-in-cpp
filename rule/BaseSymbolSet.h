@@ -20,6 +20,13 @@ public:
     int SymbolNum();
 
     RuleItem *getSymbolByPos(int i);
+
+    /**
+     * 是否相交
+     * @param set
+     * @return
+     */
+    bool cross(BaseSymbolSet *set);
 };
 
 class BaseSymbolSetBuilder {
