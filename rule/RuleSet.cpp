@@ -226,7 +226,7 @@ FirstSet *RuleSet::getFirstSet(RuleItem *ruleItem) {
 
 FollowSet *RuleSet::getFollowSet(RuleItem *ruleItem) {
     if (ruleItem->getRuleItemType() != RuleItemType::NonTerminal) {
-        throw ParseException("can't get first set from terminal symbol");
+        throw ParseException("can't get follow set from terminal symbol");
     }
     auto follow = followSet.find(ruleItem->getSymbolName());
     if (follow != followSet.end()) {
