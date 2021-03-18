@@ -24,7 +24,7 @@ protected:
     std::string symbolName;
 public:
     explicit RuleItem(const std::string &name);
-    std::string getSymbolName();
+    virtual std::string getSymbolName();
     virtual RuleItemType getRuleItemType();
     virtual bool matchToken(Token* token);
 };
@@ -40,6 +40,7 @@ public:
     explicit TerminalSymbol(TokenType type);
     RuleItemType getRuleItemType() override;
     bool matchToken(Token *token) override;
+    std::string getSymbolName() override;
 };
 
 /**

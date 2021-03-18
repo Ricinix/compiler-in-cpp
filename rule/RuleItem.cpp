@@ -57,6 +57,25 @@ RuleItemType TerminalSymbol::getRuleItemType() {
     return RuleItemType::Terminal;
 }
 
+std::string TerminalSymbol::getSymbolName() {
+    if (tokenType == TokenType::string) {
+        return "STRING";
+    } else if (tokenType == TokenType::op) {
+        return "OP";
+    } else if (tokenType == TokenType::number) {
+        return "NUMBER";
+    } else if (tokenType == TokenType::identifier) {
+        return "IDENTIFIER";
+    } else if (tokenType == TokenType::eof) {
+        return "EOF";
+    } else if (tokenType == TokenType::eol) {
+        return "EOL";
+    } else if (tokenType == TokenType::none) {
+        return "NONE";
+    }
+    return RuleItem::getSymbolName();
+}
+
 EmptySymbol::EmptySymbol() : RuleItem("ε") {
 
 }

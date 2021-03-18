@@ -39,6 +39,11 @@ CompileOrder::CompileOrder(std::string &src, std::string &target, OrderType type
 
 void CompileOrder::exec() {
     Log::info("compiling" + getSrcPath());
+    if (ruleSet->isLLOne()) {
+        Log::info("check grammar is LL(1)");
+    } else {
+        Log::info("check grammar is not LL(1)");
+    }
     IoUtil ioUtil(getSrcPath(), getTargetPath());
     SymbolTable::addModule(getSrcPath());
     auto *ast = getAst(ioUtil);

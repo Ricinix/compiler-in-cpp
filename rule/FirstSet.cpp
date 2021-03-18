@@ -51,5 +51,10 @@ void FirstSet::Builder::setMultipleNum(int multiple) {
 }
 
 void FirstSet::Builder::concatSymbolSet(BaseSymbolSet *set) {
-    BaseSymbolSetBuilder::concatSymbolSet(set);
+    for (int i = 0; i < set->SymbolNum(); ++i) {
+        auto *symbol = set->getSymbolByPos(i);
+        if (symbol->getRuleItemType() != RuleItemType::Empty) {
+            addTerminalSymbol(symbol);
+        }
+    }
 }

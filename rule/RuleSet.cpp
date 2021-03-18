@@ -5,6 +5,7 @@
 #include <sstream>
 #include "RuleSet.h"
 #include "../domain/exception.h"
+#include "../util/Log.h"
 
 Rule *RuleSet::makeNewRule(const std::string &name) {
     Rule *rule_ptr = new Rule(name);
@@ -253,34 +254,35 @@ FollowSet *RuleSet::initFollowSet(RuleItem *ruleItem) {
 }
 
 bool RuleSet::findFirst(FirstSet::Builder &builder, RuleItem *ruleItem) {
+    auto name = ruleItem->getSymbolName();
+    if (ruleItem->getRuleItemType() == RuleItemType::Terminal) {
+        // 终结符
+        builder.addTerminalSymbol(ruleItem);
+        return false;
+    }
+    if (ruleItem->getRuleItemType() == RuleItemType::Empty) {
+        // 空
+        return true;
+    }
+    // 非终结符
     auto *rule = getRule(ruleItem);
     bool hasEmpty = false;
     for (int i = 0; i < rule->ruleSeqNum(); ++i) {
+        // 检查每个产生式
         auto *ruleSeq = rule->getRuleSeq(i);
-        if (ruleSeq->ruleItemNum() == 0) {
-            throw ParseException("rule seq is empty");
+        int emptyNum = 0;
+        for (int j = 0; j < ruleSeq->ruleItemNum(); ++j) {
+            // 检查产生式右边的每个符号
+            auto *symbol = ruleSeq->getRuleItemByPos(j);
+            if (findFirst(builder, symbol)) {
+                ++emptyNum;
+            } else {
+                break;
+            }
         }
-        auto *first = ruleSeq->getRuleItemByPos(0);
-        if (first->getRuleItemType() == RuleItemType::NonTerminal) {
-            int emptyCount = 0;
-            for (int j = 0; j < ruleSeq->ruleItemNum(); ++j) {
-                if (!findFirst(builder, ruleSeq->getRuleItemByPos(j))) {
-                    break;
-                } else {
-                    ++emptyCount;
-                }
-            }
-            if (emptyCount == ruleSeq->ruleItemNum() && ruleItem == builder.getBelongSymbol()) {
-                // 如果当前产生式所有都是空，则加入空
-                builder.addEmptySymbol();
-            }
-        } else if (first->getRuleItemType() == RuleItemType::Terminal) {
-            // 直接加入first集
-            builder.addTerminalSymbol(first);
-        } else {
+        if (emptyNum == ruleSeq->ruleItemNum()) {
             hasEmpty = true;
             if (ruleItem == builder.getBelongSymbol()) {
-                // 如果直接就找到空，则加入空
                 builder.addEmptySymbol();
             }
         }
@@ -367,15 +369,20 @@ bool RuleSet::isLLOne() {
         for (int i = 0; i < rule->ruleSeqNum() - 1; ++i) {
             for (int j = i + 1; j < rule->ruleSeqNum(); ++j) {
                 auto *seqOne = rule->getRuleSeq(i);
+                Log::info("doing " + rule->getStartSymbol()->getSymbolName() + " " + std::to_string(i));
                 auto *firstOne = getFirstSet(seqOne, 0, seqOne->ruleItemNum());
+                Log::info("doing " + rule->getStartSymbol()->getSymbolName() + " " + std::to_string(j));
                 auto *seqTwo = rule->getRuleSeq(j);
                 auto *firstTwo = getFirstSet(seqTwo, 0, seqTwo->ruleItemNum());
                 if (firstOne->cross(firstTwo)) {
+                    Log::info(rule->getStartSymbol()->getSymbolName() + " " + std::to_string(i) + " and " + std::to_string(j) + " is cross");
                     return false;
                 }
                 if (firstOne->hasEmptySymbol() && firstTwo->cross(getFollowSet(rule->getStartSymbol()))) {
+                    Log::info(rule->getStartSymbol()->getSymbolName() + " " + std::to_string(i) + " is empty, " + std::to_string(j) + " cross follow");
                     return false;
                 } else if (firstTwo->hasEmptySymbol() && firstOne->cross(getFollowSet(rule->getStartSymbol()))) {
+                    Log::info(rule->getStartSymbol()->getSymbolName() + " " + std::to_string(j) + " is empty, " + std::to_string(i) + " cross follow");
                     return false;
                 }
             }
