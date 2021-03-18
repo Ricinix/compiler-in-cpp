@@ -6,13 +6,22 @@
 #define DESIGN_1_RULESET_H
 
 #include <map>
-#include <vector>
 #include "Rule.h"
+#include "FirstSet.h"
+#include "FollowSet.h"
 
 class RuleSet {
 private:
     std::vector<Rule *> ruleSet;
     std::map<std::string, Rule *> ruleMap;
+    std::map<std::string, FirstSet *> firstSet;
+    std::map<std::string, FollowSet *> followSet;
+
+    Rule *getRule(std::string &startSymbolName);
+
+    FirstSet *initFirstSet(RuleItem *ruleItem);
+
+    FollowSet *initFollowSet(RuleItem *ruleItem);
 
 public:
     Rule *makeNewRule(const std::string &name);
@@ -30,9 +39,11 @@ public:
 
     Rule *getRule(int i);
 
-    Rule *getRule(std::string &startSymbolName);
-
     Rule *getRule(RuleItem *startSymbol);
+
+    FirstSet *getFirstSet(RuleItem *ruleItem);
+
+    FollowSet *getFollowSet(RuleItem *ruleItem);
 };
 
 

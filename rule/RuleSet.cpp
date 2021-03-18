@@ -3,6 +3,7 @@
 //
 
 #include "RuleSet.h"
+#include "../domain/exception.h"
 
 Rule *RuleSet::makeNewRule(const std::string &name) {
     Rule *rule_ptr = new Rule(name);
@@ -86,12 +87,12 @@ RuleSet *RuleSet::generate() {
     // primary 语法，包含了6个新产生式
     auto *primary = ruleSet->makeNewRule(NS_PRIMARY);
     primary->makeNewSeq()->appendTerminalSymbol(RW_LEFT_SQUARE_BRACKET)->appendNonTerminalSymbol(NS_ELEMENTS_OR_NONE)
-    ->appendTerminalSymbol(RW_RIGHT_SQUARE_BRACKET);
+            ->appendTerminalSymbol(RW_RIGHT_SQUARE_BRACKET);
     primary->makeNewSeq()->appendTerminalSymbol(RW_LEFT_BRACKET)->appendNonTerminalSymbol(NS_EXPR)
             ->appendTerminalSymbol(RW_RIGHT_BRACKET)->appendNonTerminalSymbol(NS_PRIMARY_STAR);
     primary->makeNewSeq()->appendTerminalSymbol(TokenType::number)->appendNonTerminalSymbol(NS_DECIMALS);
     primary->makeNewSeq()->appendNonTerminalSymbol(NS_NEW)->appendTerminalSymbol(TokenType::identifier)
-    ->appendNonTerminalSymbol(NS_PRIMARY_STAR);
+            ->appendNonTerminalSymbol(NS_PRIMARY_STAR);
     primary->makeNewSeq()->appendNonTerminalSymbol(NS_IMPORT_OR_NONE)->appendTerminalSymbol(TokenType::string);
     auto *primary2 = ruleSet->makeNewRule(NS_PRIMARY_STAR);
     primary2->makeNewSeq()->appendNonTerminalSymbol(NS_POSTFIX)->appendNonTerminalSymbol(NS_PRIMARY_STAR);
@@ -123,7 +124,7 @@ RuleSet *RuleSet::generate() {
     // param_list 语法，包含了2个新产生式
     auto *paramList = ruleSet->makeNewRule(NS_PARAM_LIST);
     paramList->makeNewSeq()->appendTerminalSymbol(RW_LEFT_BRACKET)->appendNonTerminalSymbol(NS_PARAM_LIST_OR_NONE)
-    ->appendTerminalSymbol(RW_RIGHT_BRACKET);
+            ->appendTerminalSymbol(RW_RIGHT_BRACKET);
     auto *paramList2 = ruleSet->makeNewRule(NS_PARAM_LIST_OR_NONE);
     paramList2->makeNewSeq()->appendNonTerminalSymbol(NS_PARAMS);
     paramList2->makeEmptySeq();
@@ -131,7 +132,7 @@ RuleSet *RuleSet::generate() {
     // func 语法，包含了1个新产生式
     auto *func = ruleSet->makeNewRule(NS_FUNC);
     func->makeNewSeq()->appendTerminalSymbol(RW_FUNC)->appendTerminalSymbol(TokenType::identifier)
-    ->appendNonTerminalSymbol(NS_PARAM_LIST)->appendNonTerminalSymbol(NS_BLOCK);
+            ->appendNonTerminalSymbol(NS_PARAM_LIST)->appendNonTerminalSymbol(NS_BLOCK);
 
     // args 语法，包含了2个新产生式
     auto *args = ruleSet->makeNewRule(NS_ARGS);
@@ -144,9 +145,9 @@ RuleSet *RuleSet::generate() {
     auto *postfix = ruleSet->makeNewRule(NS_POSTFIX);
     postfix->makeNewSeq()->appendTerminalSymbol(RW_DOT)->appendTerminalSymbol(TokenType::identifier);
     postfix->makeNewSeq()->appendTerminalSymbol(RW_LEFT_BRACKET)->appendNonTerminalSymbol(NS_POSTFIX_OR_NONE)
-    ->appendTerminalSymbol(RW_RIGHT_BRACKET);
+            ->appendTerminalSymbol(RW_RIGHT_BRACKET);
     postfix->makeNewSeq()->appendTerminalSymbol(RW_LEFT_SQUARE_BRACKET)->appendNonTerminalSymbol(NS_EXPR)
-    ->appendTerminalSymbol(RW_RIGHT_SQUARE_BRACKET);
+            ->appendTerminalSymbol(RW_RIGHT_SQUARE_BRACKET);
     auto *postfixOrNone = ruleSet->makeNewRule(NS_POSTFIX_OR_NONE);
     postfixOrNone->makeNewSeq()->appendNonTerminalSymbol(NS_ARGS);
     postfixOrNone->makeEmptySeq();
@@ -154,7 +155,7 @@ RuleSet *RuleSet::generate() {
     // class 语法，包含了2个新产生式
     auto *classRule = ruleSet->makeNewRule(NS_CLASS);
     classRule->makeNewSeq()->appendTerminalSymbol(RW_CLASS)->appendTerminalSymbol(TokenType::identifier)
-    ->appendNonTerminalSymbol(NS_EXTENDS)->appendNonTerminalSymbol(NS_CLASS_BODY);
+            ->appendNonTerminalSymbol(NS_EXTENDS)->appendNonTerminalSymbol(NS_CLASS_BODY);
     auto *extends = ruleSet->makeNewRule(NS_EXTENDS);
     extends->makeNewSeq()->appendTerminalSymbol(RW_EXTENDS)->appendTerminalSymbol(TokenType::identifier);
     extends->makeEmptySeq();
@@ -162,13 +163,13 @@ RuleSet *RuleSet::generate() {
     // class_body 语法，包含了3个新产生式
     auto *classBody = ruleSet->makeNewRule(NS_CLASS_BODY);
     classBody->makeNewSeq()->appendTerminalSymbol(RW_LEFT_BRACE)->appendNonTerminalSymbol(NS_MEMBER_OR_NONE)
-    ->appendNonTerminalSymbol(NS_CLASS_BODY_STAR)->appendTerminalSymbol(RW_RIGHT_BRACE);
+            ->appendNonTerminalSymbol(NS_CLASS_BODY_STAR)->appendTerminalSymbol(RW_RIGHT_BRACE);
     auto *memberOrNone = ruleSet->makeNewRule(NS_MEMBER_OR_NONE);
     memberOrNone->makeNewSeq()->appendNonTerminalSymbol(NS_MEMBER);
     memberOrNone->makeEmptySeq();
     auto *classBodyStar = ruleSet->makeNewRule(NS_CLASS_BODY_STAR);
     classBodyStar->makeNewSeq()->appendNonTerminalSymbol(NS_LINE_END)->appendNonTerminalSymbol(NS_MEMBER_OR_NONE)
-    ->appendNonTerminalSymbol(NS_CLASS_BODY_STAR);
+            ->appendNonTerminalSymbol(NS_CLASS_BODY_STAR);
     classBodyStar->makeEmptySeq();
 
     // member 语法，包含了3个新产生式
@@ -210,4 +211,42 @@ Rule *RuleSet::getRule(std::string &startSymbolName) {
 Rule *RuleSet::getRule(RuleItem *startSymbol) {
     std::string symbolName = startSymbol->getSymbolName();
     return getRule(symbolName);
+}
+
+FirstSet *RuleSet::getFirstSet(RuleItem *ruleItem) {
+    if (ruleItem->getRuleItemType() != RuleItemType::NonTerminal) {
+        throw ParseException("can't get first set from terminal symbol");
+    }
+    auto first = firstSet.find(ruleItem->getSymbolName());
+    if (first != firstSet.end()) {
+        return first->second;
+    }
+    return initFirstSet(ruleItem);
+}
+
+FollowSet *RuleSet::getFollowSet(RuleItem *ruleItem) {
+    if (ruleItem->getRuleItemType() != RuleItemType::NonTerminal) {
+        throw ParseException("can't get first set from terminal symbol");
+    }
+    auto follow = followSet.find(ruleItem->getSymbolName());
+    if (follow != followSet.end()) {
+        return follow->second;
+    }
+    return initFollowSet(ruleItem);
+}
+
+FirstSet *RuleSet::initFirstSet(RuleItem *ruleItem) {
+    auto builder = FirstSet::Builder(ruleItem);
+    // TODO
+    auto *first = builder.build();
+    firstSet[ruleItem->getSymbolName()] = first;
+    return first;
+}
+
+FollowSet *RuleSet::initFollowSet(RuleItem *ruleItem) {
+    auto builder = FollowSet::Builder(ruleItem);
+    // TODO
+    auto *follow = builder.build();
+    followSet[ruleItem->getSymbolName()] = follow;
+    return follow;
 }
