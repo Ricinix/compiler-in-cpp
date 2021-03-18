@@ -24,9 +24,9 @@ private:
 public:
     void finish();
 
-    std::string getOutPath();
+    const std::string &getOutPath() const;
 
-    std::string getInPath();
+    const std::string &getInPath() const;
 
     char getNext();
 

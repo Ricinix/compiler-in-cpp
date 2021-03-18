@@ -106,7 +106,7 @@ IoUtil &IoUtil::newLine() {
     return *this;
 }
 
-std::string IoUtil::getOutPath() {
+const std::string &IoUtil::getOutPath() const {
     return outPath;
 }
 
@@ -119,6 +119,6 @@ void IoUtil::finish() {
     }
 }
 
-std::string IoUtil::getInPath() {
+const std::string &IoUtil::getInPath() const {
     return inPath;
 }
