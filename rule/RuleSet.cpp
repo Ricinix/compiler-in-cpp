@@ -216,10 +216,7 @@ Rule *RuleSet::getRule(RuleItem *startSymbol) {
 }
 
 FirstSet *RuleSet::getFirstSet(RuleItem *ruleItem) {
-    if (ruleItem->getRuleItemType() != RuleItemType::NonTerminal) {
-        throw ParseException("can't get first set from terminal symbol");
-    }
-    auto first = firstSet.find(ruleItem->getSymbolName());
+    auto first = firstSet.find(getHashCode(ruleItem));
     if (first != firstSet.end()) {
         return first->second;
     }
@@ -241,7 +238,7 @@ FirstSet *RuleSet::initFirstSet(RuleItem *ruleItem) {
     auto builder = FirstSet::Builder(ruleItem);
     findFirst(builder, ruleItem);
     auto *first = builder.build();
-    firstSet[ruleItem->getSymbolName()] = first;
+    firstSet[getHashCode(ruleItem)] = first;
     return first;
 }
 
@@ -323,10 +320,7 @@ FirstSet *RuleSet::getFirstSet(RuleSeq *ruleSeq, int startIndex, int endIndex) {
     std::ostringstream fmt;
     for (int i = startIndex; i < endIndex; ++i) {
         auto *item = ruleSeq->getRuleItemByPos(i);
-        if (item->getRuleItemType() != RuleItemType::NonTerminal) {
-            fmt << "T-";
-        }
-        fmt << item->getSymbolName();
+        fmt << getHashCode(item);
         if (i != endIndex - 1) {
             fmt << "_";
         }
@@ -334,6 +328,9 @@ FirstSet *RuleSet::getFirstSet(RuleSeq *ruleSeq, int startIndex, int endIndex) {
     auto firstPair = firstSet.find(fmt.str());
     if (firstPair != firstSet.end()) {
         return firstPair->second;
+    }
+    if (endIndex - startIndex == 1) {
+        return getFirstSet(ruleSeq->getRuleItemByPos(startIndex));
     }
     auto builder = FirstSet::Builder(ruleSeq->getRuleItemByPos(startIndex));
     builder.setMultipleNum(endIndex - startIndex);
@@ -389,4 +386,12 @@ bool RuleSet::isLLOne() {
         }
     }
     return true;
+}
+
+std::string RuleSet::getHashCode(RuleItem *ruleItem) {
+    if (ruleItem->getRuleItemType() == RuleItemType::NonTerminal) {
+        return ruleItem->getSymbolName();
+    } else {
+        return "T-" + ruleItem->getSymbolName();
+    }
 }

@@ -33,6 +33,8 @@ private:
 
     void findFollow(FollowSet::Builder &builder, RuleItem *ruleItem);
 
+    static std::string getHashCode(RuleItem *ruleItem);
+
 public:
     Rule *makeNewRule(const std::string &name);
 
