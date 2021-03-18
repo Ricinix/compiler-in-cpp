@@ -12,6 +12,10 @@ FollowSet *FollowSet::Builder::build() {
     return new FollowSet(belongTo, symbolSet);
 }
 
+void FollowSet::Builder::addTerminalSymbol(RuleItem *ruleItem) {
+    BaseSymbolSetBuilder::addTerminalSymbol(ruleItem);
+}
+
 FollowSet::FollowSet(RuleItem *who, std::vector<RuleItem *> &follow) : BaseSymbolSet(who, follow) {
 
 }

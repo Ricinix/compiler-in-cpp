@@ -237,7 +237,7 @@ FollowSet *RuleSet::getFollowSet(RuleItem *ruleItem) {
 
 FirstSet *RuleSet::initFirstSet(RuleItem *ruleItem) {
     auto builder = FirstSet::Builder(ruleItem);
-    // TODO
+    findFirst(builder, ruleItem);
     auto *first = builder.build();
     firstSet[ruleItem->getSymbolName()] = first;
     return first;
@@ -249,4 +249,40 @@ FollowSet *RuleSet::initFollowSet(RuleItem *ruleItem) {
     auto *follow = builder.build();
     followSet[ruleItem->getSymbolName()] = follow;
     return follow;
+}
+
+bool RuleSet::findFirst(FirstSet::Builder &builder, RuleItem *ruleItem) {
+    auto *rule = getRule(ruleItem);
+    bool hasEmpty = false;
+    for (int i = 0; i < rule->ruleSeqNum(); ++i) {
+        auto *ruleSeq = rule->getRuleSeq(i);
+        if (ruleSeq->ruleItemNum() == 0) {
+            throw ParseException("rule seq is empty");
+        }
+        auto *first = ruleSeq->getRuleItemByPos(0);
+        if (first->getRuleItemType() == RuleItemType::NonTerminal) {
+            int emptyCount = 0;
+            for (int j = 0; j < ruleSeq->ruleItemNum(); ++j) {
+                if (!findFirst(builder, ruleSeq->getRuleItemByPos(j))) {
+                    break;
+                } else {
+                    ++emptyCount;
+                }
+            }
+            if (emptyCount == ruleSeq->ruleItemNum() && ruleItem == builder.getBelongSymbol()) {
+                // 如果当前产生式所有都是空，则加入空
+                builder.addEmptySymbol();
+            }
+        } else if (first->getRuleItemType() == RuleItemType::Terminal){
+            // 直接加入first集
+            builder.addTerminalSymbol(first);
+        } else {
+            hasEmpty = true;
+            if (ruleItem == builder.getBelongSymbol()) {
+                // 如果直接就找到空，则加入空
+                builder.addEmptySymbol();
+            }
+        }
+    }
+    return hasEmpty;
 }

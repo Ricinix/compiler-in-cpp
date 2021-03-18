@@ -26,7 +26,9 @@ protected:
 public:
     explicit BaseSymbolSetBuilder(RuleItem *who);
 
-    void addTerminalSymbol(RuleItem *ruleItem);
+    virtual RuleItem *getBelongSymbol();
+
+    virtual void addTerminalSymbol(RuleItem *ruleItem);
 };
 
 #endif //DESIGN_1_BASESYMBOLSET_H

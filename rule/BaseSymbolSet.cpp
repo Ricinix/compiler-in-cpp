@@ -16,3 +16,7 @@ void BaseSymbolSetBuilder::addTerminalSymbol(RuleItem *ruleItem) {
 BaseSymbolSetBuilder::BaseSymbolSetBuilder(RuleItem *who) {
     belongTo = who;
 }
+
+RuleItem *BaseSymbolSetBuilder::getBelongSymbol() {
+    return belongTo;
+}

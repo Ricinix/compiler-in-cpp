@@ -14,6 +14,7 @@ public:
     class Builder : BaseSymbolSetBuilder {
     public:
         Builder(RuleItem *who);
+        void addTerminalSymbol(RuleItem *ruleItem) override;
         FollowSet *build();
     };
 };

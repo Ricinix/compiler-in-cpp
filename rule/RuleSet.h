@@ -21,6 +21,14 @@ private:
 
     FirstSet *initFirstSet(RuleItem *ruleItem);
 
+    /**
+     *
+     * @param builder
+     * @param ruleItem
+     * @return 是否有空
+     */
+    bool findFirst(FirstSet::Builder &builder, RuleItem *ruleItem);
+
     FollowSet *initFollowSet(RuleItem *ruleItem);
 
 public:
