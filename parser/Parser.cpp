@@ -3,6 +3,7 @@
 //
 
 #include "Parser.h"
+#include "../domain/exception.h"
 
 Parser::Parser(RuleSet *ruleSet, Lexer *lexer) {
     rules = ruleSet;
@@ -22,7 +23,8 @@ void Parser::parse() {
         Log::error("no rule");
         return;
     }
-    parseFromTop();
+//    parseFromTop();
+    parseFromTopWithStack();
 }
 
 void Parser::parseFromTop() {
@@ -45,7 +47,7 @@ ParseTree *Parser::getParseTree() {
     return parseTree;
 }
 
-bool Parser::recurParseFromTop(ParseTreeNode* node) {
+bool Parser::recurParseFromTop(ParseTreeNode *node) {
     if (node->isLeaf()) {
         // 叶子节点则不需要再构造子树，所以该节点为根节点的子树构造成功
         Log::info(node->getNodeName() + "已是叶子节点");
@@ -74,7 +76,7 @@ bool Parser::recurParseFromTop(ParseTreeNode* node) {
                     Log::info("增加新叶子节点: ε");
                     node->setChild(j, child);
 //                    node->appendChild(child);
-                } else if (ruleItem->matchToken(getNowToken())){
+                } else if (ruleItem->matchToken(getNowToken())) {
                     // 终结符则停止
                     auto *child = new ParseTreeLeaf(ruleItem, getNowToken());
                     Log::info("增加新叶子节点: " + child->getNodeName());
@@ -111,5 +113,68 @@ Token *Parser::getNowToken() {
         nextToken();
     }
     return nowToken;
+}
+
+void Parser::parseFromTopWithStack() {
+    if (table == nullptr) {
+        throw ParseException("can't parse in this way without stateTransitionTable");
+    }
+    Rule *rule = rules->getRule(0);
+    auto *root = new ParseTreeNonLeaf(rule->getStartSymbol());
+    parseTree->setRoot(root);
+    symbolStack.push_back(root);
+    while (!symbolStack.empty()) {
+        auto *topNode = symbolStack[symbolStack.size() - 1];
+        auto *topSymbol = topNode->getRuleItem();
+        if (topNode->isLeaf() && topSymbol->matchToken(getNowToken())) {
+            // 加入终结符结点
+            symbolStack.pop_back();
+            Log::info(topSymbol->getSymbolName() + " match " + getNowToken()->getText() + ", stack element num: "
+                      + std::to_string(symbolStack.size()));
+            topNode->setToken(getNowToken());
+            nextToken();
+        } else if (topNode->isLeaf() && topSymbol->getRuleItemType() == RuleItemType::Empty) {
+            symbolStack.pop_back();
+            Log::info(topSymbol->getSymbolName() + " match " + getNowToken()->getText() + ", stack element num: "
+                      + std::to_string(symbolStack.size()));
+        } else if (topSymbol->getRuleItemType() == RuleItemType::Terminal) {
+            throw ParseException("terminal error");
+        } else {
+            auto *ruleSeq = table->getRuleSeq(topSymbol, getNowToken());
+            if (ruleSeq == nullptr) {
+                throw ParseException("rule seq error");
+            }
+            // 加入非终结符结点
+            symbolStack.pop_back();
+            for (int i = ruleSeq->ruleItemNum() - 1; i >= 0; --i) {
+                auto *symbol = ruleSeq->getRuleItemByPos(i);
+                if (symbol->getRuleItemType() == RuleItemType::NonTerminal) {
+                    auto *child = new ParseTreeNonLeaf(symbol);
+                    topNode->insertChild(0, child);
+                    symbolStack.push_back(child);
+                } else if (symbol->getRuleItemType() == RuleItemType::Empty) {
+                    auto *child = new ParseTreeLeaf(symbol, nullptr);
+                    Log::info("增加新叶子节点: ε");
+                    topNode->insertChild(0, child);
+                    symbolStack.push_back(child);
+                } else if (symbol->getRuleItemType() == RuleItemType::End) {
+                    Log::info("检测到: $");
+                } else if (symbol->getRuleItemType() == RuleItemType::Terminal) {
+                    auto *child = new ParseTreeLeaf(symbol, nullptr);
+                    Log::info("增加新叶子节点: " + child->getNodeName());
+                    topNode->insertChild(0, child);
+                    symbolStack.push_back(child);
+                }
+            }
+        }
+    }
+}
+
+Parser::Parser(RuleSet *ruleSet, Lexer *lexer, StateTransitionTable *sst) {
+    rules = ruleSet;
+    table = sst;
+    mLexer = lexer;
+    hasGetParseTree = false;
+    parseTree = new ParseTree();
 }
 

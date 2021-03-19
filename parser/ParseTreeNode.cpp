@@ -105,6 +105,15 @@ void ParseTreeNode::checkChildNum(int correctNum) {
     }
 }
 
+void ParseTreeNode::setToken(Token *t) {
+    token = t;
+}
+
+void ParseTreeNode::insertChild(int pos, ParseTreeNode *node) {
+    node->setFather(this);
+    children.insert(children.cbegin() + pos, node);
+}
+
 
 ParseTreeLeaf::ParseTreeLeaf(RuleItem *ruleItem, Token *token_p) : ParseTreeNode(ruleItem, token_p) {
 

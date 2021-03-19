@@ -36,12 +36,17 @@ protected:
 class CompileOrder : public Order {
 private:
     static RuleSet *ruleSet;
+    static StateTransitionTable *stateTransitionTable;
 
     static AbstractSyntaxTree *getAstByInPath(const std::string &inPath);
 
     static AbstractSyntaxTree *getAst(IoUtil &ioUtil);
 
     static void generateExe(IoUtil &ioUtil);
+
+    static RuleSet *getRuleSet();
+
+    static StateTransitionTable *getStateTable();
 
 public:
     CompileOrder(std::string &src, std::string &target, OrderType type);

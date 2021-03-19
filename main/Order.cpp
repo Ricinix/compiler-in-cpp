@@ -5,7 +5,8 @@
 #include "Order.h"
 #include "../rule/SymbolTable.h"
 
-RuleSet *CompileOrder::ruleSet= RuleSet::generate();
+RuleSet *CompileOrder::ruleSet = nullptr;
+StateTransitionTable *CompileOrder::stateTransitionTable = nullptr;
 
 Order::Order(std::string &src, std::string &target, OrderType type) {
     srcPath = src;
@@ -39,7 +40,7 @@ CompileOrder::CompileOrder(std::string &src, std::string &target, OrderType type
 
 void CompileOrder::exec() {
     Log::info("compiling" + getSrcPath());
-    if (ruleSet->isLLOne()) {
+    if (getRuleSet()->isLLOne()) {
         Log::info("check grammar is LL(1)");
     } else {
         Log::info("check grammar is not LL(1)");
@@ -72,7 +73,7 @@ AbstractSyntaxTree *CompileOrder::getAst(IoUtil &ioUtil) {
     // 词法分析
     Lexer lexer(ioUtil);
     // 语法分析
-    Parser parser(ruleSet, &lexer);
+    Parser parser(getRuleSet(), &lexer, getStateTable());
     parser.parse();
     auto *parseTree = parser.getParseTree();
     Log::info(*parseTree);
@@ -92,4 +93,18 @@ AbstractSyntaxTree *CompileOrder::getAstByInPath(const std::string &inPath) {
     auto *ast = getAst(ioUtil);
     ioUtil.finish();
     return ast;
+}
+
+RuleSet *CompileOrder::getRuleSet() {
+    if (ruleSet == nullptr) {
+        ruleSet = RuleSet::generate();
+    }
+    return ruleSet;
+}
+
+StateTransitionTable *CompileOrder::getStateTable() {
+    if (stateTransitionTable == nullptr) {
+        stateTransitionTable = new StateTransitionTable(getRuleSet());
+    }
+    return stateTransitionTable;
 }

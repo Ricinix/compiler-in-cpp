@@ -89,6 +89,9 @@ RuleItemType EmptySymbol::getRuleItemType() {
 }
 
 bool EndSymbol::matchToken(Token *token) {
+    if (token->getTokenType() == TokenType::eof) {
+        return true;
+    }
     return false;
 }
 

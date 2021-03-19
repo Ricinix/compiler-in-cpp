@@ -37,6 +37,8 @@ public:
 
     void setChild(int pos, ParseTreeNode *node);
 
+    void insertChild(int pos, ParseTreeNode *node);
+
     ParseTreeNode *getChild(int pos);
 
     int childNum();
@@ -48,6 +50,8 @@ public:
     virtual bool isLeaf();
 
     Token *getToken();
+
+    void setToken(Token *t);
 
     virtual std::string getNodeName() const;
 

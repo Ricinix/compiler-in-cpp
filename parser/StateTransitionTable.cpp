@@ -98,6 +98,13 @@ RuleSeq *StateTransitionTable::TableRow::get(RuleItem *terminal) {
 RuleSeq *StateTransitionTable::TableRow::get(Token *token) {
     for (auto &pair : list) {
         if (pair.first->matchToken(token)) {
+            std::ostringstream fmt;
+            fmt << "getting from stt: " << pair.second->getStartSymbol()->getSymbolName();
+            fmt << " -> ";
+            for (int i = 0; i < pair.second->ruleItemNum(); ++i) {
+                fmt << pair.second->getRuleItemByPos(i)->getSymbolName() << " ";
+            }
+            Log::info(fmt.str());
             return pair.second;
         }
     }
