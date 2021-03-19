@@ -2,7 +2,9 @@
 // Created by laugh on 2021/3/19.
 //
 
+#include <sstream>
 #include "../domain/exception.h"
+#include "../util/Log.h"
 #include "StateTransitionTable.h"
 
 StateTransitionTable::StateTransitionTable(RuleSet *set) {
@@ -29,13 +31,10 @@ StateTransitionTable::StateTransitionTable(RuleSet *set) {
 }
 
 RuleSeq *StateTransitionTable::getRuleSeq(RuleItem *startSymbol, Token *token) {
-    auto pair1 = table.find(startSymbol->getSymbolName());
-    if (pair1 != table.end()) {
-        for (auto &pair2 : *pair1->second) {
-            if (pair2.first->matchToken(token)) {
-                return pair2.second;
-            }
-        }
+    auto pair = table.find(startSymbol->getSymbolName());
+    if (pair != table.end()) {
+        Log::info("find pair");
+        return pair->second->get(token);
     }
     return nullptr;
 }
@@ -48,25 +47,59 @@ RuleSeq *StateTransitionTable::getRuleSeq(Token *token) {
             return ruleSeq;
         }
     }
-    return nullptr;
+    throw ParseException("can't find ruleSeq for " + token->getText());
 }
 
 bool StateTransitionTable::insert(RuleItem *startSymbol, RuleItem *terminal, RuleSeq *ruleSeq) {
     auto pair = table.find(startSymbol->getSymbolName());
     if (pair == table.end()) {
-        auto row = new std::map<RuleItem *, RuleSeq *>();
+        auto *row = new TableRow;
         table[startSymbol->getSymbolName()] = row;
-        (*row)[terminal] = ruleSeq;
-    } else {
-        auto t = *pair->second;
-        for (auto &pair2 : t) {
-            if (pair2.first->getSymbolName() == terminal->getSymbolName()
-                && pair2.first->getRuleItemType() == terminal->getRuleItemType()) {
-                throw ParseException(
-                        "rule seq repeat: M[" + startSymbol->getSymbolName() + ", " + terminal->getSymbolName() + "]");
-            }
+        if (!row->append(terminal, ruleSeq)) {
+            Log::info("insert fail");
         }
-        t[terminal] = ruleSeq;
+    } else {
+        auto *row = pair->second;
+        if (!row->append(terminal, ruleSeq)) {
+            throw ParseException(
+                    "rule seq repeat: M[" + startSymbol->getSymbolName() + ", " + terminal->getSymbolName() + "]");
+        }
     }
+    std::ostringstream fmt;
+    fmt << "succeed in adding M[" << startSymbol->getSymbolName();
+    fmt << ", " << terminal->getSymbolName() << "] = ";
+    fmt << ruleSeq->getStartSymbol()->getSymbolName() << " -> ";
+    for (int i = 0; i < ruleSeq->ruleItemNum(); ++i) {
+        fmt << ruleSeq->getRuleItemByPos(i)->getSymbolName() << " ";
+    }
+    Log::info(fmt.str());
     return true;
+}
+
+bool StateTransitionTable::TableRow::append(RuleItem *terminal, RuleSeq *ruleSeq) {
+    // 先查重
+    if (get(terminal) != nullptr) {
+        return false;
+    }
+    list.emplace_back(terminal, ruleSeq);
+    return true;
+}
+
+RuleSeq *StateTransitionTable::TableRow::get(RuleItem *terminal) {
+    for (auto &pair : list) {
+        if (pair.first->getRuleItemType() == terminal->getRuleItemType()
+            && pair.first->getSymbolName() == terminal->getSymbolName()) {
+            return pair.second;
+        }
+    }
+    return nullptr;
+}
+
+RuleSeq *StateTransitionTable::TableRow::get(Token *token) {
+    for (auto &pair : list) {
+        if (pair.first->matchToken(token)) {
+            return pair.second;
+        }
+    }
+    return nullptr;
 }

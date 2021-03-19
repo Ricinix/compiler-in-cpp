@@ -9,15 +9,26 @@
 
 class StateTransitionTable {
 private:
-    std::map<std::string, std::map<RuleItem *, RuleSeq *> *> table;
+    class TableRow {
+    private:
+        std::vector<std::pair<RuleItem *, RuleSeq *>> list;
+    public:
+        bool append(RuleItem *terminal, RuleSeq *ruleSeq);
+
+        RuleSeq *get(RuleItem *terminal);
+
+        RuleSeq *get(Token *token);
+    };
+
+    std::map<std::string, TableRow *> table;
     RuleSet *ruleSet;
 
-    RuleSeq *getRuleSeq(RuleItem *startSymbol, Token *token);
-
-    bool insert(RuleItem *startSymbol, RuleItem *terminal, RuleSeq * ruleSeq);
+    bool insert(RuleItem *startSymbol, RuleItem *terminal, RuleSeq *ruleSeq);
 
 public:
     explicit StateTransitionTable(RuleSet *set);
+
+    RuleSeq *getRuleSeq(RuleItem *startSymbol, Token *token);
 
     RuleSeq *getRuleSeq(Token *token);
 };
