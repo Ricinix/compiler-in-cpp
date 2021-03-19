@@ -45,3 +45,11 @@ int RuleSeq::ruleItemNum() {
     return ruleItemSet.size();
 }
 
+RuleSeq::RuleSeq(RuleItem *start) {
+    startSymbol = start;
+}
+
+RuleItem *RuleSeq::getStartSymbol() {
+    return startSymbol;
+}
+

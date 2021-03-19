@@ -10,14 +10,23 @@
 
 class RuleSeq {
 private:
-    std::vector<RuleItem*> ruleItemSet;
+    std::vector<RuleItem *> ruleItemSet;
+    RuleItem *startSymbol;
 public:
-    RuleSeq* appendNonTerminalSymbol(const std::string &name);
-    RuleSeq* appendTerminalSymbol(const std::string &name);
-    RuleSeq* appendTerminalSymbol(TokenType tokenType);
-    RuleSeq* appendEmpty();
+    explicit RuleSeq(RuleItem *start);
 
-    RuleItem* getRuleItemByPos(int pos);
+    RuleSeq *appendNonTerminalSymbol(const std::string &name);
+
+    RuleSeq *appendTerminalSymbol(const std::string &name);
+
+    RuleSeq *appendTerminalSymbol(TokenType tokenType);
+
+    RuleSeq *appendEmpty();
+
+    RuleItem *getStartSymbol();
+
+    RuleItem *getRuleItemByPos(int pos);
+
     int ruleItemNum();
 
     ~RuleSeq();

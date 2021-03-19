@@ -15,7 +15,7 @@ Rule::~Rule() {
 }
 
 RuleSeq *Rule::makeNewSeq() {
-    auto *ruleSeq_ptr = new RuleSeq();
+    auto *ruleSeq_ptr = new RuleSeq(getStartSymbol());
     ruleSeqSet.push_back(ruleSeq_ptr);
     return ruleSeq_ptr;
 }
@@ -26,7 +26,7 @@ Rule::Rule(const std::string &name) {
 }
 
 void Rule::makeEmptySeq() {
-    auto *ruleSeq_ptr = new RuleSeq();
+    auto *ruleSeq_ptr = new RuleSeq(getStartSymbol());
     ruleSeq_ptr->appendEmpty();
     ruleSeqSet.push_back(ruleSeq_ptr);
 }
