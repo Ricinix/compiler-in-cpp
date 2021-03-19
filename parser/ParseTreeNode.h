@@ -16,12 +16,8 @@
 class ParseTreeNode {
 protected:
     ParseTreeNode *father = nullptr;
-    std::vector<ParseTreeNode *> children;
     RuleItem *symbol;
     Token *token;
-
-    void checkChildNum(int correctNum);
-
 public:
     explicit ParseTreeNode(RuleItem *ruleItem);
 
@@ -33,25 +29,25 @@ public:
 
     ParseTreeNode *getFather();
 
-    void appendChild(ParseTreeNode *node);
-
-    void setChild(int pos, ParseTreeNode *node);
-
-    void insertChild(int pos, ParseTreeNode *node);
-
-    ParseTreeNode *getChild(int pos);
-
-    int childNum();
-
-    void clearChildren();
-
-    RuleItem *getRuleItem();
-
-    virtual bool isLeaf();
-
     Token *getToken();
 
     void setToken(Token *t);
+
+    RuleItem *getRuleItem();
+
+    virtual void appendChild(ParseTreeNode *node);
+
+    virtual void setChild(int pos, ParseTreeNode *node);
+
+    virtual void insertChild(int pos, ParseTreeNode *node);
+
+    virtual ParseTreeNode *getChild(int pos);
+
+    virtual int childNum();
+
+    virtual void clearChildren();
+
+    virtual bool isLeaf();
 
     virtual std::string getNodeName() const;
 
@@ -74,6 +70,10 @@ public:
 
 class ParseTreeNonLeaf : public ParseTreeNode {
 private:
+    std::vector<ParseTreeNode *> children;
+
+    void checkChildNum(int correctNum);
+
     ASTNode *parseChildDirectly();
 
     static ASTNode *parsePostfixNode(ASTNode *prefixNode, ParseTreeNode *targetNode);
@@ -83,11 +83,25 @@ private:
 public:
     explicit ParseTreeNonLeaf(RuleItem *ruleItem);
 
+    ~ParseTreeNonLeaf();
+
     bool isLeaf() override;
 
     std::string getNodeName() const override;
 
     ASTNode *toASTNode() override;
+
+    void appendChild(ParseTreeNode *node) override;
+
+    void clearChildren() override;
+
+    ParseTreeNode * getChild(int pos) override;
+
+    void insertChild(int pos, ParseTreeNode *node) override;
+
+    void setChild(int pos, ParseTreeNode *node) override;
+
+    int childNum() override;
 };
 
 #endif //DESIGN_1_PARSETREENODE_H

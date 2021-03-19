@@ -40,40 +40,26 @@ RuleItem *ParseTreeNode::getRuleItem() {
     return symbol;
 }
 
-ParseTreeNode::~ParseTreeNode() {
-    for (auto &child : children) {
-        delete child;
-        child = nullptr;
-    }
-}
+ParseTreeNode::~ParseTreeNode() = default;
 
 void ParseTreeNode::appendChild(ParseTreeNode *node) {
-    node->setFather(this);
-    children.push_back(node);
+    throw ParseException("can't append child to this node");
 }
 
 void ParseTreeNode::setChild(int pos, ParseTreeNode *node) {
-    if (childNum() >= pos) {
-        appendChild(node);
-        return;
-    }
-    if (children[pos] != nullptr) {
-        delete children[pos];
-    }
-    children[pos] = node;
-    node->setFather(this);
+    throw ParseException("can't set child to this node");
 }
 
 ParseTreeNode *ParseTreeNode::getChild(int pos) {
-    return children[pos];
+    throw ParseException("can't get child from this node, for there is no child");
 }
 
 int ParseTreeNode::childNum() {
-    return children.size();
+    return 0;
 }
 
 void ParseTreeNode::clearChildren() {
-    children.clear();
+    throw ParseException("can't clear children in this node, for there is no child");
 }
 
 bool ParseTreeNode::isLeaf() {
@@ -97,7 +83,7 @@ ASTNode *ParseTreeNode::toASTNode() {
     return nullptr;
 }
 
-void ParseTreeNode::checkChildNum(int correctNum) {
+void ParseTreeNonLeaf::checkChildNum(int correctNum) {
     if (childNum() != correctNum) {
         throw ParseException(
                 getNodeName() + " has wrong child num. correct: " + std::to_string(correctNum) + ", now: " +
@@ -110,8 +96,7 @@ void ParseTreeNode::setToken(Token *t) {
 }
 
 void ParseTreeNode::insertChild(int pos, ParseTreeNode *node) {
-    node->setFather(this);
-    children.insert(children.cbegin() + pos, node);
+    throw ParseException("can't insert child to this node");
 }
 
 
@@ -536,4 +521,46 @@ void ParseTreeNonLeaf::castMember(DefineNodeObject::Builder &builder, ASTNode *m
             builder.addDomain(domain);
         }
     }
+}
+
+void ParseTreeNonLeaf::appendChild(ParseTreeNode *node) {
+    node->setFather(this);
+    children.push_back(node);
+}
+
+void ParseTreeNonLeaf::clearChildren() {
+    children.clear();
+}
+
+ParseTreeNode *ParseTreeNonLeaf::getChild(int pos) {
+    return children[pos];
+}
+
+void ParseTreeNonLeaf::insertChild(int pos, ParseTreeNode *node) {
+    node->setFather(this);
+    children.insert(children.cbegin() + pos, node);
+}
+
+void ParseTreeNonLeaf::setChild(int pos, ParseTreeNode *node) {
+    if (childNum() >= pos) {
+        appendChild(node);
+        return;
+    }
+    if (children[pos] != nullptr) {
+        delete children[pos];
+    }
+    children[pos] = node;
+    node->setFather(this);
+}
+
+int ParseTreeNonLeaf::childNum() {
+    return children.size();
+}
+
+ParseTreeNonLeaf::~ParseTreeNonLeaf() {
+    for (auto &child : children) {
+        delete child;
+        child = nullptr;
+    }
+    children.clear();
 }
