@@ -3,6 +3,7 @@
 //
 
 #include "Parser.h"
+#include <ctime>
 #include "../domain/exception.h"
 
 Parser::Parser(RuleSet *ruleSet, Lexer *lexer) {
@@ -23,8 +24,10 @@ void Parser::parse() {
         Log::error("no rule");
         return;
     }
+    int startTime = clock();
 //    parseFromTop();
     parseFromTopWithStack();
+    Log::warm("parse run time: " + std::to_string((float)(clock()-startTime)*1000/CLOCKS_PER_SEC));
 }
 
 void Parser::parseFromTop() {
