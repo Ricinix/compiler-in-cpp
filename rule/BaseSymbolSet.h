@@ -16,6 +16,8 @@ protected:
 
     BaseSymbolSet(RuleItem *who, std::vector<RuleItem *> &symbols);
 
+    explicit BaseSymbolSet(RuleItem *who);
+
 public:
     int SymbolNum();
 
@@ -34,9 +36,10 @@ protected:
     std::vector<RuleItem *> symbolSet;
 
     RuleItem *belongTo;
-public:
+
     explicit BaseSymbolSetBuilder(RuleItem *who);
 
+public:
     virtual RuleItem *getBelongSymbol();
 
     virtual void concatSymbolSet(BaseSymbolSet *set);

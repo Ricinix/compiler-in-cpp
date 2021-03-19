@@ -29,9 +29,9 @@ private:
      */
     bool findFirst(FirstSet::Builder &builder, RuleItem *ruleItem);
 
-    FollowSet *initFollowSet(RuleItem *ruleItem);
+    void initFollowSet();
 
-    void findFollow(FollowSet::Builder &builder, RuleItem *ruleItem);
+    FollowSet *getFollowFromMap(RuleItem *ruleItem);
 
     static std::string getHashCode(RuleItem *ruleItem);
 

@@ -6,38 +6,52 @@
 #include "FollowSet.h"
 #include "../util/Log.h"
 
-FollowSet::Builder::Builder(RuleItem *who) : BaseSymbolSetBuilder(who) {
+FollowSet::FollowSet(RuleItem *who, std::vector<RuleItem *> &follow) : BaseSymbolSet(who, follow) {
 
 }
 
-FollowSet *FollowSet::Builder::build() {
-    std::ostringstream fmt("generate first set: ");
-    fmt << "FOLLOW(" << belongTo->getSymbolName() << ") = { ";
-    for (auto &r : symbolSet) {
-        fmt << r->getSymbolName() << ", ";
-    }
-    fmt << " }";
-    Log::info(fmt.str());
-    return new FollowSet(belongTo, symbolSet);
+FollowSet::FollowSet(RuleItem *who) : BaseSymbolSet(who) {
+
 }
 
-void FollowSet::Builder::addTerminalSymbol(RuleItem *ruleItem) {
-    BaseSymbolSetBuilder::addTerminalSymbol(ruleItem);
-}
-
-void FollowSet::Builder::addEndSymbol() {
-    addTerminalSymbol(new EndSymbol);
-}
-
-void FollowSet::Builder::concatSymbolSet(BaseSymbolSet *set) {
+bool FollowSet::concatSymbolSet(BaseSymbolSet *set) {
+    bool hasNew = false;
     for (int i = 0; i < set->SymbolNum(); ++i) {
         auto *symbol = set->getSymbolByPos(i);
         if (symbol->getRuleItemType() != RuleItemType::Empty) {
-            addTerminalSymbol(symbol);
+            if (addTerminalSymbol(symbol)) {
+                hasNew = true;
+            }
         }
     }
+    return hasNew;
 }
 
-FollowSet::FollowSet(RuleItem *who, std::vector<RuleItem *> &follow) : BaseSymbolSet(who, follow) {
+bool FollowSet::addTerminalSymbol(RuleItem *ruleItem) {
+    for (auto &item : symbolSet) {
+        if (item == ruleItem || (item->getSymbolName() == ruleItem->getSymbolName()
+                                 && item->getRuleItemType() == ruleItem->getRuleItemType())) {
+            return false;
+        }
+    }
+    symbolSet.push_back(ruleItem);
+    return true;
+}
 
+void FollowSet::addEndSymbol() {
+    if (hasEnd) {
+        return;
+    }
+    hasEnd = true;
+    addTerminalSymbol(new EndSymbol);
+}
+
+std::ostream &operator<<(std::ostream &os, const FollowSet &set) {
+    os << "generate first set: ";
+    os << "FOLLOW(" << set.belongTo->getSymbolName() << ") = { ";
+    for (auto &r : set.symbolSet) {
+        os << r->getSymbolName() << ", ";
+    }
+    os << " }";
+    return os;
 }

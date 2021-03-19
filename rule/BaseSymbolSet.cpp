@@ -30,6 +30,10 @@ bool BaseSymbolSet::cross(BaseSymbolSet *set) {
     return false;
 }
 
+BaseSymbolSet::BaseSymbolSet(RuleItem *who) {
+    belongTo = who;
+}
+
 void BaseSymbolSetBuilder::addTerminalSymbol(RuleItem *ruleItem) {
     for (auto &item : symbolSet) {
         if (item == ruleItem || (item->getSymbolName() == ruleItem->getSymbolName()

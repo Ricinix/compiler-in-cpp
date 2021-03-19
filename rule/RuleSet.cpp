@@ -227,11 +227,14 @@ FollowSet *RuleSet::getFollowSet(RuleItem *ruleItem) {
     if (ruleItem->getRuleItemType() != RuleItemType::NonTerminal) {
         throw ParseException("can't get follow set from terminal symbol");
     }
+    if (followSet.empty()) {
+        initFollowSet();
+    }
     auto follow = followSet.find(ruleItem->getSymbolName());
     if (follow != followSet.end()) {
         return follow->second;
     }
-    return initFollowSet(ruleItem);
+    throw ParseException("can't find " + ruleItem->getSymbolName() + "in follow set");
 }
 
 FirstSet *RuleSet::initFirstSet(RuleItem *ruleItem) {
@@ -242,12 +245,40 @@ FirstSet *RuleSet::initFirstSet(RuleItem *ruleItem) {
     return first;
 }
 
-FollowSet *RuleSet::initFollowSet(RuleItem *ruleItem) {
-    auto builder = FollowSet::Builder(ruleItem);
-    findFollow(builder, ruleItem);
-    auto *follow = builder.build();
-    followSet[ruleItem->getSymbolName()] = follow;
-    return follow;
+void RuleSet::initFollowSet() {
+    bool hasAddNew = true;
+    int round = 1;
+    while (hasAddNew) {
+        hasAddNew = false;
+        Log::info("init follow set round " + std::to_string(round) + " start");
+        for (auto &rule : ruleSet) {
+            auto *startFollow = getFollowFromMap(rule->getStartSymbol());
+            startFollow->addEndSymbol();
+            for (int i = 0; i < rule->ruleSeqNum(); ++i) {
+                auto *ruleSeq = rule->getRuleSeq(i);
+                for (int j = 0; j < ruleSeq->ruleItemNum(); ++j) {
+                    auto *symbol = ruleSeq->getRuleItemByPos(j);
+                    if (symbol->getRuleItemType() != RuleItemType::NonTerminal) {
+                        continue;
+                    }
+                    auto *symbolFollow = getFollowFromMap(symbol);
+                    if (j == ruleSeq->ruleItemNum() - 1) {
+                        // 在末尾，取头的follow
+                        hasAddNew = hasAddNew || symbolFollow->concatSymbolSet(startFollow);
+                    } else {
+                        // 不在末尾
+                        auto *first = getFirstSet(ruleSeq, j + 1, ruleSeq->ruleItemNum());;
+                        hasAddNew = hasAddNew || symbolFollow->concatSymbolSet(first);
+                        if (first->hasEmptySymbol()) {
+                            hasAddNew = hasAddNew || symbolFollow->concatSymbolSet(startFollow);
+                        }
+                    }
+                }
+            }
+            Log::info(*startFollow);
+        }
+        Log::info("init follow set round " + std::to_string(round++) + " end");
+    }
 }
 
 bool RuleSet::findFirst(FirstSet::Builder &builder, RuleItem *ruleItem) {
@@ -259,6 +290,9 @@ bool RuleSet::findFirst(FirstSet::Builder &builder, RuleItem *ruleItem) {
     }
     if (ruleItem->getRuleItemType() == RuleItemType::Empty) {
         // 空
+        if (ruleItem == builder.getBelongSymbol()) {
+            builder.addEmptySymbol();
+        }
         return true;
     }
     // 非终结符
@@ -285,35 +319,6 @@ bool RuleSet::findFirst(FirstSet::Builder &builder, RuleItem *ruleItem) {
         }
     }
     return hasEmpty;
-}
-
-void RuleSet::findFollow(FollowSet::Builder &builder, RuleItem *ruleItem) {
-    for (auto &rule : ruleSet) {
-        if (rule->getStartSymbol()->getSymbolName() == ruleItem->getSymbolName()) {
-            // 开始符号需要加入$
-            builder.addEndSymbol();
-        }
-        for (int i = 0; i < rule->ruleSeqNum(); ++i) {
-            // 检查每一条产生式
-            auto *ruleSeq = rule->getRuleSeq(i);
-            bool findFlag = false;
-            bool finishFlag = false;
-            for (int j = 0; j < ruleSeq->ruleItemNum() && !finishFlag; ++j) {
-                auto *symbol = ruleSeq->getRuleItemByPos(j);
-                if (findFlag) {
-                    auto *first = getFirstSet(symbol);
-                    builder.concatSymbolSet(first);
-                    finishFlag = !first->hasEmptySymbol();
-                }
-                if (symbol->getSymbolName() == ruleItem->getSymbolName()) {
-                    findFlag = true;
-                }
-            }
-            if (findFlag && !finishFlag && ruleItem->getSymbolName() != rule->getStartSymbol()->getSymbolName()) {
-                builder.concatSymbolSet(getFollowSet(rule->getStartSymbol()));
-            }
-        }
-    }
 }
 
 FirstSet *RuleSet::getFirstSet(RuleSeq *ruleSeq, int startIndex, int endIndex) {
@@ -372,14 +377,17 @@ bool RuleSet::isLLOne() {
                 auto *seqTwo = rule->getRuleSeq(j);
                 auto *firstTwo = getFirstSet(seqTwo, 0, seqTwo->ruleItemNum());
                 if (firstOne->cross(firstTwo)) {
-                    Log::info(rule->getStartSymbol()->getSymbolName() + " " + std::to_string(i) + " and " + std::to_string(j) + " is cross");
+                    Log::info(rule->getStartSymbol()->getSymbolName() + " " + std::to_string(i) + " and "
+                              + std::to_string(j) + " is cross");
                     return false;
                 }
                 if (firstOne->hasEmptySymbol() && firstTwo->cross(getFollowSet(rule->getStartSymbol()))) {
-                    Log::info(rule->getStartSymbol()->getSymbolName() + " " + std::to_string(i) + " is empty, " + std::to_string(j) + " cross follow");
+                    Log::info(rule->getStartSymbol()->getSymbolName() + " " + std::to_string(i) + " is empty, "
+                              + std::to_string(j) + " cross follow");
                     return false;
                 } else if (firstTwo->hasEmptySymbol() && firstOne->cross(getFollowSet(rule->getStartSymbol()))) {
-                    Log::info(rule->getStartSymbol()->getSymbolName() + " " + std::to_string(j) + " is empty, " + std::to_string(i) + " cross follow");
+                    Log::info(rule->getStartSymbol()->getSymbolName() + " " + std::to_string(j) + " is empty, "
+                              + std::to_string(i) + " cross follow");
                     return false;
                 }
             }
@@ -394,4 +402,17 @@ std::string RuleSet::getHashCode(RuleItem *ruleItem) {
     } else {
         return "T-" + ruleItem->getSymbolName();
     }
+}
+
+FollowSet *RuleSet::getFollowFromMap(RuleItem *ruleItem) {
+    if (ruleItem->getRuleItemType() != RuleItemType::NonTerminal) {
+        throw ParseException("can't generate follow set from terminal symbol");
+    }
+    auto pair = followSet.find(ruleItem->getSymbolName());
+    if (pair != followSet.end()) {
+        return pair->second;
+    }
+    auto *follow = new FollowSet(ruleItem);
+    followSet[ruleItem->getSymbolName()] = follow;
+    return follow;
 }

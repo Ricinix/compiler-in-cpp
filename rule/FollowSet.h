@@ -10,15 +10,13 @@
 class FollowSet : public BaseSymbolSet {
 private:
     FollowSet(RuleItem *who, std::vector<RuleItem *> &follow);
+    bool hasEnd = false;
 public:
-    class Builder : BaseSymbolSetBuilder {
-    public:
-        Builder(RuleItem *who);
-        void addTerminalSymbol(RuleItem *ruleItem) override;
-        void addEndSymbol();
-        void concatSymbolSet(BaseSymbolSet *set) override;
-        FollowSet *build();
-    };
+    explicit FollowSet(RuleItem *who);
+    bool concatSymbolSet(BaseSymbolSet *set);
+    bool addTerminalSymbol(RuleItem *ruleItem);
+    void addEndSymbol();
+    friend std::ostream &operator<<(std::ostream &os, const FollowSet &set);
 };
 
 
