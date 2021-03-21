@@ -81,32 +81,65 @@ bool StateTransitionTable::TableRow::append(RuleItem *terminal, RuleSeq *ruleSeq
     if (get(terminal) != nullptr) {
         return false;
     }
-    list.emplace_back(terminal, ruleSeq);
+//    list.emplace_back(terminal, ruleSeq);
+    map[getKey(terminal)] = std::pair(terminal, ruleSeq);
     return true;
 }
 
 RuleSeq *StateTransitionTable::TableRow::get(RuleItem *terminal) {
-    for (auto &pair : list) {
-        if (pair.first->getRuleItemType() == terminal->getRuleItemType()
-            && pair.first->getSymbolName() == terminal->getSymbolName()) {
-            return pair.second;
-        }
+//    for (auto &pair : list) {
+//        if (pair.first->getRuleItemType() == terminal->getRuleItemType()
+//            && pair.first->getSymbolName() == terminal->getSymbolName()) {
+//            return pair.second;
+//        }
+//    }
+    auto pair = map.find(getKey(terminal));
+    if (pair != map.end()) {
+        return pair->second.second;
     }
     return nullptr;
 }
 
 RuleSeq *StateTransitionTable::TableRow::get(Token *token) {
-    for (auto &pair : list) {
-        if (pair.first->matchToken(token)) {
-            std::ostringstream fmt;
-            fmt << "getting from stt: " << pair.second->getStartSymbol()->getSymbolName();
-            fmt << " -> ";
-            for (int i = 0; i < pair.second->ruleItemNum(); ++i) {
-                fmt << pair.second->getRuleItemByPos(i)->getSymbolName() << " ";
-            }
-            Log::info(fmt.str());
-            return pair.second;
-        }
+//    for (auto &pair : list) {
+//        if (pair.first->matchToken(token)) {
+//            std::ostringstream fmt;
+//            fmt << "getting from stt: " << pair.second->getStartSymbol()->getSymbolName();
+//            fmt << " -> ";
+//            for (int i = 0; i < pair.second->ruleItemNum(); ++i) {
+//                fmt << pair.second->getRuleItemByPos(i)->getSymbolName() << " ";
+//            }
+//            Log::info(fmt.str());
+//            return pair.second;
+//        }
+//    }
+    auto pair = map.find(getKey(token));
+    if (pair != map.end()) {
+        return pair->second.second;
     }
     return nullptr;
+}
+
+std::string StateTransitionTable::TableRow::getKey(RuleItem *terminal) {
+    return terminal->getSymbolName();
+}
+
+std::string StateTransitionTable::TableRow::getKey(Token *token) {
+    auto tokenType = token->getTokenType();
+    if (tokenType == TokenType::string) {
+        return "STRING";
+    } else if (tokenType == TokenType::op) {
+        return "OP";
+    } else if (tokenType == TokenType::number) {
+        return "NUMBER";
+    } else if (tokenType == TokenType::identifier) {
+        return "IDENTIFIER";
+    } else if (tokenType == TokenType::eof) {
+        return "$";
+    } else if (tokenType == TokenType::eol) {
+        return "EOL";
+    } else if (tokenType == TokenType::none) {
+        return "NONE";
+    }
+    return token->getText();
 }
