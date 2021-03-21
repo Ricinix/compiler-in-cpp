@@ -15,6 +15,8 @@ private:
 
     explicit OpNodeSimple(ASTNode *simpleStmtNode, bool isReturn);
 
+    static void checkIdList(ASTNode *node, std::vector<std::string> &list);
+
 public:
 
     void genCode(IoUtil &ioUtil) override;
