@@ -19,13 +19,13 @@ void OpNodeBlock::genCode(IoUtil &ioUtil) {
             hasReturn = true;
         }
     }
-    if (!hasReturn) {
-        // 释放资源(仅在block里没有return资源的情况下，删除在该block里new出来的变量)
-        for (int i = 0; i < SymbolTable::getIdNumInTailCell(); ++i) {
-            const std::string &id = SymbolTable::getIdByPos(i);
-            ioUtil.appendContent("delete " + id + ";\n");
-        }
-    }
+//    if (!hasReturn) {
+//        // 释放资源(仅在block里没有return资源的情况下，删除在该block里new出来的变量)
+//        for (int i = 0; i < SymbolTable::getIdNumInTailCell(); ++i) {
+//            const std::string &id = SymbolTable::getIdByPos(i);
+//            ioUtil.appendContent("delete " + id + ";\n");
+//        }
+//    }
     SymbolTable::popCell();
     if (getFather()->getType() == ASTNodeType::func
         && getFather()->getFather()->getType() != ASTNodeType::constructor && !hasReturn) {
