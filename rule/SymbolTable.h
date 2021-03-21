@@ -18,6 +18,10 @@ public:
     bool exist(const std::string &id);
 
     void add(const std::string &id);
+
+    int idNum() const;
+
+    const std::string &getIdByPos(int i) const;
 };
 
 class SymbolTable {
@@ -40,6 +44,10 @@ public:
     static void newCell();
 
     static void popCell();
+
+    static int getIdNumInTailCell();
+
+    static const std::string &getIdByPos(int i);
 
     /**
      * 每解析一个module就向这里插入

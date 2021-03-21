@@ -101,10 +101,29 @@ std::string SymbolTable::formatPath(const std::string &path) {
     return modulePath;
 }
 
+int SymbolTable::getIdNumInTailCell() {
+    if (tail != nullptr) {
+        return tail->idNum();
+    }
+    return 0;
+}
+
+const std::string &SymbolTable::getIdByPos(int i) {
+    return tail->getIdByPos(i);
+}
+
 bool TableCell::exist(const std::string &id) {
     return std::find(idList.cbegin(), idList.cend(), id) != idList.end();
 }
 
 void TableCell::add(const std::string &id) {
     idList.push_back(id);
+}
+
+int TableCell::idNum() const {
+    return idList.size();
+}
+
+const std::string &TableCell::getIdByPos(int i) const {
+    return idList[i];
 }
