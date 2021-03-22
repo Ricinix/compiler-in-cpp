@@ -5,6 +5,8 @@
 #ifndef DESIGN_1_CONSTANT_H
 #define DESIGN_1_CONSTANT_H
 
+#include <string>
+
 enum class TokenType {
     eof, // end of file
     eol, // end of line
@@ -60,6 +62,10 @@ enum class ASTNodeType {
     normalStmt,
     returnStmt,
 };
+
+namespace DefaultValue {
+    const std::string defaultString = "";
+}
 
 // 定义保留字
 

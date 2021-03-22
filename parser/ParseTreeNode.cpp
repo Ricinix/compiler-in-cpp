@@ -75,8 +75,8 @@ Token *ParseTreeNode::getToken() {
     return token;
 }
 
-std::string ParseTreeNode::getNodeName() const {
-    return "";
+const std::string &ParseTreeNode::getNodeName() const {
+    throw DesignException("getNodeName method must be override");
 }
 
 ASTNode *ParseTreeNode::toASTNode() {
@@ -112,7 +112,7 @@ ParseTreeLeaf::ParseTreeLeaf(RuleItem *ruleItem) : ParseTreeNode(ruleItem) {
 
 }
 
-std::string ParseTreeLeaf::getNodeName() const {
+const std::string &ParseTreeLeaf::getNodeName() const {
     if (token == nullptr) {
         return symbol->getSymbolName();
     }
@@ -143,8 +143,8 @@ bool ParseTreeNonLeaf::isLeaf() {
     return false;
 }
 
-std::string ParseTreeNonLeaf::getNodeName() const {
-    return "NonLeaf: " + symbol->getSymbolName();
+const std::string &ParseTreeNonLeaf::getNodeName() const {
+    return symbol->getSymbolName();
 }
 
 ASTNode *ParseTreeNonLeaf::toASTNode() {
@@ -307,7 +307,7 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
         } else if (childNum() == 3 && getChild(1)->getToken()->getTokenType() == TokenType::identifier) {
             // 标识符的情况，需要判别有函数调用以及对象实例化
             auto *newNode = getChild(0)->toASTNode();
-            ASTNode *prefix = nullptr;
+            ASTNode *prefix;
             if (newNode != nullptr && newNode->toString() == RW_NEW) {
                 // 新建对象，本质上是将 new Object转换为 Object.new，所以此处不需要关系对象实例化所传入的参数，参数会在后面的postfix中处理
                 auto builder = NewNodeObject::Builder();

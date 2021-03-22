@@ -18,7 +18,7 @@ public:
 
     virtual int getNumber() const;
 
-    virtual std::string getText() const;
+    virtual const std::string &getText() const;
 
     const TokenType &getTokenType() const;
 
@@ -30,15 +30,16 @@ private:
 };
 
 class NumToken : public Token {
+private:
+    int value;
+    std::string rawStr;
 public:
     NumToken(int line, int v);
 
-    std::string getText() const override;
+    const std::string &getText() const override;
 
     int getNumber() const override;
 
-private:
-    int value;
 
 };
 
@@ -48,7 +49,7 @@ public:
 
     IdToken(int line, TokenType type);
 
-    std::string getText() const override;
+    const std::string &getText() const override;
 
 private:
     std::string text;
@@ -59,7 +60,7 @@ class StrToken : public Token {
 public:
     StrToken(int line, std::string &str);
 
-    std::string getText() const override;
+    const std::string &getText() const override;
 
 private:
     std::string literal;
@@ -78,7 +79,7 @@ public:
 
     OpType getOpType() const;
 
-    std::string getText() const override;
+    const std::string &getText() const override;
 };
 
 #endif //DESIGN_1_TOKEN_H

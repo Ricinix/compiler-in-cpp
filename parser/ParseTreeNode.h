@@ -49,7 +49,7 @@ public:
 
     virtual bool isLeaf();
 
-    virtual std::string getNodeName() const;
+    virtual const std::string &getNodeName() const;
 
     virtual ASTNode *toASTNode();
 
@@ -63,7 +63,7 @@ public:
 
     bool isLeaf() override;
 
-    std::string getNodeName() const override;
+    const std::string &getNodeName() const override;
 
     ASTNode *toASTNode() override;
 };
@@ -87,7 +87,7 @@ public:
 
     bool isLeaf() override;
 
-    std::string getNodeName() const override;
+    const std::string &getNodeName() const override;
 
     ASTNode *toASTNode() override;
 

@@ -47,3 +47,7 @@ std::string IndexOutOfBoundsException::generateMsg(int i) {
     fmt << "index " << i << "is out of bounds";
     return fmt.str();
 }
+
+DesignException::DesignException(const std::string &msg) : logic_error(msg) {
+
+}

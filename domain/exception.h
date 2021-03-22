@@ -24,6 +24,11 @@ private:
     static std::string getErrorMsg(const char* msg, const Token &t);
 };
 
+class DesignException : public std::logic_error {
+public:
+    explicit DesignException(const std::string &msg);
+};
+
 class IoException: public std::invalid_argument {
 public:
     explicit IoException(const std::string &msg);

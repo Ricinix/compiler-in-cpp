@@ -29,8 +29,8 @@ int Token::getLineNumber() const {
     return lineNumber;
 }
 
-std::string Token::getText() const {
-    return "";
+const std::string &Token::getText() const {
+    return DefaultValue::defaultString;
 }
 
 std::ostream &operator<<(std::ostream &os, const Token &token) {
@@ -59,10 +59,11 @@ std::ostream &operator<<(std::ostream &os, const Token &token) {
 
 NumToken::NumToken(int line, int v) : Token(line, TokenType::number) {
     value = v;
+    rawStr = std::to_string(v);
 }
 
-std::string NumToken::getText() const {
-    return std::to_string(value);
+const std::string &NumToken::getText() const {
+    return rawStr;
 }
 
 int NumToken::getNumber() const {
@@ -73,7 +74,7 @@ IdToken::IdToken(int line, std::string &id) : Token(line, checkType(id)) {
     text = id;
 }
 
-std::string IdToken::getText() const {
+const std::string &IdToken::getText() const {
     return text;
 }
 
@@ -94,7 +95,7 @@ StrToken::StrToken(int line, std::string &str) : Token(line, TokenType::string) 
     literal = str;
 }
 
-std::string StrToken::getText() const {
+const std::string &StrToken::getText() const {
     return literal;
 }
 
@@ -160,6 +161,6 @@ OpToken::OpToken(int line, OpType type, const std::string &str) : Token(line, To
     opType = type;
 }
 
-std::string OpToken::getText() const {
+const std::string &OpToken::getText() const {
     return rawStr;
 }
