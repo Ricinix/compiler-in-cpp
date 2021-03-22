@@ -9,7 +9,7 @@ RuleItem::RuleItem(const std::string &name) {
     symbolName = name;
 }
 
-std::string RuleItem::getSymbolName() {
+const std::string &RuleItem::getSymbolName() {
     return symbolName;
 }
 
@@ -35,10 +35,26 @@ RuleItemType NonTerminalSymbol::getRuleItemType() {
 
 TerminalSymbol::TerminalSymbol(const std::string &name) : RuleItem(name) {
     tokenType = TokenType::reserve;
+    terminalName = name;
 }
 
 TerminalSymbol::TerminalSymbol(TokenType type) : RuleItem("") {
     tokenType = type;
+    if (tokenType == TokenType::string) {
+        terminalName = "STRING";
+    } else if (tokenType == TokenType::op) {
+        terminalName = "OP";
+    } else if (tokenType == TokenType::number) {
+        terminalName = "NUMBER";
+    } else if (tokenType == TokenType::identifier) {
+        terminalName = "IDENTIFIER";
+    } else if (tokenType == TokenType::eof) {
+        terminalName = "EOF";
+    } else if (tokenType == TokenType::eol) {
+        terminalName = "EOL";
+    } else if (tokenType == TokenType::none) {
+        terminalName = "NONE";
+    }
 }
 
 bool TerminalSymbol::matchToken(Token *token) {
@@ -57,23 +73,8 @@ RuleItemType TerminalSymbol::getRuleItemType() {
     return RuleItemType::Terminal;
 }
 
-std::string TerminalSymbol::getSymbolName() {
-    if (tokenType == TokenType::string) {
-        return "STRING";
-    } else if (tokenType == TokenType::op) {
-        return "OP";
-    } else if (tokenType == TokenType::number) {
-        return "NUMBER";
-    } else if (tokenType == TokenType::identifier) {
-        return "IDENTIFIER";
-    } else if (tokenType == TokenType::eof) {
-        return "EOF";
-    } else if (tokenType == TokenType::eol) {
-        return "EOL";
-    } else if (tokenType == TokenType::none) {
-        return "NONE";
-    }
-    return RuleItem::getSymbolName();
+const std::string &TerminalSymbol::getSymbolName() {
+    return terminalName;
 }
 
 EmptySymbol::EmptySymbol() : RuleItem("ε") {
