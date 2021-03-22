@@ -15,7 +15,7 @@ enum class OrderType {
 
 class Order {
 public:
-    Order(std::string &src, std::string &target, OrderType type);
+    Order(const std::string &src, const std::string &target, OrderType type);
 
     Order();
 
@@ -28,9 +28,9 @@ private:
     std::string targetPath;
     OrderType orderType;
 protected:
-    std::string getSrcPath();
+    const std::string &getSrcPath();
 
-    std::string getTargetPath();
+    const std::string &getTargetPath();
 };
 
 class CompileOrder : public Order {
@@ -49,7 +49,7 @@ private:
     static StateTransitionTable *getStateTable();
 
 public:
-    CompileOrder(std::string &src, std::string &target, OrderType type);
+    CompileOrder(const std::string &src, const std::string &target, OrderType type);
 
     void exec() override;
 };

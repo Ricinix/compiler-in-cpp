@@ -14,8 +14,8 @@ private:
         std::vector<std::pair<RuleItem *, RuleSeq *>> list;
         std::map<std::string, std::pair<RuleItem *, RuleSeq *>> map;
 
-        std::string getKey(RuleItem *terminal);
-        std::string getKey(Token *token);
+        static const std::string &getKey(RuleItem *terminal);
+        static std::string getKey(Token *token);
     public:
         bool append(RuleItem *terminal, RuleSeq *ruleSeq);
 

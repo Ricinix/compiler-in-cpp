@@ -120,7 +120,7 @@ RuleSeq *StateTransitionTable::TableRow::get(Token *token) {
     return nullptr;
 }
 
-std::string StateTransitionTable::TableRow::getKey(RuleItem *terminal) {
+const std::string &StateTransitionTable::TableRow::getKey(RuleItem *terminal) {
     return terminal->getSymbolName();
 }
 

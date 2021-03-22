@@ -8,17 +8,17 @@
 RuleSet *CompileOrder::ruleSet = nullptr;
 StateTransitionTable *CompileOrder::stateTransitionTable = nullptr;
 
-Order::Order(std::string &src, std::string &target, OrderType type) {
+Order::Order(const std::string &src, const std::string &target, OrderType type) {
     srcPath = src;
     targetPath = target;
     orderType = type;
 }
 
-std::string Order::getSrcPath() {
+const std::string &Order::getSrcPath() {
     return srcPath;
 }
 
-std::string Order::getTargetPath() {
+const std::string &Order::getTargetPath() {
     return targetPath;
 }
 
@@ -34,7 +34,8 @@ void Order::exec() {
     Log::warm("do nothing");
 }
 
-CompileOrder::CompileOrder(std::string &src, std::string &target, OrderType type) : Order(src, target, type) {
+CompileOrder::CompileOrder(const std::string &src, const std::string &target, OrderType type) : Order(src, target,
+                                                                                                      type) {
 
 }
 
