@@ -21,7 +21,6 @@ RuleSeq *Rule::makeNewSeq() {
 }
 
 Rule::Rule(const std::string &name) {
-    startName = name;
     startSymbol = new NonTerminalSymbol(name);
 }
 

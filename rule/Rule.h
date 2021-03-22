@@ -14,7 +14,6 @@ private:
      * 每个RuleSeq之间呈或关系
      */
     std::vector<RuleSeq*> ruleSeqSet;
-    std::string startName;
     RuleItem* startSymbol;
 public:
     explicit Rule(const std::string &name);
