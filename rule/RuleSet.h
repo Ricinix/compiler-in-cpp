@@ -17,7 +17,7 @@ private:
     std::map<std::string, FirstSet *> firstSet;
     std::map<std::string, FollowSet *> followSet;
 
-    Rule *getRule(std::string &startSymbolName);
+    Rule *getRule(const std::string &startSymbolName);
 
     FirstSet *initFirstSet(RuleItem *ruleItem);
 

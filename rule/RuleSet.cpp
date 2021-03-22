@@ -202,7 +202,7 @@ Rule *RuleSet::getRule(int i) {
     return ruleSet[i];
 }
 
-Rule *RuleSet::getRule(std::string &startSymbolName) {
+Rule *RuleSet::getRule(const std::string &startSymbolName) {
     auto rulePair = ruleMap.find(startSymbolName);
     if (rulePair != ruleMap.end()) {
         return rulePair->second;
