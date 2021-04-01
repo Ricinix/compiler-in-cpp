@@ -282,7 +282,6 @@ void RuleSet::initFollowSet() {
 }
 
 bool RuleSet::findFirst(FirstSet::Builder &builder, RuleItem *ruleItem) {
-    auto name = ruleItem->getSymbolName();
     if (ruleItem->getRuleItemType() == RuleItemType::Terminal) {
         // 终结符
         builder.addTerminalSymbol(ruleItem);
@@ -369,10 +368,10 @@ bool RuleSet::isLLOne() {
             continue;
         }
         for (int i = 0; i < rule->ruleSeqNum() - 1; ++i) {
+            auto *seqOne = rule->getRuleSeq(i);
+            Log::info("doing " + rule->getStartSymbol()->getSymbolName() + " " + std::to_string(i));
+            auto *firstOne = getFirstSet(seqOne, 0, seqOne->ruleItemNum());
             for (int j = i + 1; j < rule->ruleSeqNum(); ++j) {
-                auto *seqOne = rule->getRuleSeq(i);
-                Log::info("doing " + rule->getStartSymbol()->getSymbolName() + " " + std::to_string(i));
-                auto *firstOne = getFirstSet(seqOne, 0, seqOne->ruleItemNum());
                 Log::info("doing " + rule->getStartSymbol()->getSymbolName() + " " + std::to_string(j));
                 auto *seqTwo = rule->getRuleSeq(j);
                 auto *firstTwo = getFirstSet(seqTwo, 0, seqTwo->ruleItemNum());
