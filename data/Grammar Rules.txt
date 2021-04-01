@@ -36,6 +36,6 @@ class : "class" IDENTIFIER [ "extends" IDENTIFIER ] class_body
 // 类体
 class_body : "{" [ member ] { (";" | EOL) [ member ] } "}"
 // 成员
-member : [ "static" ] ( def | simple )
+member : [ "static" ] ( func | simple )
 // 数组成员
 elements : expr { "," expr }
