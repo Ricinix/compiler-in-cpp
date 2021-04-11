@@ -86,6 +86,16 @@ public:
         return this;
     }
 
+    Object *at(Object *obj) override {
+        auto *str = dynamic_cast<String *>(obj->toString());
+        if (str == nullptr) {
+            return nullptr;
+        }
+        int index = std::stoi(str->getString());
+        std::string ch = {s[index]};
+        return String::newObj(ch);
+    }
+
 };
 
 

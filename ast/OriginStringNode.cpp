@@ -78,6 +78,15 @@ void OriginStringNode::genCode(IoUtil &ioUtil) {
             "        return this;\n"
             "    }\n"
             "\n"
+            "    Object *at(Object *obj) override {\n"
+            "        auto *str = dynamic_cast<String *>(obj->toString());\n"
+            "        if (str == nullptr) {\n"
+            "            return nullptr;\n"
+            "        }\n"
+            "        int index = std::stoi(str->getString());\n"
+            "        std::string ch = {s[index]};\n"
+            "        return String::newObj(ch);\n"
+            "    }\n"
             "};\n"
     );
     ioUtil.newLine();
