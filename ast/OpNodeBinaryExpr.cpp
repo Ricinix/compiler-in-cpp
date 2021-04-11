@@ -32,6 +32,7 @@ OpNodeBinaryExpr::OpNodeBinaryExpr(ASTNode *leftNode, ASTNode *rightNode, Token 
 
 void OpNodeBinaryExpr::genCode(IoUtil &ioUtil) {
     if (checkArr()) {
+        left->genCode(ioUtil);
         return;
     }
     if (token->getTokenType() == TokenType::op) {
