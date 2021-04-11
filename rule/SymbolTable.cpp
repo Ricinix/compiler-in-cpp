@@ -7,6 +7,7 @@
 #include <algorithm>
 
 std::map<std::string, bool> SymbolTable::reservedWordMap;
+std::map<std::string, bool> SymbolTable::staticMethodMap;
 TableCell *SymbolTable::tail = new TableCell;
 std::vector<std::string> SymbolTable::modulePathList;
 
@@ -110,6 +111,14 @@ int SymbolTable::getIdNumInTailCell() {
 
 const std::string &SymbolTable::getIdByPos(int i) {
     return tail->getIdByPos(i);
+}
+
+void SymbolTable::addStaticMethod(const std::string &method) {
+    staticMethodMap[method] = true;
+}
+
+bool SymbolTable::isStaticMethod(const std::string &method) {
+    return staticMethodMap.find(method) != staticMethodMap.end();
 }
 
 bool TableCell::exist(const std::string &id) {

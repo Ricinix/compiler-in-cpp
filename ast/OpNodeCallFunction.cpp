@@ -33,6 +33,10 @@ ASTNodeType OpNodeCallFunction::getType() {
     return ASTNodeType::funcCall;
 }
 
+std::string OpNodeCallFunction::getHashMsg() const{
+    return functionName->toString() + "_" + std::to_string(args.size());
+}
+
 void OpNodeCallFunction::Builder::setFunctionName(ASTNode *funcName) {
     functionName = funcName;
 }

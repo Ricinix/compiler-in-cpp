@@ -21,6 +21,8 @@ public:
 
     ASTNodeType getType() override;
 
+    std::string getHashMsg() const;
+
     class Builder {
     private:
         ASTNode *functionName;

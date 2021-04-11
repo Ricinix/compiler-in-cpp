@@ -2,7 +2,9 @@
 // Created by laugh on 2021/3/15.
 //
 
+#include <sstream>
 #include "DecorateNodeMethod.h"
+#include "../domain/exception.h"
 
 DecorateNodeMethod::DecorateNodeMethod(DefineNodeFunction *funcNode, bool isStaticMethod) {
     func = funcNode;
@@ -91,6 +93,23 @@ void DecorateNodeMethod::printParamList(IoUtil &ioUtil, bool printType) {
         }
     }
     ioUtil.appendContent(")");
+}
+
+bool DecorateNodeMethod::isStaticMethod() const {
+    return isStatic;
+}
+
+std::string DecorateNodeMethod::getStaticHashMsg() {
+    if (!isStatic) {
+        return "";
+    }
+    if (getFather()->getType() != ASTNodeType::clz) {
+        throw ParseException("method's father is not clz");
+    }
+    std::ostringstream fmt;
+    fmt << getFather()->toString() << "::";
+    fmt << func->getHashMsg();
+    return fmt.str();
 }
 
 void DecorateNodeMethod::Builder::setStatic(bool isStaticMethod) {

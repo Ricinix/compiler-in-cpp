@@ -63,15 +63,19 @@ void OriginObjectNode::addVirtualMethod(ASTNode *methodNode) {
         return;
     }
     auto *method = dynamic_cast<DecorateNodeMethod *>(methodNode);
-    if (method == nullptr || method->getHashMsg().empty()) {
+    addVirtualMethod(method);
+}
+
+void OriginObjectNode::addVirtualMethod(DecorateNodeMethod *methodNode) {
+    if (methodNode == nullptr || methodNode->getHashMsg().empty()) {
         return;
     }
     for (auto &m : methodSet) {
-        if (m->getHashMsg() == method->getHashMsg()) {
+        if (m->getHashMsg() == methodNode->getHashMsg()) {
             return;
         }
     }
-    addMethod(new OriginNodeVirtualMethod(method));
+    addMethod(new OriginNodeVirtualMethod(methodNode));
 }
 
 void OriginTrueNode::genCode(IoUtil &ioUtil) {

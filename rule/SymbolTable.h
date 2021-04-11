@@ -27,6 +27,7 @@ public:
 class SymbolTable {
 private:
     static std::map<std::string, bool> reservedWordMap;
+    static std::map<std::string, bool> staticMethodMap;
     static std::vector<std::string> modulePathList;
     static TableCell *tail;
 
@@ -55,6 +56,10 @@ public:
      * @return 如果已经解析过则返回false，否则true
      */
     static bool addModule(const std::string &path);
+
+    static void addStaticMethod(const std::string &method);
+
+    static bool isStaticMethod(const std::string &method);
 };
 
 

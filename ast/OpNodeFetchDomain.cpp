@@ -3,6 +3,8 @@
 //
 
 #include "OpNodeFetchDomain.h"
+#include "OpNodeCallFunction.h"
+#include "../rule/SymbolTable.h"
 
 std::string OpNodeFetchDomain::toString() const {
     return ".";
@@ -17,7 +19,16 @@ OpNodeFetchDomain::OpNodeFetchDomain(ASTNode *prefix, ASTNode *domain) {
 
 void OpNodeFetchDomain::genCode(IoUtil &ioUtil) {
     prefixNode->genCode(ioUtil);
-    ioUtil.appendContent("->");
+    if (prefixNode->getType() == ASTNodeType::id && domainNode->getType() == ASTNodeType::funcCall) {
+        auto *fc = dynamic_cast<OpNodeCallFunction *>(domainNode);
+        if (fc != nullptr && SymbolTable::isStaticMethod(prefixNode->toString() + "::" + fc->getHashMsg())) {
+            ioUtil.appendContent("::");
+        } else {
+            ioUtil.appendContent("->");
+        }
+    } else {
+        ioUtil.appendContent("->");
+    }
     domainNode->genCode(ioUtil);
 }
 

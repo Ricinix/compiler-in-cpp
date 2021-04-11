@@ -102,7 +102,15 @@ void AbstractSyntaxTree::initObject() {
 
 void AbstractSyntaxTree::checkFunc(ASTNode *node) {
     if (node->getType() == ASTNodeType::method) {
-        originObj->addVirtualMethod(node);
+        auto *m = dynamic_cast<DecorateNodeMethod *>(node);
+        if (m == nullptr) {
+            throw ParseException("checkFunc m is nullptr");
+        }
+        if (m->isStaticMethod()) {
+            SymbolTable::addStaticMethod(m->getStaticHashMsg());
+        } else {
+            originObj->addVirtualMethod(m);
+        }
         return;
     }
     for (int i = 0; i < node->numChildren(); ++i) {

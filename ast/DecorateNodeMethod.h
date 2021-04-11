@@ -35,6 +35,10 @@ public:
 
     bool isConstructor();
 
+    bool isStaticMethod() const;
+
+    std::string getStaticHashMsg();
+
     class Builder {
     private:
         bool isStatic;

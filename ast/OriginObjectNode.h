@@ -25,6 +25,8 @@ public:
     void addMethod(DecorateNodeMethod *method) override;
 
     void addVirtualMethod(ASTNode *methodNode);
+
+    void addVirtualMethod(DecorateNodeMethod *methodNode);
 };
 
 class Object {
