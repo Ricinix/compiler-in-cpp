@@ -129,15 +129,14 @@ void Parser::parseFromTopWithStack() {
     while (!symbolStack.empty()) {
         auto *topNode = symbolStack[symbolStack.size() - 1];
         auto *topSymbol = topNode->getRuleItem();
+        symbolStack.pop_back();
         if (topNode->isLeaf() && topSymbol->matchToken(getNowToken())) {
             // 加入终结符结点
-            symbolStack.pop_back();
             Log::info(topSymbol->getSymbolName() + " match " + getNowToken()->getText() + ", stack element num: "
                       + std::to_string(symbolStack.size()));
             topNode->setToken(getNowToken());
             nextToken();
         } else if (topNode->isLeaf() && topSymbol->getRuleItemType() == RuleItemType::Empty) {
-            symbolStack.pop_back();
             Log::info(topSymbol->getSymbolName() + " match " + getNowToken()->getText() + ", stack element num: "
                       + std::to_string(symbolStack.size()));
         } else if (topSymbol->getRuleItemType() == RuleItemType::Terminal) {
@@ -148,7 +147,6 @@ void Parser::parseFromTopWithStack() {
                 throw ParseException("rule seq error");
             }
             // 加入非终结符结点
-            symbolStack.pop_back();
             for (int i = ruleSeq->ruleItemNum() - 1; i >= 0; --i) {
                 auto *symbol = ruleSeq->getRuleItemByPos(i);
                 if (symbol->getRuleItemType() == RuleItemType::NonTerminal) {
