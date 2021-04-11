@@ -28,7 +28,7 @@ DecorateNodeMethod::DecorateNodeMethod(DefineNodeFunction *funcNode, bool isStat
             // 找到super函数
             superNode = dynamic_cast<OpNodeCallFunction *>(super);
             simple->remove(0);
-            func->child(func->numChildren() - 1)->removeAndDelete(0);
+            block->removeAndDelete(0);
         }
     }
 }

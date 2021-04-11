@@ -81,7 +81,8 @@ ASTLeaf::ASTLeaf(Token *token_p) {
 }
 
 ASTNode *ASTLeaf::child(int i) {
-    throw IndexOutOfBoundsException(i);
+    Log::warm("call child(" + std::to_string(i) + ") from ASTLeaf");
+    return nullptr;
 }
 
 int ASTLeaf::numChildren() const {

@@ -3,11 +3,15 @@
 //
 
 #include "DefineNodeDomain.h"
+#include "../domain/exception.h"
 
 DefineNodeDomain::DefineNodeDomain(ASTNode *initStmtNode, bool isStaticDomain) {
     initStmt = initStmtNode;
     isStatic = isStaticDomain;
     addChild(initStmtNode);
+    if (isStatic && initStmt->getType() == ASTNodeType::opBinaryExpr) {
+        throw ParseException("static domain can't init");
+    }
 }
 
 std::string DefineNodeDomain::toString() const {
@@ -20,7 +24,7 @@ std::string DefineNodeDomain::toString() const {
 void DefineNodeDomain::genCode(IoUtil &ioUtil) {
     ioUtil.appendContent("private: \n");
     if (isStatic) {
-        ioUtil.appendContent("static ");
+        ioUtil.appendContent("static Object *");
     }
     initStmt->genCode(ioUtil);
 }
