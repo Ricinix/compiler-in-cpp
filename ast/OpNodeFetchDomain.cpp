@@ -19,9 +19,12 @@ OpNodeFetchDomain::OpNodeFetchDomain(ASTNode *prefix, ASTNode *domain) {
 
 void OpNodeFetchDomain::genCode(IoUtil &ioUtil) {
     prefixNode->genCode(ioUtil);
-    if (prefixNode->getType() == ASTNodeType::id && domainNode->getType() == ASTNodeType::funcCall) {
-        auto *fc = dynamic_cast<OpNodeCallFunction *>(domainNode);
-        if (fc != nullptr && SymbolTable::isStaticMethod(prefixNode->toString() + "::" + fc->getHashMsg())) {
+    if (prefixNode->getType() == ASTNodeType::id
+        && domainNode->getType() == ASTNodeType::id
+        && getFather()->getType() == ASTNodeType::funcCall) {
+
+        auto *fc = dynamic_cast<OpNodeCallFunction *>(getFather());
+        if (fc != nullptr && SymbolTable::isStaticMethod(prefixNode->toString() + "::" + domainNode->toString() + "_" + std::to_string(fc->argsNum()))) {
             ioUtil.appendContent("::");
         } else {
             ioUtil.appendContent("->");

@@ -21,7 +21,7 @@ public:
 
     ASTNodeType getType() override;
 
-    std::string getHashMsg() const;
+    int argsNum() const;
 
     class Builder {
     private:
