@@ -7,11 +7,14 @@
 
 #include "ASTNode.h"
 #include "DefineNodeFunction.h"
+#include "OpNodeCallFunction.h"
 
 class DecorateNodeMethod : public ASTList {
 private:
     bool isStatic;
     DefineNodeFunction *func;
+    OpNodeCallFunction *superNode = nullptr;
+    ASTNode *extendNode = nullptr;
 
     bool genConstructor(IoUtil &ioUtil);
 
@@ -38,6 +41,8 @@ public:
     bool isStaticMethod() const;
 
     std::string getStaticHashMsg();
+
+    void setExtendNode(ASTNode *node);
 
     class Builder {
     private:

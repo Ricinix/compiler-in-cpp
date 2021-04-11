@@ -17,6 +17,8 @@ private:
 public:
     void genCode(IoUtil &ioUtil) override;
 
+    void genArgs(IoUtil &ioUtil);
+
     std::string toString() const override;
 
     ASTNodeType getType() override;

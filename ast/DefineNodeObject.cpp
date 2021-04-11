@@ -44,6 +44,7 @@ void DefineNodeObject::genCode(IoUtil &ioUtil) {
     bool hasConstructor = false;
     for (auto &method : methodSet) {
         if (method->isConstructor()) {
+            method->setExtendNode(extendObj);
             hasConstructor = true;
         }
         method->genCode(ioUtil);

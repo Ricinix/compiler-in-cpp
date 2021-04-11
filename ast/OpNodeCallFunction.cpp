@@ -19,14 +19,7 @@ OpNodeCallFunction::OpNodeCallFunction(std::vector<ASTNode *> &argList, ASTNode 
 
 void OpNodeCallFunction::genCode(IoUtil &ioUtil) {
     functionName->genCode(ioUtil);
-    ioUtil.appendContent("(");
-    for (int i = 0; i < args.size(); ++i) {
-        args[i]->genCode(ioUtil);
-        if (i != args.size() -1) {
-            ioUtil.appendContent(", ");
-        }
-    }
-    ioUtil.appendContent(")");
+    genArgs(ioUtil);
 }
 
 ASTNodeType OpNodeCallFunction::getType() {
@@ -35,6 +28,17 @@ ASTNodeType OpNodeCallFunction::getType() {
 
 int OpNodeCallFunction::argsNum() const {
     return args.size();
+}
+
+void OpNodeCallFunction::genArgs(IoUtil &ioUtil) {
+    ioUtil.appendContent("(");
+    for (int i = 0; i < args.size(); ++i) {
+        args[i]->genCode(ioUtil);
+        if (i != args.size() -1) {
+            ioUtil.appendContent(", ");
+        }
+    }
+    ioUtil.appendContent(")");
 }
 
 void OpNodeCallFunction::Builder::setFunctionName(ASTNode *funcName) {

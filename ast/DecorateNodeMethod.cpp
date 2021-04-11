@@ -6,10 +6,31 @@
 #include "DecorateNodeMethod.h"
 #include "../domain/exception.h"
 
+
 DecorateNodeMethod::DecorateNodeMethod(DefineNodeFunction *funcNode, bool isStaticMethod) {
     func = funcNode;
     isStatic = isStaticMethod;
     addChild(funcNode);
+    if (func == nullptr) {
+        // 特殊结点
+        return;
+    }
+    auto *block = func->child(func->numChildren() - 1);
+    if (block == nullptr || block->numChildren() == 0) {
+        // 函数体为空
+        return;
+    }
+    auto *simple = block->child(0);
+    if (simple != nullptr && simple->getType() == ASTNodeType::normalStmt) {
+        // 找到第一个语句
+        auto *super = simple->child(0);
+        if (super != nullptr && super->getType() == ASTNodeType::funcCall && super->child(0)->toString() == "super") {
+            // 找到super函数
+            superNode = dynamic_cast<OpNodeCallFunction *>(super);
+            simple->remove(0);
+            func->child(func->numChildren() - 1)->removeAndDelete(0);
+        }
+    }
 }
 
 void DecorateNodeMethod::genCode(IoUtil &ioUtil) {
@@ -68,6 +89,11 @@ bool DecorateNodeMethod::genConstructor(IoUtil &ioUtil) {
             .appendContent("explicit ")
             .appendContent(getFather()->toString());
     printParamList(ioUtil, true);
+    if (superNode != nullptr && extendNode != nullptr) {
+        ioUtil.appendContent(" : ");
+        extendNode->genCode(ioUtil);
+        superNode->genArgs(ioUtil);
+    }
     func->getRunBody()->genCode(ioUtil);
     // 再生成hook一层的构造器
     ioUtil.appendContent("static Object *newObj");
@@ -110,6 +136,10 @@ std::string DecorateNodeMethod::getStaticHashMsg() {
     fmt << getFather()->toString() << "::";
     fmt << func->getHashMsg();
     return fmt.str();
+}
+
+void DecorateNodeMethod::setExtendNode(ASTNode *node) {
+    extendNode = node;
 }
 
 void DecorateNodeMethod::Builder::setStatic(bool isStaticMethod) {
