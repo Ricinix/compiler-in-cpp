@@ -10,10 +10,12 @@
 
 namespace Log {
     template<typename V>
-    void error(const V &value) {
+    void _error(const V &value, const char *fileName, const int line, const char *funcName) {
         using namespace std;
-        cerr << "[ERROR]" << endl << value << endl;
+        cerr << "[ERROR]" << fileName << "  line " << line << "  " << funcName << endl << value << endl;
     }
+
+    #define error(v) _error(v, __FILE__, __LINE__, __FUNCTION__)
 
     template<typename V>
     void info(const V &value) {
