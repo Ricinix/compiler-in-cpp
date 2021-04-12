@@ -63,3 +63,5 @@ arr = [1,2,3]
 print(arr)
 arr[0] = 4
 print(arr[0])
+arr.removeAt(0)
+print(arr)
