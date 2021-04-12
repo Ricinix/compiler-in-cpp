@@ -30,13 +30,13 @@ public:
         auto *arr = new Array();
         int i = 0;
         for (auto &obj : objArr){
-            arr->container[std::to_string(i)] = obj;
+            arr->container[std::to_string(i++)] = obj;
         }
         return arr;
     }
 
     Object *at(Object *obj) override {
-        auto *str = dynamic_cast<String *>(obj);
+        auto *str = dynamic_cast<String *>(obj->toString());
         if (str == nullptr) {
             return nullptr;
         }
@@ -44,7 +44,7 @@ public:
     }
 
     Object *removeAt(Object *obj) override {
-        auto *str = dynamic_cast<String *>(obj);
+        auto *str = dynamic_cast<String *>(obj->toString());
         if (str == nullptr) {
             return nullptr;
         }
@@ -57,7 +57,7 @@ public:
     }
 
     Object *insert(Object *index, Object *obj) override {
-        auto *str = dynamic_cast<String *>(obj);
+        auto *str = dynamic_cast<String *>(index->toString());
         if (str == nullptr) {
             return nullptr;
         }
@@ -75,15 +75,15 @@ public:
     }
 
     Object *toString() override {
-        std::ostringstream fmt("[");
+        std::ostringstream fmt;
+        fmt << "[";
         int i = 0;
         for (auto &element : container) {
             auto *str = dynamic_cast<String *>(element.second->toString());
             if (str != nullptr) {
                 fmt << str->getString();
             }
-            i++;
-            if (i != container.size()) {
+            if (++i != container.size()) {
                 fmt << ", ";
             }
         }
