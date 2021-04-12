@@ -40,18 +40,23 @@ i = 0
 sum = 0
 
 while i < 10 {
-    sum = sum + i
     i = i + 1
     print(fff(i))
-    s = new Student(i)
-
-    s.say()
-    s.change()
-    s.say()
 }
 
-p = new People(i)
+if sum == 0 {
+    print("sum is 0")
+} else {
+    print("sum is not 0")
+}
+
+s = new Student(i)
+s.say()
+s.change()
+s.say()
 Student.staticSay()
+
+p = new People(i)
 p.say()
 
 arr = [1,2,3]
