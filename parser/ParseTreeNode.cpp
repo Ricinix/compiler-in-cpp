@@ -273,7 +273,7 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
         return parseChildDirectly();
     } else if (getRuleItem()->getSymbolName() == NS_PRIMARY) {
         // primary结点
-        if (childNum() == 4 && getChild(0)->getRuleItem()->getSymbolName() == "[") {
+        if (childNum() == 3 && getChild(0)->getRuleItem()->getSymbolName() == RW_LEFT_SQUARE_BRACKET) {
             // 数组
             auto builder = NewNodeArray::Builder();
             auto *elementsOrNone = getChild(1);
@@ -290,7 +290,7 @@ ASTNode *ParseTreeNonLeaf::toASTNode() {
                 builder.addElement(elements->getChild(0)->toASTNode());
             }
             return builder.build();
-        } else if (childNum() == 4 && getChild(0)->getRuleItem()->getSymbolName() == "(") {
+        } else if (childNum() == 4 && getChild(0)->getRuleItem()->getSymbolName() == RW_LEFT_BRACKET) {
             // 表达式
             auto builder = DecorateNodePrimary::Builder();
             builder.setExprNode(getChild(1)->toASTNode());
