@@ -1,5 +1,13 @@
 import "test_2.st"
 
+f2()
+arr = [1,2,3]
+print(arr)
+arr[0] = 4
+print(arr[0])
+arr.removeAt(0)
+print(arr)
+
 function fff(i) {
     return i + i
 }
@@ -32,17 +40,17 @@ class Student extends People {
 
     static function staticSay() {
         print("from static ")
-        //print(b)
     }
 }
 
 i = 0
-sum = 0
 
 while i < 10 {
     i = i + 1
     print(fff(i))
 }
+
+sum = 0
 
 if sum == 0 {
     print("sum is 0")
@@ -52,16 +60,9 @@ if sum == 0 {
 
 s = new Student(i)
 s.say()
-s.change()
-s.say()
 Student.staticSay()
 
 p = new People(i)
 p.say()
-
-arr = [1,2,3]
-print(arr)
-arr[0] = 4
-print(arr[0])
-arr.removeAt(0)
-print(arr)
+p.change()
+p.say()
