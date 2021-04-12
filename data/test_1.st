@@ -53,3 +53,8 @@ while i < 10 {
 p = new People(i)
 Student.staticSay()
 p.say()
+
+arr = [1,2,3]
+print(arr)
+arr[0] = 4
+print(arr[0])
